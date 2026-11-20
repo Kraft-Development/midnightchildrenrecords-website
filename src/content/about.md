@@ -1,5 +1,5 @@
-SAMPLE: The opening paragraph of the label's story. It is shown larger than the rest. Keep it factual: who started the label, when, and what it releases.
+Midnight Children Records is an electronic music label from Johannesburg, started by TiMO ODV and Aidin Caye.
 
-SAMPLE: A second paragraph about the sound, the artists and what the label stands for.
+The name comes from Midnight Children, TiMO's 2020 EP, which Aidin co-produced. Two DJs from the East Rand who kept touring and making records together needed a home for that work, and this is it.
 
-SAMPLE: A third paragraph, for example how artists can get in touch or where the label's music is played.
+The label does three things: it releases South African electronic music and pushes it properly, it builds a small roster of artists it believes in, and it runs its own nights so the records have a room to land in.

@@ -1,0 +1,37 @@
+---
+// Latest posts from the label's official Instagram, saved on our own domain at build time.
+// Until the Instagram connection is set up (or if it fails), a simple "follow us" block shows instead.
+import { label, gallery } from '../lib/data';
+const { eyebrow = 'Instagram' } = Astro.props;
+const handle = '@' + (label.socials.instagram.match(/instagram\.com\/([^/?#]+)/)?.[1] || 'midnightchildrenrecords');
+---
+{label.socials.instagram && (
+  <section class="section section--gallery" aria-labelledby="ig-title">
+    <div class="container">
+      <div class="section-head section-head--row">
+        <div>
+          <p class="eyebrow">{eyebrow}</p>
+          <h2 class="section-title" id="ig-title">After midnight</h2>
+        </div>
+        <a class="link-arrow" href={label.socials.instagram} rel="noopener noreferrer">{handle} <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+      </div>
+      {gallery.length >= 4 ? (
+        <ul class="ig-grid">
+          {gallery.map((g) => (
+            <li class="ig-grid__item">
+              {g.url
+                ? <a href={g.url} rel="noopener noreferrer"><img src={g.src} alt={g.alt} width="600" height="600" loading="lazy" decoding="async"></a>
+                : <img src={g.src} alt={g.alt} width="600" height="600" loading="lazy" decoding="async">}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <a class="ig-follow" href={label.socials.instagram} rel="noopener noreferrer">
+          <svg class="ig-follow__icon" aria-hidden="true"><use href="#i-instagram"></use></svg>
+          <span class="ig-follow__text">Photos, line-ups and new music land on Instagram first.</span>
+          <span class="ig-follow__handle">Follow {handle}</span>
+        </a>
+      )}
+    </div>
+  </section>
+)}

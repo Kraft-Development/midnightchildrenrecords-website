@@ -3,12 +3,16 @@ import Layout from '../layouts/Layout.astro';
 import Cover from '../components/Cover.astro';
 import ReleaseCard from '../components/ReleaseCard.astro';
 import ArtistCard from '../components/ArtistCard.astro';
-import { label, artists, releases, creditLine, formatDate, isUpcoming, linkList } from '../lib/data';
+import Countdown from '../components/Countdown.astro';
+import EventRow from '../components/EventRow.astro';
+import Gallery from '../components/Gallery.astro';
+import { label, artists, releases, creditLine, formatDate, isUpcoming, linkList, upcomingEvents, nextEvent } from '../lib/data';
 
 const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
 const latest = releases[0];
 const more = releases.slice(1, 5);
 const tagline = label.tagline && !label.tagline.startsWith('SAMPLE') ? label.tagline : 'Independent record label';
+let n = 0; const num = () => String(++n).padStart(2, '0');
 const sameAs = Object.values(label.socials).filter(Boolean);
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -27,8 +31,12 @@ const jsonLd = {
       <p class="hero__tagline">{tagline}</p>
     </div>
     <div class="hero__footer">
-      <a class="btn btn--outline" href="/releases/">Explore releases <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
-      <a class="link-arrow" href="/demos/">Send a demo <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+      {nextEvent ? <Countdown /> : (
+        <>
+          <a class="btn btn--outline" href="/releases/">Explore releases <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+          <a class="link-arrow" href="/demos/">Send a demo <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </>
+      )}
     </div>
   </section>
 
@@ -37,7 +45,7 @@ const jsonLd = {
       <div class="container spotlight">
         <a class="spotlight__cover" href={`/releases/${latest.slug}/`}><Cover release={latest} eager /></a>
         <div class="spotlight__text">
-          <p class="eyebrow">01 · {isUpcoming(latest) ? 'Coming soon' : 'Latest release'}</p>
+          <p class="eyebrow">{num()} · {isUpcoming(latest) ? 'Coming soon' : 'Latest release'}</p>
           <h2 class="section-title" id="latest-title">{latest.title}</h2>
           <p class="spotlight__artist">{creditLine(latest)}</p>
           <p class="spotlight__meta">{latest.type} · {isUpcoming(latest) ? 'Out ' : ''}{formatDate(latest.date)}{latest.catalogue && ` · ${latest.catalogue}`}</p>
@@ -60,7 +68,7 @@ const jsonLd = {
       <div class="container">
         <div class="section-head section-head--row">
           <div>
-            <p class="eyebrow">02 · Catalogue</p>
+            <p class="eyebrow">{num()} · Catalogue</p>
             <h2 class="section-title" id="new-title">New releases</h2>
           </div>
           <a class="link-arrow" href="/releases/">All releases <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
@@ -70,12 +78,27 @@ const jsonLd = {
     </section>
   )}
 
+  {upcomingEvents.length > 0 && (
+    <section class="section section--events" aria-labelledby="events-title">
+      <div class="container">
+        <div class="section-head section-head--row">
+          <div>
+            <p class="eyebrow">{num()} · Nights</p>
+            <h2 class="section-title" id="events-title">Events</h2>
+          </div>
+          <a class="link-arrow" href="/events/">Calendar <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </div>
+        <ol class="event-list">{upcomingEvents.slice(0, 3).map((e) => <EventRow e={e} />)}</ol>
+      </div>
+    </section>
+  )}
+
   {artists.length > 0 && (
     <section class="section section--roster" aria-labelledby="roster-title">
       <div class="container">
         <div class="section-head section-head--row">
           <div>
-            <p class="eyebrow">03 · Roster</p>
+            <p class="eyebrow">{num()} · Roster</p>
             <h2 class="section-title" id="roster-title">The children</h2>
           </div>
           <a class="link-arrow" href="/artists/">All artists <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
@@ -84,6 +107,8 @@ const jsonLd = {
       </div>
     </section>
   )}
+
+  <Gallery eyebrow={`${num()} · Instagram`} />
 
   <section class="section section--band" aria-labelledby="demo-title">
     <div class="container band">

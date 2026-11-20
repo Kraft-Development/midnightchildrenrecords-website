@@ -29,7 +29,7 @@ const edit = (file, fn) => ({ read, write }) => { const v = read(file); fn(v); w
 
 expect('current content passes', null, true);
 expect('unknown artist on a release', edit('releases.json', (r) => { r[0].artists = ['nobody']; }), false, /not in artists\.json/);
-expect('duplicate release slug', edit('releases.json', (r) => { r[1].slug = r[0].slug; }), false, /used twice/);
+expect('duplicate release slug', edit('releases.json', (r) => { r.push({ ...r[0], catalogue: 'MCR099' }); }), false, /used twice/);
 expect('bad date', edit('releases.json', (r) => { r[0].date = '2026-02-30'; }), false, /real date/);
 expect('html in a title', edit('releases.json', (r) => { r[0].title = '<script>x</script>'; }), false, /HTML/);
 expect('half-cut emoji', edit('artists.json', (a) => { a[0].short = 'Hello \uD83D'; }), false, /invalid characters/);
@@ -40,7 +40,15 @@ expect('missing cover file', edit('releases.json', (r) => { r[0].cover = '/img/r
 expect('bad release type', edit('releases.json', (r) => { r[0].type = 'Mixtape'; }), false, /must be one of/);
 expect('link in about.md', ({ write }) => write('about.md', 'See [here](https://x.example)'), false, /links/);
 expect('invalid JSON', ({ write }) => write('artists.json', '[{'), false, /not valid JSON/);
-expect('samples blocked at launch', edit('label.json', (l) => { l.launched = true; l.company = { legalName: 'X', registrationNumber: '1', registeredAddress: '', informationOfficer: 'Y' }; }), false, /removed before launch/);
+expect('event with bad date', edit('events.json', (e) => { e[0].date = '2026-13-01'; }), false, /real date/);
+expect('event with bad time', edit('events.json', (e) => { e[0].time = '25:00'; }), false, /24-hour/);
+expect('event ticket link not https', edit('events.json', (e) => { e[0].url = 'http://howler.co.za/x'; }), false, /https link/);
+expect('event line-up unknown artist', edit('events.json', (e) => { e[0].lineup = ['nobody']; }), false, /not in artists\.json/);
+expect('event html in name', edit('events.json', (e) => { e[0].event = '<b>x</b>'; }), false, /contains < >/);
+expect('duplicate event', edit('events.json', (e) => { e.push({ ...e[0] }); }), false, /duplicate/);
+expect('release year only is allowed', edit('releases.json', (r) => { r[0].date = '2026'; }), true);
+expect('gallery outside our domain', ({ write }) => write('gallery.json', [{ src: 'https://cdn.example/x.jpg', alt: '', url: '' }]), false, /ig-N/);
+expect('company details required at launch', edit('label.json', (l) => { l.launched = true; }), false, /required before launch/);
 
 if (failed) { console.error(`\n${failed} validator test(s) failed.`); process.exit(1); }
 console.log('Validator tests passed.');

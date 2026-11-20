@@ -2,11 +2,14 @@
 import labelJson from '../content/label.json';
 import artistsJson from '../content/artists.json';
 import releasesJson from '../content/releases.json';
+import eventsJson from '../content/events.json';
+import galleryJson from '../content/gallery.json';
+import { cleanEvents, isUpcomingEvent, startIso } from '../../scripts/events.mjs';
 
 export const label = labelJson;
 
 export type Links = Record<string, string>;
-export interface Artist { slug: string; name: string; genre?: string; city?: string; short?: string; bio?: string; image?: string; imageCredit?: string; links?: Links; sample?: boolean; }
+export interface Artist { slug: string; name: string; role?: string; website?: string; genre?: string; city?: string; short?: string; bio?: string; image?: string; imageCredit?: string; links?: Links; sample?: boolean; }
 export interface Track { title: string; duration?: string; }
 export interface Release { slug: string; title: string; artists: string[]; featuring?: string[]; type: string; date: string; catalogue?: string; cover?: string; description?: string; tracks?: Track[]; links?: Links; sample?: boolean; }
 
@@ -26,7 +29,7 @@ export const creditLine = (r: Release) => {
 
 const today = () => new Date().toISOString().slice(0, 10);
 export const isUpcoming = (r: Release) => r.date > today();
-export const formatDate = (d: string) =>
+export const formatDate = (d: string) => d.length === 4 ? d :
   new Date(d + 'T12:00:00Z').toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 export const year = (d: string) => d.slice(0, 4);
 
@@ -39,3 +42,19 @@ export const linkList = (links: Links = {}) =>
 
 // One id per build, so browsers fetch fresh CSS/JS after every deploy.
 export const BUILD_ID = Date.now().toString(36);
+
+// ---------- Events (same validation as npm test; anything invalid is dropped, never published) ----------
+export interface LabelEvent { id: string; date: string; time: string; event: string; series: string; venue: string; city: string; address: string; status: string; url: string; lineup: string[]; uid: string; }
+const cleaned = cleanEvents(eventsJson, { artistSlugs: new Set(artists.map((a) => a.slug)) });
+if (cleaned.problems.length) console.warn('[events] dropped invalid entries:', cleaned.problems);
+export const events: LabelEvent[] = cleaned.events;
+export const upcomingEvents = events.filter((e) => isUpcomingEvent(e));
+export const pastEvents = events.filter((e) => !isUpcomingEvent(e)).reverse();
+export const nextEvent = upcomingEvents.find((e) => e.status !== 'cancelled');
+export { startIso };
+export const eventDay = (e: LabelEvent) => new Date(e.date + 'T12:00:00Z');
+export const fmtEvent = (e: LabelEvent, opts: Intl.DateTimeFormatOptions) => eventDay(e).toLocaleDateString('en-ZA', { timeZone: 'UTC', ...opts });
+
+// ---------- Instagram gallery (written at build time by scripts/fetch-data.mjs) ----------
+export interface GalleryItem { src: string; alt: string; url: string; }
+export const gallery: GalleryItem[] = (galleryJson as GalleryItem[]).filter((g) => /^\/img\/gallery\/ig-\d+\.jpg$/.test(g.src));

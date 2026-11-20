@@ -1,48 +1,15 @@
 [
   {
-    "slug": "sample-ep-night-shift",
-    "sample": true,
-    "title": "Night Shift",
-    "artists": ["sample-artist-one"],
-    "featuring": [],
-    "type": "EP",
-    "date": "2026-11-14",
-    "catalogue": "MCR003",
-    "cover": "",
-    "description": "SAMPLE: A sentence or two about the release.",
-    "tracks": [
-      { "title": "Night Shift", "duration": "6:12" },
-      { "title": "Moonlit", "duration": "5:48" },
-      { "title": "Midnight Run", "duration": "7:03" }
-    ],
-    "links": { "spotify": "", "appleMusic": "", "youtube": "", "soundcloud": "", "bandcamp": "", "beatport": "" }
-  },
-  {
-    "slug": "sample-single-crescent",
-    "sample": true,
-    "title": "Crescent",
-    "artists": ["sample-artist-two"],
-    "featuring": ["Guest Vocalist"],
-    "type": "Single",
-    "date": "2026-10-03",
-    "catalogue": "MCR002",
-    "cover": "",
-    "description": "",
-    "tracks": [{ "title": "Crescent", "duration": "5:30" }],
-    "links": { "spotify": "", "appleMusic": "", "youtube": "", "soundcloud": "", "bandcamp": "", "beatport": "" }
-  },
-  {
-    "slug": "sample-single-hold-hands",
-    "sample": true,
-    "title": "Hold Hands",
-    "artists": ["sample-artist-three", "sample-artist-one"],
+    "slug": "what-about-us",
+    "title": "What About Us?",
+    "artists": ["andeon", "timo-odv"],
     "featuring": [],
     "type": "Single",
-    "date": "2026-08-22",
+    "date": "2026",
     "catalogue": "MCR001",
     "cover": "",
     "description": "",
-    "tracks": [{ "title": "Hold Hands", "duration": "4:51" }],
-    "links": { "spotify": "", "appleMusic": "", "youtube": "", "soundcloud": "", "bandcamp": "", "beatport": "" }
+    "tracks": [{ "title": "What About Us?", "duration": "" }],
+    "links": {}
   }
 ]

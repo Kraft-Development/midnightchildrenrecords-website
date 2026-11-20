@@ -1,38 +1,48 @@
 [
   {
-    "slug": "sample-artist-one",
-    "sample": true,
-    "name": "Sample Artist One",
-    "genre": "Afro house",
-    "city": "Johannesburg",
-    "short": "SAMPLE: One line that introduces the artist on their card.",
-    "bio": "SAMPLE: A short biography goes here. Two or three paragraphs, factual, written or approved by the artist.\n\nSecond paragraph of the sample biography.",
+    "slug": "timo-odv",
+    "name": "TiMO ODV",
+    "role": "Co-founder",
+    "genre": "DJ · Producer · Singer · Songwriter",
+    "city": "Kempton Park, East Rand",
+    "short": "Co-founder. DJ, producer, singer and songwriter from Kempton Park.",
+    "bio": "TiMO ODV is a DJ, producer, singer and songwriter from Kempton Park on Johannesburg's East Rand, and co-founder of Midnight Children Records.\n\nThe label takes its name from his 2020 EP Midnight Children, made with Aidin Caye.",
     "image": "",
     "imageCredit": "",
-    "links": { "spotify": "", "appleMusic": "", "instagram": "", "soundcloud": "", "youtube": "" }
+    "website": "https://timoodv.com",
+    "links": {
+      "spotify": "https://open.spotify.com/artist/5ekzQ0Zq1wSg7dDZHYKFLt",
+      "instagram": "https://www.instagram.com/timoodv/",
+      "youtube": "https://www.youtube.com/@TiMOODVmusic",
+      "soundcloud": "https://soundcloud.com/timoodv"
+    }
   },
   {
-    "slug": "sample-artist-two",
-    "sample": true,
-    "name": "Sample Artist Two",
-    "genre": "Deep house",
-    "city": "Cape Town",
-    "short": "SAMPLE: One line that introduces the artist on their card.",
-    "bio": "SAMPLE: A short biography goes here.",
+    "slug": "aidin-caye",
+    "name": "Aidin Caye",
+    "role": "Co-founder",
+    "genre": "DJ · Producer",
+    "city": "East Rand",
+    "short": "Co-founder. DJ and producer from the East Rand.",
+    "bio": "Aidin Caye is a DJ and producer from Johannesburg's East Rand and co-founder of Midnight Children Records.\n\nHe co-produced TiMO ODV's 2020 EP Midnight Children, the record the label is named after.",
     "image": "",
     "imageCredit": "",
-    "links": { "spotify": "", "appleMusic": "", "instagram": "", "soundcloud": "", "youtube": "" }
+    "website": "",
+    "links": {
+      "instagram": "https://www.instagram.com/aidincaye/"
+    }
   },
   {
-    "slug": "sample-artist-three",
-    "sample": true,
-    "name": "Sample Artist Three",
-    "genre": "Amapiano",
-    "city": "Durban",
-    "short": "SAMPLE: One line that introduces the artist on their card.",
-    "bio": "SAMPLE: A short biography goes here.",
+    "slug": "andeon",
+    "name": "Andeon",
+    "role": "Label artist",
+    "genre": "Artist",
+    "city": "",
+    "short": "On the label's first release, What About Us? with TiMO ODV.",
+    "bio": "Andeon features on What About Us? with TiMO ODV, the first release on Midnight Children Records.",
     "image": "",
     "imageCredit": "",
-    "links": { "spotify": "", "appleMusic": "", "instagram": "", "soundcloud": "", "youtube": "" }
+    "website": "",
+    "links": {}
   }
 ]

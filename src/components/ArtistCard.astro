@@ -8,6 +8,7 @@ const { artist } = Astro.props;
         ? <img src={artist.image} alt={artist.name} width="600" height="750" loading="lazy" decoding="async">
         : <span class="artist-card__placeholder" aria-hidden="true"><img src="/img/moon.svg" alt="" width="793" height="833"></span>}
     </span>
+    {artist.role && <span class="artist-card__role">{artist.role}</span>}
     <span class="artist-card__name">{artist.name}</span>
     <span class="artist-card__meta">{[artist.genre, artist.city].filter(Boolean).join(' · ')}</span>
   </a>

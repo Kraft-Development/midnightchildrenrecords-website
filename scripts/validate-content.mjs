@@ -4,6 +4,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { cleanEvents, cleanDeclined } from './events.mjs';
 
 const root = process.env.CONTENT_ROOT || join(dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
@@ -108,7 +109,9 @@ if (artists) {
     else if (artistSlugs.has(a.slug)) err(`${w}.slug`, 'is used twice');
     else artistSlugs.add(a.slug);
     text(`${w}.name`, a.name, { required: true, max: 60 });
-    text(`${w}.genre`, a.genre, { max: 40 });
+    text(`${w}.genre`, a.genre, { max: 60 });
+    text(`${w}.role`, a.role, { max: 30 });
+    if (a.website) { try { const u = new URL(a.website); if (u.protocol !== 'https:' || u.username) err(`${w}.website`, 'must be an https link'); } catch { err(`${w}.website`, 'is not a valid link'); } }
     text(`${w}.city`, a.city, { max: 60 });
     text(`${w}.short`, a.short, { max: 140 });
     text(`${w}.bio`, a.bio, { max: 2500, multiline: true });
@@ -137,7 +140,7 @@ if (releases) {
     else r.artists.forEach((s) => { if (!artistSlugs.has(s)) err(`${w}.artists`, `"${s}" is not in artists.json`); });
     (r.featuring || []).forEach((f, j) => text(`${w}.featuring[${j}]`, f, { required: true, max: 60 }));
     if (!TYPES.includes(r.type)) err(`${w}.type`, `must be one of ${TYPES.join(', ')}`);
-    if (!validDate(r.date || '')) err(`${w}.date`, 'must be a real date like 2026-11-14');
+    if (!validDate(r.date || '') && !/^\d{4}$/.test(r.date || '')) err(`${w}.date`, 'must be a real date like 2026-11-14 (or just the year, 2026, until the date is confirmed)');
     if (r.catalogue) {
       if (!CATALOGUE.test(r.catalogue)) err(`${w}.catalogue`, 'must look like MCR001');
       else if (cats.has(r.catalogue)) err(`${w}.catalogue`, 'is used twice');
@@ -151,6 +154,23 @@ if (releases) {
     });
     for (const [k, v] of Object.entries(r.links || {})) link(`${w}.links.${k}`, k, v);
     if (r.sample && label?.launched) err(w, 'sample release must be removed before launch');
+  });
+}
+
+// ---------- events.json (same rules the site uses when building) ----------
+const eventsRaw = readJson('src/content/events.json');
+if (eventsRaw) for (const p of cleanEvents(eventsRaw, { artistSlugs }).problems) err('events.json', p);
+const declined = readJson('src/content/events.declined.json');
+if (declined) for (const p of cleanDeclined(declined).problems) err('events.declined.json', p);
+
+// ---------- gallery.json (written by the build from the label's Instagram) ----------
+const gallery = readJson('src/content/gallery.json');
+if (gallery) {
+  if (!Array.isArray(gallery)) err('gallery.json', 'must be a list');
+  else gallery.forEach((g, i) => {
+    if (!/^\/img\/gallery\/ig-\d+\.jpg$/.test(g?.src || '')) err(`gallery[${i}].src`, 'must be /img/gallery/ig-N.jpg');
+    if (g?.url && !/^https:\/\/(www\.)?instagram\.com\//.test(g.url)) err(`gallery[${i}].url`, 'must be an instagram.com link');
+    text(`gallery[${i}].alt`, g?.alt, { max: 140 });
   });
 }
 

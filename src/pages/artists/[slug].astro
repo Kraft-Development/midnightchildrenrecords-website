@@ -33,9 +33,14 @@ const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.
         {artist.imageCredit && <figcaption>Photo: {artist.imageCredit}</figcaption>}
       </figure>
       <div class="artist-page__text">
-        <p class="eyebrow">{[artist.genre, artist.city].filter(Boolean).join(' · ') || 'Artist'}</p>
+        <p class="eyebrow">{artist.role || 'Artist'}</p>
         <h1 class="page-title">{artist.name}</h1>
+        <p class="artist-page__meta">{[artist.genre, artist.city].filter(Boolean).join(' · ')}</p>
         <div class="prose">{paragraphs.map((p) => <p>{p}</p>)}</div>
+        <div class="artist-page__actions">
+          <a class="btn btn--solid" href={`/contact/?topic=booking&artist=${artist.slug}`}>Book {artist.name} <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+          {artist.website && <a class="link-arrow" href={artist.website} rel="noopener noreferrer">Official website <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>}
+        </div>
         {links.length > 0 && <ul class="listen__list">{links.map((l) => <li><a class="btn btn--small" href={l.url} rel="noopener noreferrer">{l.name}</a></li>)}</ul>}
       </div>
     </div>
