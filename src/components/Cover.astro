@@ -1,0 +1,11 @@
+---
+// Release cover, or a branded placeholder tile (moon + title) when no artwork is set yet.
+const { release, size = 600, eager = false } = Astro.props;
+---
+{release.cover
+  ? <img class="cover" src={release.cover} alt={`${release.title} cover art`} width={size} height={size} loading={eager ? 'eager' : 'lazy'} decoding="async">
+  : <span class="cover cover--placeholder" aria-hidden="true">
+      <img class="cover__moon" src="/img/moon.svg" alt="" width="793" height="833">
+      <span class="cover__title">{release.title}</span>
+      {release.catalogue && <span class="cover__cat">{release.catalogue}</span>}
+    </span>}

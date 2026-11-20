@@ -1,14 +1,38 @@
 ---
+import Icons from '../components/Icons.astro';
+import { label, BUILD_ID } from '../lib/data';
+
 const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
 const {
-  title = 'Midnight Children Records',
-  description = 'Midnight Children Records, an independent record label.',
+  title = `${label.name} | Independent record label`,
+  description = `${label.name}: releases, roster, demos and contact.`,
   path = '/',
-  noindex = false,
+  jsonLd = null,
+  image = '/img/og-image.jpg',
+  current = '',
 } = Astro.props;
-const canonical = SITE + (path === '/' ? '/' : path.replace(/\/?$/, ''));
-// Changes on every deploy so browsers never keep an old copy of the styles.
-const buildId = Date.now().toString(36);
+// One switch for the whole site: until label.json says "launched": true, every page is noindex.
+const noindex = !label.launched || Astro.props.noindex;
+const canonical = SITE + path;
+const ogImage = SITE + image;
+// JSON-LD is data, never executed. "<" is escaped so the block can never be closed early.
+const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : '';
+// Changes on every deploy so browsers never keep an old copy of the script or styles.
+const buildId = BUILD_ID;
+const nav = [
+  { href: '/releases/', label: 'Releases', key: 'releases' },
+  { href: '/artists/', label: 'Artists', key: 'artists' },
+  { href: '/about/', label: 'About', key: 'about' },
+  { href: '/demos/', label: 'Demos', key: 'demos' },
+  { href: '/contact/', label: 'Contact', key: 'contact' },
+];
+const socials = [
+  { key: 'instagram', icon: 'i-instagram', name: 'Instagram' },
+  { key: 'spotify', icon: 'i-spotify', name: 'Spotify' },
+  { key: 'appleMusic', icon: 'i-applemusic', name: 'Apple Music' },
+  { key: 'youtube', icon: 'i-youtube', name: 'YouTube' },
+].filter((s) => label.socials[s.key]);
+const company = label.company.legalName || label.name;
 ---
 <!doctype html>
 <html lang="en-ZA">
@@ -19,11 +43,95 @@ const buildId = Date.now().toString(36);
   <meta name="description" content={description}>
   <link rel="canonical" href={canonical}>
   {noindex ? <meta name="robots" content="noindex,nofollow"> : <meta name="robots" content="index,follow,max-image-preview:large">}
-  <meta name="theme-color" content="#08080a">
-  <link rel="preload" href="/fonts/archivo-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <meta name="theme-color" content="#07080b">
+  <meta property="og:site_name" content={label.name}>
+  <meta property="og:locale" content="en_ZA">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={canonical}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:image" content={ogImage}>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={ogImage}>
+  {jsonLdText && <script type="application/ld+json" set:html={jsonLdText}></script>}
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/img/favicon-48.png" sizes="48x48" type="image/png">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <link rel="preload" href="/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/archivo-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href={`/css/styles.css?v=${buildId}`}>
+  <script src={`/js/main.js?v=${buildId}`} defer></script>
 </head>
 <body>
-  <slot />
+  <Icons />
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" data-header>
+    <div class="site-header__inner">
+      <a class="logo" href="/" aria-label={`${label.name}, home`}>
+        <img src="/img/logo-wordmark.svg" alt={label.shortName} width="1870" height="1215">
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+        <span class="nav-toggle__bar"></span>
+        <span class="nav-toggle__bar"></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Main" data-nav>
+        <ul class="site-nav__list">
+          {nav.map((n) => <li><a href={n.href} aria-current={current === n.key ? 'page' : undefined}>{n.label}</a></li>)}
+        </ul>
+        {socials.length > 0 && (
+          <div class="site-nav__social">
+            {socials.map((s) => (
+              <a class="social-chip" href={label.socials[s.key]} rel="noopener noreferrer" aria-label={s.name}>
+                <svg class="social-chip__icon" aria-hidden="true"><use href={`#${s.icon}`}></use></svg>
+              </a>
+            ))}
+          </div>
+        )}
+      </nav>
+    </div>
+  </header>
+
+  {!label.launched && <p class="preview-banner">Preview: sample content, not yet launched.</p>}
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <img class="site-footer__children" src="/img/children.svg" alt="" width="2182" height="851" loading="lazy">
+      <div class="site-footer__grid">
+        <div>
+          <img class="site-footer__wordmark" src="/img/logo-wordmark.svg" alt={label.shortName} width="1870" height="1215" loading="lazy">
+          <p class="site-footer__note">Independent record label{label.location && !label.location.startsWith('SAMPLE') ? `, ${label.location}` : ''}.</p>
+        </div>
+        <nav aria-label="Footer">
+          <p class="site-footer__title">Label</p>
+          <ul class="site-footer__links">
+            {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+          </ul>
+        </nav>
+        {socials.length > 0 && (
+          <div>
+            <p class="site-footer__title">Follow</p>
+            <ul class="site-footer__links">
+              {socials.map((s) => <li><a href={label.socials[s.key]} rel="noopener noreferrer">{s.name}</a></li>)}
+            </ul>
+          </div>
+        )}
+      </div>
+      <div class="site-footer__bar">
+        <p>© {new Date().getFullYear()} {company}{label.company.registrationNumber && ` · Reg. ${label.company.registrationNumber}`}</p>
+        <ul class="site-footer__legal">
+          <li><a href="/privacy/">Privacy Policy</a></li>
+          <li><a href="/terms/">Terms of Use</a></li>
+          <li><a href="/cookies/">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Cover from '../../components/Cover.astro';
+import ReleaseCard from '../../components/ReleaseCard.astro';
+import { label, releases, artistBySlug, creditLine, formatDate, isUpcoming, linkList, artistNames } from '../../lib/data';
+
+export function getStaticPaths() {
+  return releases.map((r) => ({ params: { slug: r.slug }, props: { release: r } }));
+}
+const { release } = Astro.props;
+const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
+const path = `/releases/${release.slug}/`;
+const links = linkList(release.links);
+const credit = creditLine(release);
+const related = releases.filter((r) => r.slug !== release.slug && r.artists.some((a) => release.artists.includes(a))).slice(0, 4);
+const single = !release.tracks || release.tracks.length <= 1;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': single ? 'MusicRecording' : 'MusicAlbum',
+  name: release.title,
+  url: SITE + path,
+  datePublished: release.date,
+  byArtist: release.artists.map((s) => ({ '@type': 'MusicGroup', name: artistBySlug(s)?.name || s, url: `${SITE}/artists/${s}/` })),
+  recordLabel: { '@type': 'Organization', name: label.name, url: `${SITE}/` },
+  ...(release.cover ? { image: SITE + release.cover } : {}),
+  ...(release.catalogue ? { catalogNumber: release.catalogue } : {}),
+  ...(!single ? { numTracks: release.tracks.length, track: release.tracks.map((t, i) => ({ '@type': 'MusicRecording', name: t.title, position: i + 1 })) } : {}),
+  ...(links.length ? { sameAs: links.map((l) => l.url) } : {}),
+};
+const description = release.description && !release.description.startsWith('SAMPLE')
+  ? release.description
+  : `${release.title} by ${credit}. ${release.type} on ${label.name}, ${isUpcoming(release) ? 'out' : 'released'} ${formatDate(release.date)}.`;
+---
+<Layout title={`${release.title} by ${artistNames(release).join(' & ')} | ${label.name}`} description={description} path={path} jsonLd={jsonLd} image={release.cover || undefined} current="releases">
+  <article class="release-page">
+    <div class="container release-page__grid">
+      <div class="release-page__cover"><Cover release={release} eager /></div>
+      <div class="release-page__info">
+        <p class="eyebrow">{release.type}{release.catalogue && ` · ${release.catalogue}`}</p>
+        <h1 class="page-title">{release.title}</h1>
+        <p class="release-page__artist">
+          {release.artists.map((s, i) => <>{i > 0 && ' & '}<a href={`/artists/${s}/`}>{artistBySlug(s)?.name || s}</a></>)}
+          {release.featuring?.length ? <> feat. {release.featuring.join(', ')}</> : null}
+        </p>
+        <p class="release-page__date">{isUpcoming(release) ? 'Out' : 'Released'} {formatDate(release.date)}</p>
+        {release.description && <p class="release-page__desc">{release.description}</p>}
+        {links.length > 0
+          ? <div class="listen"><p class="listen__title">Listen</p><ul class="listen__list">{links.map((l) => <li><a class="btn btn--small" href={l.url} rel="noopener noreferrer">{l.name}</a></li>)}</ul></div>
+          : <p class="release-page__soon">Streaming links coming soon.</p>}
+        {release.tracks && release.tracks.length > 0 && (
+          <div class="release-page__tracks">
+            <p class="listen__title">Tracklist</p>
+            <ol class="tracklist">
+              {release.tracks.map((t, i) => <li><span class="tracklist__n">{String(i + 1).padStart(2, '0')}</span><span class="tracklist__t">{t.title}</span><span class="tracklist__d">{t.duration}</span></li>)}
+            </ol>
+          </div>
+        )}
+      </div>
+    </div>
+  </article>
+  {related.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="section-head"><p class="eyebrow">More from the artist</p><h2 class="section-title section-title--sm">Related releases</h2></div>
+        <ul class="release-grid">{related.map((r) => <ReleaseCard release={r} />)}</ul>
+      </div>
+    </section>
+  )}
+</Layout>

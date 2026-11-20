@@ -1,0 +1,51 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ReleaseCard from '../../components/ReleaseCard.astro';
+import { label, artists, releasesFor, linkList } from '../../lib/data';
+
+export function getStaticPaths() {
+  return artists.map((a) => ({ params: { slug: a.slug }, props: { artist: a } }));
+}
+const { artist } = Astro.props;
+const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
+const path = `/artists/${artist.slug}/`;
+const links = linkList(artist.links);
+const own = releasesFor(artist.slug);
+const paragraphs = (artist.bio || '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicGroup',
+  name: artist.name,
+  url: SITE + path,
+  ...(artist.genre ? { genre: artist.genre } : {}),
+  ...(artist.image ? { image: SITE + artist.image } : {}),
+  ...(links.length ? { sameAs: links.map((l) => l.url) } : {}),
+};
+const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.short : `${artist.name} on ${label.name}: releases, biography and links.`;
+---
+<Layout title={`${artist.name} | ${label.name}`} description={description} path={path} jsonLd={jsonLd} image={artist.image || undefined} current="artists">
+  <article class="artist-page">
+    <div class="container artist-page__grid">
+      <figure class="artist-page__media">
+        {artist.image
+          ? <img src={artist.image} alt={artist.name} width="900" height="1125" fetchpriority="high">
+          : <span class="artist-card__placeholder artist-card__placeholder--large" aria-hidden="true"><img src="/img/moon.svg" alt="" width="793" height="833"></span>}
+        {artist.imageCredit && <figcaption>Photo: {artist.imageCredit}</figcaption>}
+      </figure>
+      <div class="artist-page__text">
+        <p class="eyebrow">{[artist.genre, artist.city].filter(Boolean).join(' · ') || 'Artist'}</p>
+        <h1 class="page-title">{artist.name}</h1>
+        <div class="prose">{paragraphs.map((p) => <p>{p}</p>)}</div>
+        {links.length > 0 && <ul class="listen__list">{links.map((l) => <li><a class="btn btn--small" href={l.url} rel="noopener noreferrer">{l.name}</a></li>)}</ul>}
+      </div>
+    </div>
+  </article>
+  {own.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="section-head"><p class="eyebrow">On {label.shortName}</p><h2 class="section-title section-title--sm">Releases</h2></div>
+        <ul class="release-grid">{own.map((r) => <ReleaseCard release={r} />)}</ul>
+      </div>
+    </section>
+  )}
+</Layout>

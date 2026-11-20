@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { label } from '../lib/data';
+const d = label.demos;
+const genres = d.genres.filter((g) => !g.startsWith('SAMPLE'));
+const shownGenres = genres.length ? genres : d.genres.map((g) => g.replace(/^SAMPLE:\s*/, ''));
+const hostNames = { 'soundcloud.com': 'SoundCloud', 'drive.google.com': 'Google Drive', 'dropbox.com': 'Dropbox', 'disco.ac': 'DISCO', 'bandcamp.com': 'Bandcamp', 'youtube.com': 'YouTube', 'wetransfer.com': 'WeTransfer' };
+const hosts = [...new Set(d.allowedHosts.map((h) => hostNames[h]).filter(Boolean))];
+---
+<Layout title={`Submit a demo | ${label.name}`} description={`How to send your music to ${label.name}: a private link, no attachments.`} path="/demos/" current="demos">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Demos</p>
+      <h1 class="page-title">Send us your music</h1>
+    </div>
+  </section>
+  <section class="section section--tight">
+    <div class="container contact">
+      <div class="contact__intro">
+        <ol class="steps">
+          <li><strong>Links only.</strong> Upload your tracks to {hosts.join(', ')} and paste a private link. We do not accept attachments.</li>
+          <li><strong>Your best two or three.</strong> Finished or nearly finished tracks, unreleased and not signed elsewhere.</li>
+          <li><strong>What we release.</strong> {shownGenres.join(', ')}.</li>
+          <li><strong>What happens next.</strong> {d.replyNote.replace(/^SAMPLE:\s*/, '')}</li>
+        </ol>
+      </div>
+      {d.open ? (
+        <form class="form" method="post" action="/api/demo" data-form novalidate>
+          <div class="form__row">
+            <div class="field"><label for="d-artist">Artist name</label><input id="d-artist" name="artist" required maxlength="100"></div>
+            <div class="field"><label for="d-email">Email</label><input id="d-email" name="email" type="email" autocomplete="email" required maxlength="200"></div>
+          </div>
+          <div class="form__row">
+            <div class="field"><label for="d-city">City / country</label><input id="d-city" name="location" maxlength="100"></div>
+            <div class="field"><label for="d-genre">Genre</label>
+              <select id="d-genre" name="genre">{shownGenres.map((g) => <option>{g}</option>)}<option>Other</option></select>
+            </div>
+          </div>
+          <div class="field"><label for="d-link1">Link to your music</label><input id="d-link1" name="link1" type="url" inputmode="url" placeholder="https://" required maxlength="500"></div>
+          <div class="form__row">
+            <div class="field"><label for="d-link2">Second link (optional)</label><input id="d-link2" name="link2" type="url" inputmode="url" placeholder="https://" maxlength="500"></div>
+            <div class="field"><label for="d-social">Instagram or SoundCloud profile (optional)</label><input id="d-social" name="profile" type="url" inputmode="url" placeholder="https://" maxlength="300"></div>
+          </div>
+          <div class="field"><label for="d-msg">A few words about the music</label><textarea id="d-msg" name="message" maxlength="3000"></textarea></div>
+          <div class="field field--hp" aria-hidden="true"><label for="d-web">Website</label><input id="d-web" name="website" tabindex="-1" autocomplete="off"></div>
+          <label class="form__check"><input type="checkbox" name="rights" required> I wrote and produced this music, or have the right to send it, and it is not signed to another label.</label>
+          <p class="form__privacy">We use your details only to listen and reply. Submissions are deleted after 12 months. See our <a href="/privacy/">Privacy Policy</a>.</p>
+          <button class="btn btn--solid" type="submit" disabled>Send demo <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></button>
+          <p class="form__soon">This form goes live in the next update.</p>
+        </form>
+      ) : (
+        <p class="empty-note">Demo submissions are closed for now. Follow us on Instagram to hear when they open again.</p>
+      )}
+    </div>
+  </section>
+</Layout>

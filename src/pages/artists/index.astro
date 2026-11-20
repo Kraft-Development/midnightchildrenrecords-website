@@ -1,0 +1,19 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ArtistCard from '../../components/ArtistCard.astro';
+import { label, artists } from '../../lib/data';
+---
+<Layout title={`Artists | ${label.name}`} description={`The artists on ${label.name}.`} path="/artists/" current="artists">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Roster</p>
+      <h1 class="page-title">The children</h1>
+      <p class="page-lead">The artists who call {label.shortName} home.</p>
+    </div>
+  </section>
+  <section class="section section--tight">
+    <div class="container">
+      {artists.length ? <ul class="artist-grid">{artists.map((a) => <ArtistCard artist={a} />)}</ul> : <p class="empty-note">Roster coming soon.</p>}
+    </div>
+  </section>
+</Layout>

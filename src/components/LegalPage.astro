@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro';
+import legal from '../content/legal.json';
+import { label } from '../lib/data';
+const { title, heading, path } = Astro.props;
+const updated = new Date(legal.updated + 'T12:00:00Z').toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+<Layout title={`${title} | ${label.name}`} description={`${title} for ${label.name}.`} path={path}>
+  <section class="legal">
+    <div class="container">
+      <header class="legal__head">
+        <p class="eyebrow">Legal</p>
+        <h1>{heading}</h1>
+        <p class="legal__meta">Last updated {updated}</p>
+      </header>
+      <article class="legal__body">
+        {legal.draft
+          ? <p>This page is being written for {label.company.legalName || label.name} and will be published before the site launches.</p>
+          : <slot />}
+      </article>
+    </div>
+  </section>
+</Layout>

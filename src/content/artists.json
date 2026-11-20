@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "sample-artist-one",
+    "sample": true,
+    "name": "Sample Artist One",
+    "genre": "Afro house",
+    "city": "Johannesburg",
+    "short": "SAMPLE: One line that introduces the artist on their card.",
+    "bio": "SAMPLE: A short biography goes here. Two or three paragraphs, factual, written or approved by the artist.\n\nSecond paragraph of the sample biography.",
+    "image": "",
+    "imageCredit": "",
+    "links": { "spotify": "", "appleMusic": "", "instagram": "", "soundcloud": "", "youtube": "" }
+  },
+  {
+    "slug": "sample-artist-two",
+    "sample": true,
+    "name": "Sample Artist Two",
+    "genre": "Deep house",
+    "city": "Cape Town",
+    "short": "SAMPLE: One line that introduces the artist on their card.",
+    "bio": "SAMPLE: A short biography goes here.",
+    "image": "",
+    "imageCredit": "",
+    "links": { "spotify": "", "appleMusic": "", "instagram": "", "soundcloud": "", "youtube": "" }
+  },
+  {
+    "slug": "sample-artist-three",
+    "sample": true,
+    "name": "Sample Artist Three",
+    "genre": "Amapiano",
+    "city": "Durban",
+    "short": "SAMPLE: One line that introduces the artist on their card.",
+    "bio": "SAMPLE: A short biography goes here.",
+    "image": "",
+    "imageCredit": "",
+    "links": { "spotify": "", "appleMusic": "", "instagram": "", "soundcloud": "", "youtube": "" }
+  }
+]

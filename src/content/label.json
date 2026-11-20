@@ -1,0 +1,31 @@
+{
+  "launched": false,
+  "name": "Midnight Children Records",
+  "shortName": "Midnight Children",
+  "tagline": "SAMPLE: An independent record label. Replace this line with the label's own tagline.",
+  "location": "SAMPLE: City, Country",
+  "founded": "",
+  "company": {
+    "legalName": "",
+    "registrationNumber": "",
+    "registeredAddress": "",
+    "informationOfficer": ""
+  },
+  "socials": {
+    "instagram": "https://www.instagram.com/midnightchildrenrecords/",
+    "spotify": "",
+    "appleMusic": "",
+    "youtube": "",
+    "soundcloud": "",
+    "tiktok": ""
+  },
+  "press": {
+    "kitUrl": ""
+  },
+  "demos": {
+    "open": true,
+    "genres": ["SAMPLE: Afro house", "SAMPLE: Amapiano", "SAMPLE: Deep house"],
+    "allowedHosts": ["soundcloud.com", "on.soundcloud.com", "drive.google.com", "dropbox.com", "disco.ac", "bandcamp.com", "youtube.com", "youtu.be", "wetransfer.com", "we.tl"],
+    "replyNote": "SAMPLE: We listen to everything, but we only reply when we want to hear more."
+  }
+}

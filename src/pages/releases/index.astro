@@ -1,0 +1,35 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ReleaseCard from '../../components/ReleaseCard.astro';
+import { label, releases, artists, year } from '../../lib/data';
+const years = [...new Set(releases.map((r) => year(r.date)))];
+const withReleases = artists.filter((a) => releases.some((r) => r.artists.includes(a.slug)));
+---
+<Layout title={`Releases | ${label.name}`} description={`Every release on ${label.name}, newest first.`} path="/releases/" current="releases">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Catalogue</p>
+      <h1 class="page-title">Releases</h1>
+      <p class="page-lead">Everything we have put out, newest first.</p>
+    </div>
+  </section>
+  <section class="section section--tight">
+    <div class="container">
+      {releases.length > 1 && (
+        <form class="filters" data-filters hidden aria-label="Filter releases">
+          <label class="filters__field"><span>Artist</span>
+            <select name="artist"><option value="">All artists</option>{withReleases.map((a) => <option value={a.slug}>{a.name}</option>)}</select>
+          </label>
+          <label class="filters__field"><span>Year</span>
+            <select name="year"><option value="">All years</option>{years.map((y) => <option value={y}>{y}</option>)}</select>
+          </label>
+          <p class="filters__count" data-filter-count aria-live="polite"></p>
+        </form>
+      )}
+      {releases.length
+        ? <ul class="release-grid" data-filter-list>{releases.map((r) => <ReleaseCard release={r} />)}</ul>
+        : <p class="empty-note">The first releases are on their way.</p>}
+      <p class="empty-note" data-filter-empty hidden>No releases match these filters.</p>
+    </div>
+  </section>
+</Layout>
