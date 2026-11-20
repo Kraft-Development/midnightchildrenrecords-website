@@ -28,7 +28,7 @@ const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.
     <div class="container artist-page__grid">
       <figure class="artist-page__media">
         {artist.image
-          ? <img src={artist.image} alt={artist.name} width="900" height="1125" fetchpriority="high">
+          ? <img src={artist.image} alt={`${artist.name}, press photo`} width="900" height="1125" fetchpriority="high">
           : <span class="artist-card__placeholder artist-card__placeholder--large" aria-hidden="true"><img src="/img/moon.svg" alt="" width="793" height="833"></span>}
         {artist.imageCredit && <figcaption>Photo: {artist.imageCredit}</figcaption>}
       </figure>

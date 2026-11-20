@@ -13,7 +13,8 @@ function run(mutate) {
   const dir = mkdtempSync(join(tmpdir(), 'mcr-'));
   mkdirSync(join(dir, 'src'), { recursive: true });
   cpSync(join(root, 'src/content'), join(dir, 'src/content'), { recursive: true });
-  mkdirSync(join(dir, 'public/img'), { recursive: true });
+  mkdirSync(join(dir, 'public'), { recursive: true });
+  cpSync(join(root, 'public/img'), join(dir, 'public/img'), { recursive: true });
   const read = (f) => JSON.parse(readFileSync(join(dir, 'src/content', f), 'utf8'));
   const write = (f, v) => writeFileSync(join(dir, 'src/content', f), typeof v === 'string' ? v : JSON.stringify(v));
   mutate?.({ read, write });
