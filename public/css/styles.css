@@ -1,0 +1,11 @@
+@font-face { font-family: 'Archivo'; src: url('/fonts/archivo-latin-400-normal.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Archivo'; src: url('/fonts/archivo-latin-600-normal.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+:root { --bg: #08080a; --fg: #f3efe7; --muted: #9a958c; --accent: #f70000; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--fg); font-family: 'Archivo', system-ui, sans-serif; }
+.holding { min-height: 100svh; display: grid; place-content: center; justify-items: center; gap: 1rem; padding: 2rem; text-align: center; }
+.holding__logo { width: min(80vw, 560px); height: auto; }
+.holding__line { margin: 0; font-weight: 600; letter-spacing: .5em; text-transform: uppercase; color: var(--accent); }
+.holding__soon { margin: 1.5rem 0 0; color: var(--muted); }
+.holding__link { color: var(--fg); text-underline-offset: .25em; }
+.holding__link:hover, .holding__link:focus-visible { color: var(--accent); }

@@ -1,0 +1,6 @@
+name = "midnightchildrenrecords-website"
+compatibility_date = "2026-11-20"
+pages_build_output_dir = "dist"
+
+# No secrets in this file or anywhere in the repo.
+# Secrets and email addresses are set in Cloudflare: Workers & Pages -> this project -> Settings -> Variables and Secrets.

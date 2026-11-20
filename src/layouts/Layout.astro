@@ -1,0 +1,29 @@
+---
+const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
+const {
+  title = 'Midnight Children Records',
+  description = 'Midnight Children Records, an independent record label.',
+  path = '/',
+  noindex = false,
+} = Astro.props;
+const canonical = SITE + (path === '/' ? '/' : path.replace(/\/?$/, ''));
+// Changes on every deploy so browsers never keep an old copy of the styles.
+const buildId = Date.now().toString(36);
+---
+<!doctype html>
+<html lang="en-ZA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonical}>
+  {noindex ? <meta name="robots" content="noindex,nofollow"> : <meta name="robots" content="index,follow,max-image-preview:large">}
+  <meta name="theme-color" content="#08080a">
+  <link rel="preload" href="/fonts/archivo-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href={`/css/styles.css?v=${buildId}`}>
+</head>
+<body>
+  <slot />
+</body>
+</html>
