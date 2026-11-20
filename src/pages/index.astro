@@ -110,14 +110,33 @@ const jsonLd = {
 
   <Gallery eyebrow={`${num()} · Instagram`} />
 
-  <section class="section section--band" aria-labelledby="demo-title">
-    <div class="container band">
-      <img class="band__children" src="/img/children.svg" alt="" width="2182" height="851" loading="lazy">
-      <div>
-        <h2 class="band__title" id="demo-title">Got a record for us?</h2>
-        <p class="band__text">Send us a private link to your music. No attachments, just a link.</p>
+  <section class="section section--work" aria-labelledby="work-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">{num()} · Work with us</p>
+        <h2 class="section-title" id="work-title">Bookings &amp; demos</h2>
       </div>
-      <a class="btn btn--light" href="/demos/">Submit a demo <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+      <ul class="work-grid">
+        <li class="work-card work-card--primary">
+          <p class="work-card__kicker">For clubs, festivals &amp; private events</p>
+          <h3 class="work-card__title">Book an artist</h3>
+          <p class="work-card__text">{artists.map((a) => a.name).join(', ')}. Tell us the date and venue and we come back with availability and a quote.</p>
+          <a class="btn btn--light" href="/contact/?topic=booking">Booking request <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </li>
+        <li class="work-card">
+          <p class="work-card__kicker">For venues &amp; brands</p>
+          <h3 class="work-card__title">Host a label night</h3>
+          <p class="work-card__text">A {label.shortName} showcase or takeover: our artists, our sound, your room.</p>
+          <a class="btn btn--outline" href="/contact/?topic=showcase">Ask about a night <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </li>
+        <li class="work-card">
+          <p class="work-card__kicker">For producers &amp; artists</p>
+          <h3 class="work-card__title">Submit a demo</h3>
+          <p class="work-card__text">Send a private link to your music. No attachments, just a link. We listen to everything.</p>
+          <a class="btn btn--outline" href="/demos/">Send your music <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </li>
+      </ul>
+      <p class="work-note">Press, partnerships or licensing? <a href="/contact/?topic=press">Get in touch</a>.</p>
     </div>
   </section>
 </Layout>

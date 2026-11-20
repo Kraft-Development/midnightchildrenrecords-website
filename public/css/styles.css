@@ -260,9 +260,22 @@ button { font: inherit; color: inherit; }
 }
 .hero__moon {
   position: absolute; z-index: -1; right: -6vw; top: calc(var(--header-h) + 2vh);
-  width: clamp(9rem, 26vw, 24rem); height: auto; opacity: .95;
-  filter: drop-shadow(0 0 60px rgba(252, 0, 0, .35));
+  width: clamp(9rem, 26vw, 24rem); height: auto;
+  filter: drop-shadow(0 0 18px rgba(255, 40, 40, .75)) drop-shadow(0 0 60px rgba(252, 0, 0, .55)) drop-shadow(0 0 140px rgba(252, 0, 0, .35));
+  animation: moon-glow 6s ease-in-out infinite;
 }
+/* Soft red halo behind the moon, like light bleeding into the night. */
+.hero::before {
+  content: ""; position: absolute; z-index: -2; right: -10vw; top: calc(var(--header-h) - 6vh);
+  width: clamp(16rem, 44vw, 40rem); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, rgba(252, 0, 0, .22) 0%, rgba(252, 0, 0, .08) 40%, transparent 70%);
+  animation: moon-halo 6s ease-in-out infinite; pointer-events: none;
+}
+@keyframes moon-glow {
+  0%, 100% { filter: drop-shadow(0 0 16px rgba(255, 40, 40, .7)) drop-shadow(0 0 55px rgba(252, 0, 0, .5)) drop-shadow(0 0 120px rgba(252, 0, 0, .3)); }
+  50% { filter: drop-shadow(0 0 24px rgba(255, 60, 60, .9)) drop-shadow(0 0 80px rgba(252, 0, 0, .65)) drop-shadow(0 0 180px rgba(252, 0, 0, .45)); }
+}
+@keyframes moon-halo { 0%, 100% { opacity: .75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
 .hero__content { align-self: center; padding: calc(var(--header-h) + 2rem) var(--gutter) 2rem; text-align: center; }
 .hero__title { margin: 0 auto; width: min(64vw, 46rem, 58vh * 1.54); line-height: 0; }
 .hero__title img { width: 100%; height: auto; filter: drop-shadow(0 10px 40px rgba(0, 0, 0, .6)); }
@@ -616,12 +629,27 @@ button { font: inherit; color: inherit; }
   .ig-follow__handle { grid-column: 1 / -1; }
 }
 
+/* ---------- Work with us (bookings & demos) ---------- */
+.work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.5rem); }
+.work-card { display: flex; flex-direction: column; align-items: flex-start; gap: .9rem; padding: clamp(1.5rem, 3vw, 2.25rem); background: var(--bg-2); border: 1px solid var(--line); transition: border-color .25s, transform .3s var(--ease); }
+.work-card:hover { border-color: var(--green); transform: translateY(-3px); }
+.work-card--primary { background: var(--green); border-color: var(--green); }
+.work-card--primary:hover { border-color: var(--green-hover); }
+.work-card__kicker { font-size: .7rem; font-weight: 600; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--green-bright); }
+.work-card--primary .work-card__kicker { color: var(--ink); opacity: .8; }
+.work-card__title { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.9rem, 3vw, 2.6rem); line-height: 1; }
+.work-card__text { color: var(--ink-2); flex: 1; margin-bottom: .6rem; }
+.work-card--primary .work-card__text { color: var(--ink); opacity: .9; }
+.work-note { margin-top: 1.75rem; color: var(--ink-3); }
+.work-note a { color: var(--ink); text-decoration-color: var(--green); text-underline-offset: .25em; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1100px) {
   .release-grid, .artist-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 900px) {
   :root { --header-h: 72px; }
+  .work-grid { grid-template-columns: 1fr; }
   .nav-toggle { display: block; }
   .site-nav {
     position: fixed; inset: 0; z-index: 55;
