@@ -1,7 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ReleaseCard from '../../components/ReleaseCard.astro';
-import { label, artists, releasesFor, linkList } from '../../lib/data';
+import EventRow from '../../components/EventRow.astro';
+import { label, artists, releasesFor, eventsFor, linkList, year, TIER_LABEL, fmtEvent } from '../../lib/data';
 
 export function getStaticPaths() {
   return artists.map((a) => ({ params: { slug: a.slug }, props: { artist: a } }));
@@ -11,7 +12,11 @@ const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
 const path = `/artists/${artist.slug}/`;
 const links = linkList(artist.links);
 const own = releasesFor(artist.slug);
+const shows = eventsFor(artist.slug);
+// Every track this artist has on the label, newest release first.
+const tracks = own.flatMap((r) => (r.tracks?.length ? r.tracks : [{ title: r.title }]).map((t) => ({ ...t, release: r })));
 const paragraphs = (artist.bio || '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+const tierLabel = artist.tier === 'founder' ? 'Founder' : 'Friend of the label';
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'MusicGroup',
@@ -19,9 +24,10 @@ const jsonLd = {
   url: SITE + path,
   ...(artist.genre ? { genre: artist.genre } : {}),
   ...(artist.image ? { image: SITE + artist.image } : {}),
-  ...(links.length ? { sameAs: links.map((l) => l.url) } : {}),
+  ...(links.length || artist.website ? { sameAs: [...links.map((l) => l.url), ...(artist.website ? [artist.website] : [])] } : {}),
+  ...(own.length ? { album: own.map((r) => ({ '@type': 'MusicAlbum', name: r.title, url: `${SITE}/releases/${r.slug}/` })) } : {}),
 };
-const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.short : `${artist.name} on ${label.name}: releases, biography and links.`;
+const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.short : `${artist.name} on ${label.name}: releases, biography, shows and bookings.`;
 ---
 <Layout title={`${artist.name} | ${label.name}`} description={description} path={path} jsonLd={jsonLd} image={artist.image || undefined} current="artists">
   <article class="artist-page">
@@ -33,24 +39,63 @@ const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.
         {artist.imageCredit && <figcaption>Photo: {artist.imageCredit}</figcaption>}
       </figure>
       <div class="artist-page__text">
-        <p class="eyebrow">{artist.role || 'Artist'}</p>
+        <p class="eyebrow"><a href="/artists/">The Children</a> · {tierLabel}</p>
         <h1 class="page-title">{artist.name}</h1>
         <p class="artist-page__meta">{[artist.genre, artist.city].filter(Boolean).join(' · ')}</p>
         <div class="prose">{paragraphs.map((p) => <p>{p}</p>)}</div>
+        <dl class="facts facts--artist">
+          <div><dt>On the label</dt><dd class="facts__text">{TIER_LABEL[artist.tier]}</dd></div>
+          {artist.city && <div><dt>From</dt><dd class="facts__text">{artist.city}</dd></div>}
+          <div><dt>MCR releases</dt><dd>{own.length}</dd></div>
+          {shows[0] && <div><dt>Next show</dt><dd class="facts__text"><a href={`#${shows[0].id}`}>{fmtEvent(shows[0], { day: 'numeric', month: 'short' })} · {shows[0].event}</a></dd></div>}
+        </dl>
         <div class="artist-page__actions">
           <a class="btn btn--solid" href={`/contact/?topic=booking&artist=${artist.slug}`}>Book {artist.name} <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
           {artist.website && <a class="link-arrow" href={artist.website} rel="noopener noreferrer">Official website <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>}
         </div>
-        {links.length > 0 && <ul class="listen__list">{links.map((l) => <li><a class="btn btn--small" href={l.url} rel="noopener noreferrer">{l.name}</a></li>)}</ul>}
+        {links.length > 0 && (
+          <div class="listen"><p class="listen__title">Listen &amp; follow</p><ul class="listen__list">{links.map((l) => <li><a class="btn btn--small" href={l.url} rel="noopener noreferrer">{l.name}</a></li>)}</ul></div>
+        )}
       </div>
     </div>
   </article>
-  {own.length > 0 && (
-    <section class="section">
+
+  <section class="section" aria-labelledby="tracks-title">
+    <div class="container">
+      <div class="section-head"><p class="eyebrow">On {label.shortName}</p><h2 class="section-title section-title--sm" id="tracks-title">Tracks with MCR</h2></div>
+      {tracks.length ? (
+        <ol class="track-table">
+          {tracks.map((t, i) => (
+            <li class="track-row">
+              <span class="track-row__n">{String(i + 1).padStart(2, '0')}</span>
+              <span class="track-row__title">{t.title}</span>
+              <a class="track-row__release" href={`/releases/${t.release.slug}/`}>{t.release.title}<span> · {t.release.type}{t.release.catalogue && ` · ${t.release.catalogue}`}</span></a>
+              <span class="track-row__year">{year(t.release.date)}</span>
+              <span class="track-row__listen">{linkList(t.release.links).slice(0, 2).map((l) => <a href={l.url} rel="noopener noreferrer">{l.name}</a>)}</span>
+            </li>
+          ))}
+        </ol>
+      ) : <p class="empty-note">The first {artist.name} release on {label.shortName} is on its way.</p>}
+      {own.length > 0 && <ul class="release-grid release-grid--artist">{own.map((r) => <ReleaseCard release={r} />)}</ul>}
+    </div>
+  </section>
+
+  {shows.length > 0 && (
+    <section class="section" aria-labelledby="shows-title">
       <div class="container">
-        <div class="section-head"><p class="eyebrow">On {label.shortName}</p><h2 class="section-title section-title--sm">Releases</h2></div>
-        <ul class="release-grid">{own.map((r) => <ReleaseCard release={r} />)}</ul>
+        <div class="section-head"><p class="eyebrow">Live</p><h2 class="section-title section-title--sm" id="shows-title">Upcoming shows</h2></div>
+        <ol class="event-list">{shows.map((e) => <EventRow e={e} />)}</ol>
       </div>
     </section>
   )}
+
+  <section class="section section--band">
+    <div class="container band">
+      <div>
+        <h2 class="band__title">Book {artist.name}</h2>
+        <p class="band__text">Clubs, festivals, private events and brands. Tell us the date and venue.</p>
+      </div>
+      <a class="btn btn--light" href={`/contact/?topic=booking&artist=${artist.slug}`}>Booking request <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+    </div>
+  </section>
 </Layout>

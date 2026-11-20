@@ -2,7 +2,7 @@
   {
     "slug": "timo-odv",
     "name": "TiMO ODV",
-    "role": "Co-founder",
+    "tier": "founder",
     "genre": "DJ · Producer · Singer · Songwriter",
     "city": "Kempton Park, East Rand",
     "short": "Co-founder. DJ, producer, singer and songwriter from Kempton Park.",
@@ -20,7 +20,7 @@
   {
     "slug": "aidin-caye",
     "name": "Aidin Caye",
-    "role": "Co-founder",
+    "tier": "founder",
     "genre": "DJ · Producer",
     "city": "East Rand",
     "short": "Co-founder. DJ and producer from the East Rand.",
@@ -35,7 +35,7 @@
   {
     "slug": "andeon",
     "name": "Andeon",
-    "role": "Label artist",
+    "tier": "friend",
     "genre": "DJ · Producer",
     "city": "South Africa",
     "short": "DJ and producer from South Africa, on the label's first release with TiMO ODV.",

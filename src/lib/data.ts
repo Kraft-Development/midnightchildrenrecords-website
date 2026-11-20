@@ -9,11 +9,14 @@ import { cleanEvents, isUpcomingEvent, startIso } from '../../scripts/events.mjs
 export const label = labelJson;
 
 export type Links = Record<string, string>;
-export interface Artist { slug: string; name: string; role?: string; website?: string; genre?: string; city?: string; short?: string; bio?: string; image?: string; imageCredit?: string; links?: Links; sample?: boolean; }
+export interface Artist { slug: string; name: string; tier: 'founder' | 'friend'; website?: string; genre?: string; city?: string; short?: string; bio?: string; image?: string; imageCredit?: string; links?: Links; sample?: boolean; }
 export interface Track { title: string; duration?: string; }
 export interface Release { slug: string; title: string; artists: string[]; featuring?: string[]; type: string; date: string; catalogue?: string; cover?: string; description?: string; tracks?: Track[]; links?: Links; sample?: boolean; }
 
 export const artists: Artist[] = artistsJson as Artist[];
+export const founders = artists.filter((a) => a.tier === 'founder');
+export const friends = artists.filter((a) => a.tier !== 'founder');
+export const TIER_LABEL = { founder: 'Founder', friend: 'Friend' } as const;
 const bySlug = new Map(artists.map((a) => [a.slug, a]));
 export const artistBySlug = (s: string) => bySlug.get(s);
 
@@ -58,3 +61,6 @@ export const fmtEvent = (e: LabelEvent, opts: Intl.DateTimeFormatOptions) => eve
 // ---------- Instagram gallery (written at build time by scripts/fetch-data.mjs) ----------
 export interface GalleryItem { src: string; alt: string; url: string; }
 export const gallery: GalleryItem[] = (galleryJson as GalleryItem[]).filter((g) => /^\/img\/gallery\/ig-\d+\.jpg$/.test(g.src));
+
+// Events an artist is on the line-up for.
+export const eventsFor = (slug: string) => upcomingEvents.filter((e) => e.lineup.includes(slug));
