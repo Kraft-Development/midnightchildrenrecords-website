@@ -259,15 +259,15 @@ button { font: inherit; color: inherit; }
   background: radial-gradient(ellipse 70% 55% at 50% 45%, #0f1311 0%, var(--bg) 70%);
 }
 .hero__moon {
-  position: absolute; z-index: -1; right: -6vw; top: calc(var(--header-h) + 2vh);
-  width: clamp(9rem, 26vw, 24rem); height: auto;
+  position: absolute; z-index: -1; right: max(-6vw, -5rem); top: calc(var(--header-h) + 2vh);
+  width: clamp(7rem, min(22vw, 34vh), 22rem); height: auto;
   filter: drop-shadow(0 0 18px rgba(255, 40, 40, .75)) drop-shadow(0 0 60px rgba(252, 0, 0, .55)) drop-shadow(0 0 140px rgba(252, 0, 0, .35));
   animation: moon-glow 6s ease-in-out infinite;
 }
 /* Soft red halo behind the moon, like light bleeding into the night. */
 .hero::before {
   content: ""; position: absolute; z-index: -2; right: -10vw; top: calc(var(--header-h) - 6vh);
-  width: clamp(16rem, 44vw, 40rem); aspect-ratio: 1; border-radius: 50%;
+  width: clamp(14rem, min(40vw, 60vh), 38rem); aspect-ratio: 1; border-radius: 50%;
   background: radial-gradient(circle, rgba(252, 0, 0, .22) 0%, rgba(252, 0, 0, .08) 40%, transparent 70%);
   animation: moon-halo 6s ease-in-out infinite; pointer-events: none;
 }
@@ -276,8 +276,8 @@ button { font: inherit; color: inherit; }
   50% { filter: drop-shadow(0 0 24px rgba(255, 60, 60, .9)) drop-shadow(0 0 80px rgba(252, 0, 0, .65)) drop-shadow(0 0 180px rgba(252, 0, 0, .45)); }
 }
 @keyframes moon-halo { 0%, 100% { opacity: .75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
-.hero__content { align-self: center; padding: calc(var(--header-h) + 2rem) var(--gutter) 2rem; text-align: center; }
-.hero__title { margin: 0 auto; width: min(64vw, 46rem, 58vh * 1.54); line-height: 0; }
+.hero__content { align-self: center; padding: calc(var(--header-h) + clamp(1rem, 3vh, 2rem)) var(--gutter) clamp(1rem, 3vh, 2rem); text-align: center; }
+.hero__title { margin: 0 auto; width: clamp(15rem, min(62vw, 46rem, (100svh - var(--header-h) - 21rem) * 1.64), 46rem); line-height: 0; }
 .hero__title img { width: 100%; height: auto; filter: drop-shadow(0 10px 40px rgba(0, 0, 0, .6)); }
 .hero__role {
   display: flex; align-items: center; justify-content: center; gap: 1.5rem;
@@ -605,7 +605,7 @@ button { font: inherit; color: inherit; }
 .site-footer__preview { color: var(--green-bright); }
 [data-booking-only][hidden] { display: none; }
 
-@media (max-width: 1100px) {
+@media (max-width: 900px) {
   .countdown { grid-template-columns: minmax(0, 1fr) auto; }
   .countdown__actions { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 1.25rem; }
 }
@@ -634,7 +634,7 @@ button { font: inherit; color: inherit; }
 }
 
 /* ---------- Work with us (bookings & demos) ---------- */
-.work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1rem, 2vw, 1.5rem); }
+.work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 1.5rem); }
 .work-card { display: flex; flex-direction: column; align-items: flex-start; gap: .9rem; padding: clamp(1.5rem, 3vw, 2.25rem); background: var(--bg-2); border: 1px solid var(--line); transition: border-color .25s, transform .3s var(--ease); }
 .work-card:hover { border-color: var(--green); transform: translateY(-3px); }
 .work-card--primary { background: var(--green); border-color: var(--green); }
@@ -695,7 +695,6 @@ button { font: inherit; color: inherit; }
 }
 @media (max-width: 900px) {
   :root { --header-h: 72px; }
-  .work-grid { grid-template-columns: 1fr; }
   .nav-toggle { display: block; }
   .site-nav {
     position: fixed; inset: 0; z-index: 55;
@@ -750,8 +749,12 @@ button { font: inherit; color: inherit; }
 }
 
 /* ---------- The Children: responsive (kept last so it wins over the base rules) ---------- */
-@media (max-width: 1100px) {
+@media (max-width: 1180px) {
   .artist-grid--friends { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .founder { grid-template-columns: 1fr; }
+  .founder__media { min-height: 0; aspect-ratio: 4 / 3; }
+}
+@media (max-width: 640px) {
   .founder-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 700px) {
@@ -764,3 +767,21 @@ button { font: inherit; color: inherit; }
   .founder { grid-template-columns: 1fr; }
   .founder__media { aspect-ratio: 1; min-height: 0; }
 }
+
+/* ---------- Short screens (small laptops, landscape tablets) ---------- */
+@media (max-height: 860px) and (min-width: 901px) {
+  :root { --section-y: clamp(3rem, 6vw, 5rem); }
+  .hero__role { margin-top: 1rem; }
+  .hero__tagline { margin-top: .6rem; }
+  .countdown { padding-block: .9rem; }
+  .page-head { padding-top: calc(var(--header-h) + 1.75rem); }
+}
+/* Small laptops: slightly smaller type so layouts keep their proportions */
+@media (min-width: 1101px) and (max-width: 1440px) { html { font-size: 93.75%; } }
+
+/* Bookings & demos: primary card full width, the other two side by side, between phone and desktop */
+@media (max-width: 1180px) and (min-width: 641px) {
+  .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .work-card--primary { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) { .work-grid { grid-template-columns: 1fr; } }
