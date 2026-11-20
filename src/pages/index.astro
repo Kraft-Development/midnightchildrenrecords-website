@@ -24,20 +24,19 @@ const jsonLd = {
 ---
 <Layout path="/" jsonLd={jsonLd}>
   <section class="hero hero--label">
-    <img class="hero__moon" src="/img/moon.svg" alt="" width="793" height="833" aria-hidden="true">
+    <div class="hero__lights" aria-hidden="true"></div>
+    <div class="hero__haze" aria-hidden="true"></div>
+    <div class="hero__crowd" aria-hidden="true"></div>
     <div class="hero__content">
-      <h1 class="hero__title"><img src="/img/logo-wordmark.svg" alt={label.name} width="1870" height="1215" fetchpriority="high"></h1>
-      <p class="hero__role"><span>Records</span></p>
+      <h1 class="hero__title"><span>Midnight</span> <span class="is-green">Children.</span><span class="visually-hidden"> Records</span></h1>
+      <p class="hero__role">Records<span>/</span>Artists<span>/</span>Nights</p>
       <p class="hero__tagline">{tagline}</p>
+      <div class="hero__cta">
+        <a class="btn btn--solid btn--pill" href={upcomingEvents.length ? '/events/' : '/releases/'}>{upcomingEvents.length ? 'Upcoming events' : 'Latest releases'} <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        <a class="btn btn--ghost btn--pill" href="/releases/">Releases</a>
+      </div>
     </div>
-    <div class="hero__footer">
-      {nextEvent ? <Countdown /> : (
-        <>
-          <a class="btn btn--outline" href="/releases/">Explore releases <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
-          <a class="link-arrow" href="/demos/">Send a demo <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
-        </>
-      )}
-    </div>
+    {nextEvent && <div class="hero__footer"><Countdown /></div>}
   </section>
 
   {latest && (
