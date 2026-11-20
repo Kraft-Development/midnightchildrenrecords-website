@@ -1,19 +1,31 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ArtistCard from '../../components/ArtistCard.astro';
-import { label, artists } from '../../lib/data';
+import FounderCard from '../../components/FounderCard.astro';
+import { label, founders, friends } from '../../lib/data';
 ---
-<Layout title={`Artists | ${label.name}`} description={`The artists on ${label.name}.`} path="/artists/" current="artists">
+<Layout title={`The Children: artists | ${label.name}`} description={`The founders and friends of ${label.name}.`} path="/artists/" current="artists">
   <section class="page-head">
     <div class="container">
       <p class="eyebrow">Roster</p>
-      <h1 class="page-title">The children</h1>
-      <p class="page-lead">The artists who call {label.shortName} home.</p>
+      <h1 class="page-title">The Children</h1>
+      <p class="page-lead">The founders who started the label, and the friends who release with us.</p>
     </div>
   </section>
-  <section class="section section--tight">
-    <div class="container">
-      {artists.length ? <ul class="artist-grid">{artists.map((a) => <ArtistCard artist={a} />)}</ul> : <p class="empty-note">Roster coming soon.</p>}
-    </div>
-  </section>
+  {founders.length > 0 && (
+    <section class="section section--tight" aria-labelledby="founders-title">
+      <div class="container">
+        <h2 class="tier-title" id="founders-title">Founders</h2>
+        <ul class="founder-grid">{founders.map((a) => <FounderCard artist={a} />)}</ul>
+      </div>
+    </section>
+  )}
+  {friends.length > 0 && (
+    <section class="section section--tight" aria-labelledby="friends-title">
+      <div class="container">
+        <h2 class="tier-title" id="friends-title">Friends</h2>
+        <ul class="artist-grid artist-grid--friends">{friends.map((a) => <ArtistCard artist={a} />)}</ul>
+      </div>
+    </section>
+  )}
 </Layout>

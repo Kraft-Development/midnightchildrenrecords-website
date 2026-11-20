@@ -3,10 +3,11 @@ import Layout from '../layouts/Layout.astro';
 import Cover from '../components/Cover.astro';
 import ReleaseCard from '../components/ReleaseCard.astro';
 import ArtistCard from '../components/ArtistCard.astro';
+import FounderCard from '../components/FounderCard.astro';
 import Countdown from '../components/Countdown.astro';
 import EventRow from '../components/EventRow.astro';
 import Gallery from '../components/Gallery.astro';
-import { label, artists, releases, creditLine, formatDate, isUpcoming, linkList, upcomingEvents, nextEvent } from '../lib/data';
+import { label, artists, founders, friends, releases, creditLine, formatDate, isUpcoming, linkList, upcomingEvents, nextEvent } from '../lib/data';
 
 const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
 const latest = releases[0];
@@ -99,11 +100,22 @@ const jsonLd = {
         <div class="section-head section-head--row">
           <div>
             <p class="eyebrow">{num()} · Roster</p>
-            <h2 class="section-title" id="roster-title">The children</h2>
+            <h2 class="section-title" id="roster-title">The Children</h2>
           </div>
           <a class="link-arrow" href="/artists/">All artists <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
         </div>
-        <ul class="artist-grid">{artists.slice(0, 4).map((a) => <ArtistCard artist={a} />)}</ul>
+        {founders.length > 0 && (
+          <>
+            <h3 class="tier-title">Founders</h3>
+            <ul class="founder-grid">{founders.map((a) => <FounderCard artist={a} />)}</ul>
+          </>
+        )}
+        {friends.length > 0 && (
+          <>
+            <h3 class="tier-title">Friends</h3>
+            <ul class="artist-grid artist-grid--friends">{friends.map((a) => <ArtistCard artist={a} />)}</ul>
+          </>
+        )}
       </div>
     </section>
   )}

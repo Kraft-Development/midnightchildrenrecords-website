@@ -1,0 +1,26 @@
+---
+// Large founder panel: photo, name, short bio, booking and listening links.
+import { linkList, releasesFor, TIER_LABEL } from '../lib/data';
+const { artist } = Astro.props;
+const links = linkList(artist.links).slice(0, 4);
+const count = releasesFor(artist.slug).length;
+---
+<li class="founder">
+  <a class="founder__media" href={`/artists/${artist.slug}/`} tabindex="-1" aria-hidden="true">
+    {artist.image
+      ? <img src={artist.image} alt="" width="900" height="1125" loading="lazy" decoding="async">
+      : <span class="artist-card__placeholder"><img src="/img/moon.svg" alt="" width="793" height="833"></span>}
+  </a>
+  <div class="founder__body">
+    <p class="founder__tag">{TIER_LABEL[artist.tier]}</p>
+    <h3 class="founder__name"><a href={`/artists/${artist.slug}/`}>{artist.name}</a></h3>
+    <p class="founder__meta">{[artist.genre, artist.city].filter(Boolean).join(' · ')}</p>
+    {artist.short && <p class="founder__short">{artist.short}</p>}
+    {count > 0 && <p class="founder__count">{count} release{count === 1 ? '' : 's'} on MCR</p>}
+    <div class="founder__actions">
+      <a class="btn btn--solid" href={`/contact/?topic=booking&artist=${artist.slug}`}>Book {artist.name} <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+      <a class="link-arrow" href={`/artists/${artist.slug}/`}>Profile <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+    </div>
+    {links.length > 0 && <ul class="founder__links">{links.map((l) => <li><a href={l.url} rel="noopener noreferrer">{l.name}</a></li>)}</ul>}
+  </div>
+</li>

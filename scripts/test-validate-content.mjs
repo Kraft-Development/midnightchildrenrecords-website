@@ -49,6 +49,7 @@ expect('event html in name', edit('events.json', (e) => { e[0].event = '<b>x</b>
 expect('duplicate event', edit('events.json', (e) => { e.push({ ...e[0] }); }), false, /duplicate/);
 expect('release year only is allowed', edit('releases.json', (r) => { r[0].date = '2026'; }), true);
 expect('gallery outside our domain', ({ write }) => write('gallery.json', [{ src: 'https://cdn.example/x.jpg', alt: '', url: '' }]), false, /ig-N/);
+expect('unknown artist tier', edit('artists.json', (a) => { a[0].tier = 'legend'; }), false, /founder or friend/);
 expect('company details required at launch', edit('label.json', (l) => { l.launched = true; }), false, /required before launch/);
 
 if (failed) { console.error(`\n${failed} validator test(s) failed.`); process.exit(1); }

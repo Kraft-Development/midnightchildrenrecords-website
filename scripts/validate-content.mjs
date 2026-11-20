@@ -111,7 +111,7 @@ if (artists) {
     else artistSlugs.add(a.slug);
     text(`${w}.name`, a.name, { required: true, max: 60 });
     text(`${w}.genre`, a.genre, { max: 60 });
-    text(`${w}.role`, a.role, { max: 30 });
+    if (!['founder', 'friend'].includes(a.tier)) err(`${w}.tier`, 'must be founder or friend');
     if (a.website) { try { const u = new URL(a.website); if (u.protocol !== 'https:' || u.username) err(`${w}.website`, 'must be an https link'); } catch { err(`${w}.website`, 'is not a valid link'); } }
     text(`${w}.city`, a.city, { max: 60 });
     text(`${w}.short`, a.short, { max: 140 });
