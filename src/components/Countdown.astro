@@ -1,0 +1,31 @@
+---
+// Countdown to the next event. Rendered with the days left at build time; main.js keeps it ticking.
+// When the event has no start time yet, it counts to the start of that day.
+import { nextEvent, startIso, fmtEvent } from '../lib/data';
+const e = nextEvent;
+const start = e ? new Date(startIso(e)).getTime() : 0;
+const days = e ? Math.max(0, Math.floor((start - Date.now()) / 86400e3)) : 0;
+const { variant = 'hero' } = Astro.props;
+---
+{e && (
+  <div class={`countdown countdown--${variant}`} data-countdown data-start={startIso(e)} data-has-time={e.time ? '1' : '0'}>
+    <div class="countdown__info">
+      <p class="countdown__label">Next up{e.series && <> · {e.series}</>}</p>
+      <p class="countdown__event"><a href={`/events/#${e.id}`}>{e.event}</a></p>
+      <p class="countdown__meta">{fmtEvent(e, { weekday: 'short', day: 'numeric', month: 'short' })}{e.time && ` · ${e.time}`} · {e.venue}, {e.city}</p>
+    </div>
+    <div class="countdown__clock" aria-hidden="true">
+      <span class="countdown__unit"><span class="countdown__n" data-cd="d">{String(days).padStart(2, '0')}</span><span class="countdown__u">days</span></span>
+      <span class="countdown__unit"><span class="countdown__n" data-cd="h">--</span><span class="countdown__u">hrs</span></span>
+      <span class="countdown__unit"><span class="countdown__n" data-cd="m">--</span><span class="countdown__u">min</span></span>
+      <span class="countdown__unit countdown__unit--s"><span class="countdown__n" data-cd="s">--</span><span class="countdown__u">sec</span></span>
+    </div>
+    <p class="visually-hidden" data-cd-text>{days} days to {e.event}</p>
+    <div class="countdown__actions">
+      {e.url && e.status === 'tickets' && <a class="btn btn--solid" href={e.url} rel="noopener noreferrer">Tickets <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>}
+      {e.status === 'soldout' && <span class="tag">Sold out</span>}
+      {e.status === 'free' && <span class="tag">Free entry</span>}
+      <a class="link-arrow" href={`/events/${e.id}.ics`}>Add to calendar <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+    </div>
+  </div>
+)}

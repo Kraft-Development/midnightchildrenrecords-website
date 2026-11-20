@@ -1,3 +1,5 @@
-# Holding page: search engines stay out until launch.
+# Search engines stay out until launch. At launch this becomes "Allow: /" plus the sitemap line below.
 User-agent: *
 Disallow: /
+
+# Sitemap: https://midnightchildrenrecords.com/sitemap.xml

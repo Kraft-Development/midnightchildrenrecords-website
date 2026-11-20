@@ -1,0 +1,123 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import EventRow from '../../components/EventRow.astro';
+import Countdown from '../../components/Countdown.astro';
+import { label, upcomingEvents, pastEvents, events, startIso, artistBySlug } from '../../lib/data';
+
+const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
+// Months shown in the calendar: this month through the month of the last upcoming event (at least 3 months).
+const today = new Date();
+const first = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
+const lastEvent = upcomingEvents.at(-1);
+const lastMonth = lastEvent ? new Date(Date.UTC(+lastEvent.date.slice(0, 4), +lastEvent.date.slice(5, 7) - 1, 1)) : first;
+const months: Date[] = [];
+for (let d = new Date(first); months.length < 3 || d <= lastMonth; d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1))) {
+  months.push(d); if (months.length >= 18) break;
+}
+const byDay = new Map<string, typeof events>();
+for (const e of events) byDay.set(e.date, [...(byDay.get(e.date) || []), e]);
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+const weeksOf = (m: Date) => {
+  const lead = (m.getUTCDay() + 6) % 7; // Monday first
+  const days = new Date(Date.UTC(m.getUTCFullYear(), m.getUTCMonth() + 1, 0)).getUTCDate();
+  const cells: (Date | null)[] = [...Array(lead).fill(null), ...Array.from({ length: days }, (_, i) => new Date(Date.UTC(m.getUTCFullYear(), m.getUTCMonth(), i + 1)))];
+  while (cells.length % 7) cells.push(null);
+  return Array.from({ length: cells.length / 7 }, (_, w) => cells.slice(w * 7, w * 7 + 7));
+};
+const monthName = (m: Date) => m.toLocaleDateString('en-ZA', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+
+const jsonLd = upcomingEvents.length ? {
+  '@context': 'https://schema.org',
+  '@graph': upcomingEvents.map((e) => ({
+    '@type': 'MusicEvent',
+    name: e.event,
+    startDate: e.time ? startIso(e) : e.date,
+    eventStatus: e.status === 'cancelled' ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: { '@type': 'Place', name: e.venue, address: { '@type': 'PostalAddress', streetAddress: e.address || undefined, addressLocality: e.city, addressCountry: 'ZA' } },
+    organizer: { '@type': 'Organization', name: label.name, url: `${SITE}/` },
+    url: `${SITE}/events/#${e.id}`,
+    ...(e.lineup.length ? { performer: e.lineup.map((s) => ({ '@type': 'MusicGroup', name: artistBySlug(s)?.name || s, url: `${SITE}/artists/${s}/` })) } : {}),
+    ...(e.url ? { offers: { '@type': 'Offer', url: e.url, availability: e.status === 'soldout' ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock' } } : {}),
+  })),
+} : null;
+---
+<Layout title={`Events | ${label.name}`} description={`Upcoming ${label.shortName} nights and where the label's artists are playing.`} path="/events/" jsonLd={jsonLd} current="events">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">Nights</p>
+      <h1 class="page-title">Events</h1>
+      <p class="page-lead">Our own nights, where the label's records get played the way they were made to be heard.</p>
+    </div>
+  </section>
+
+  {upcomingEvents.length > 0 && (
+    <section class="section section--tight">
+      <div class="container"><Countdown variant="panel" /></div>
+    </section>
+  )}
+
+  <section class="section section--tight" aria-labelledby="upcoming-title">
+    <div class="container">
+      <div class="section-head"><h2 class="section-title section-title--sm" id="upcoming-title">Upcoming</h2></div>
+      {upcomingEvents.length
+        ? <ol class="event-list">{upcomingEvents.map((e) => <EventRow e={e} />)}</ol>
+        : <p class="empty-note">No dates announced right now. New nights land on <a href={label.socials.instagram} rel="noopener noreferrer">Instagram</a> first.</p>}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="calendar-title">
+    <div class="container">
+      <div class="section-head section-head--row">
+        <h2 class="section-title section-title--sm" id="calendar-title">Calendar</h2>
+        <div class="cal-nav" data-cal-nav hidden>
+          <button class="cal-nav__btn" type="button" data-cal-prev aria-label="Previous month">‹</button>
+          <button class="cal-nav__btn" type="button" data-cal-next aria-label="Next month">›</button>
+        </div>
+      </div>
+      <div class="calendar" data-calendar>
+        {months.map((m, mi) => (
+          <div class="cal-month" data-cal-month={iso(m).slice(0, 7)}>
+            <h3 class="cal-month__title">{monthName(m)}</h3>
+            <table class="cal-grid">
+              <thead><tr>{['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((d) => <th scope="col" abbr={d}>{d.slice(0, 1)}<span class="cal-grid__long">{d.slice(1)}</span></th>)}</tr></thead>
+              <tbody>
+                {weeksOf(m).map((week) => (
+                  <tr>{week.map((d) => {
+                    if (!d) return <td class="cal-day cal-day--empty"></td>;
+                    const list = byDay.get(iso(d)) || [];
+                    return (
+                      <td class={`cal-day${list.length ? ' cal-day--event' : ''}`} data-cal-date={iso(d)}>
+                        <span class="cal-day__n">{d.getUTCDate()}</span>
+                        {list.map((e) => <a class="cal-day__event" href={`#${e.id}`}><img src="/img/moon.svg" alt="" width="793" height="833"><span>{e.event}</span></a>)}
+                      </td>
+                    );
+                  })}</tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {pastEvents.length > 0 && (
+    <section class="section" aria-labelledby="past-title">
+      <div class="container">
+        <div class="section-head"><h2 class="section-title section-title--sm" id="past-title">Past nights</h2></div>
+        <ol class="event-list event-list--past">{pastEvents.slice(0, 12).map((e) => <EventRow e={e} past />)}</ol>
+      </div>
+    </section>
+  )}
+
+  <section class="section section--band">
+    <div class="container band">
+      <div>
+        <h2 class="band__title">Bring a night to your venue</h2>
+        <p class="band__text">Clubs, festivals and brands: book a label showcase or one of our artists.</p>
+      </div>
+      <a class="btn btn--light" href="/contact/?topic=booking">Booking request <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+    </div>
+  </section>
+</Layout>

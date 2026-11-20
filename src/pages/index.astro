@@ -1,11 +1,142 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Cover from '../components/Cover.astro';
+import ReleaseCard from '../components/ReleaseCard.astro';
+import ArtistCard from '../components/ArtistCard.astro';
+import Countdown from '../components/Countdown.astro';
+import EventRow from '../components/EventRow.astro';
+import Gallery from '../components/Gallery.astro';
+import { label, artists, releases, creditLine, formatDate, isUpcoming, linkList, upcomingEvents, nextEvent } from '../lib/data';
+
+const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
+const latest = releases[0];
+const more = releases.slice(1, 5);
+const tagline = label.tagline && !label.tagline.startsWith('SAMPLE') ? label.tagline : 'Independent record label';
+let n = 0; const num = () => String(++n).padStart(2, '0');
+const sameAs = Object.values(label.socials).filter(Boolean);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebSite', '@id': `${SITE}/#website`, url: `${SITE}/`, name: label.name },
+    { '@type': 'Organization', '@id': `${SITE}/#label`, name: label.name, url: `${SITE}/`, logo: `${SITE}/img/icon-512.png`, ...(sameAs.length ? { sameAs } : {}) },
+  ],
+};
 ---
-<Layout title="Midnight Children Records" noindex>
-  <main class="holding">
-    <img class="holding__logo" src="/img/logo-wordmark.svg" alt="Midnight Children" width="1870" height="1215">
-    <p class="holding__line">Records</p>
-    <p class="holding__soon">New site coming soon.</p>
-    <a class="holding__link" href="https://www.instagram.com/midnightchildrenrecords/" rel="noopener noreferrer">Instagram</a>
-  </main>
+<Layout path="/" jsonLd={jsonLd}>
+  <section class="hero hero--label">
+    <img class="hero__moon" src="/img/moon.svg" alt="" width="793" height="833" aria-hidden="true">
+    <div class="hero__content">
+      <h1 class="hero__title"><img src="/img/logo-wordmark.svg" alt={label.name} width="1870" height="1215" fetchpriority="high"></h1>
+      <p class="hero__role"><span>Records</span></p>
+      <p class="hero__tagline">{tagline}</p>
+    </div>
+    <div class="hero__footer">
+      {nextEvent ? <Countdown /> : (
+        <>
+          <a class="btn btn--outline" href="/releases/">Explore releases <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+          <a class="link-arrow" href="/demos/">Send a demo <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </>
+      )}
+    </div>
+  </section>
+
+  {latest && (
+    <section class="section section--spotlight" aria-labelledby="latest-title">
+      <div class="container spotlight">
+        <a class="spotlight__cover" href={`/releases/${latest.slug}/`}><Cover release={latest} eager /></a>
+        <div class="spotlight__text">
+          <p class="eyebrow">{num()} · {isUpcoming(latest) ? 'Coming soon' : 'Latest release'}</p>
+          <h2 class="section-title" id="latest-title">{latest.title}</h2>
+          <p class="spotlight__artist">{creditLine(latest)}</p>
+          <p class="spotlight__meta">{latest.type} · {isUpcoming(latest) ? 'Out ' : ''}{formatDate(latest.date)}{latest.catalogue && ` · ${latest.catalogue}`}</p>
+          {latest.tracks && latest.tracks.length > 1 && (
+            <ol class="tracklist">
+              {latest.tracks.map((t, i) => <li><span class="tracklist__n">{String(i + 1).padStart(2, '0')}</span><span class="tracklist__t">{t.title}</span><span class="tracklist__d">{t.duration}</span></li>)}
+            </ol>
+          )}
+          <div class="spotlight__actions">
+            {linkList(latest.links).slice(0, 3).map((l) => <a class="btn btn--small" href={l.url} rel="noopener noreferrer">{l.name}</a>)}
+            <a class="link-arrow" href={`/releases/${latest.slug}/`}>Release details <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {more.length > 0 && (
+    <section class="section" aria-labelledby="new-title">
+      <div class="container">
+        <div class="section-head section-head--row">
+          <div>
+            <p class="eyebrow">{num()} · Catalogue</p>
+            <h2 class="section-title" id="new-title">New releases</h2>
+          </div>
+          <a class="link-arrow" href="/releases/">All releases <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </div>
+        <ul class="release-grid">{more.map((r) => <ReleaseCard release={r} />)}</ul>
+      </div>
+    </section>
+  )}
+
+  {upcomingEvents.length > 0 && (
+    <section class="section section--events" aria-labelledby="events-title">
+      <div class="container">
+        <div class="section-head section-head--row">
+          <div>
+            <p class="eyebrow">{num()} · Nights</p>
+            <h2 class="section-title" id="events-title">Events</h2>
+          </div>
+          <a class="link-arrow" href="/events/">Calendar <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </div>
+        <ol class="event-list">{upcomingEvents.slice(0, 3).map((e) => <EventRow e={e} />)}</ol>
+      </div>
+    </section>
+  )}
+
+  {artists.length > 0 && (
+    <section class="section section--roster" aria-labelledby="roster-title">
+      <div class="container">
+        <div class="section-head section-head--row">
+          <div>
+            <p class="eyebrow">{num()} · Roster</p>
+            <h2 class="section-title" id="roster-title">The children</h2>
+          </div>
+          <a class="link-arrow" href="/artists/">All artists <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </div>
+        <ul class="artist-grid">{artists.slice(0, 4).map((a) => <ArtistCard artist={a} />)}</ul>
+      </div>
+    </section>
+  )}
+
+  <Gallery eyebrow={`${num()} · Instagram`} />
+
+  <section class="section section--work" aria-labelledby="work-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">{num()} · Work with us</p>
+        <h2 class="section-title" id="work-title">Bookings &amp; demos</h2>
+      </div>
+      <ul class="work-grid">
+        <li class="work-card work-card--primary">
+          <p class="work-card__kicker">For clubs, festivals &amp; private events</p>
+          <h3 class="work-card__title">Book an artist</h3>
+          <p class="work-card__text">{artists.map((a) => a.name).join(', ')}. Tell us the date and venue and we come back with availability and a quote.</p>
+          <a class="btn btn--light" href="/contact/?topic=booking">Booking request <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </li>
+        <li class="work-card">
+          <p class="work-card__kicker">For venues &amp; brands</p>
+          <h3 class="work-card__title">Host a label night</h3>
+          <p class="work-card__text">A {label.shortName} showcase or takeover: our artists, our sound, your room.</p>
+          <a class="btn btn--outline" href="/contact/?topic=showcase">Ask about a night <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </li>
+        <li class="work-card">
+          <p class="work-card__kicker">For producers &amp; artists</p>
+          <h3 class="work-card__title">Submit a demo</h3>
+          <p class="work-card__text">Send a private link to your music. No attachments, just a link. We listen to everything.</p>
+          <a class="btn btn--outline" href="/demos/">Send your music <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </li>
+      </ul>
+      <p class="work-note">Press, partnerships or licensing? <a href="/contact/?topic=press">Get in touch</a>.</p>
+    </div>
+  </section>
 </Layout>

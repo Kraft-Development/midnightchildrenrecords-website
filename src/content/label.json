@@ -1,0 +1,31 @@
+{
+  "launched": false,
+  "name": "Midnight Children Records",
+  "shortName": "Midnight Children",
+  "tagline": "An electronic music label from Johannesburg. Records, artists and nights.",
+  "location": "Johannesburg, South Africa",
+  "founded": "",
+  "company": {
+    "legalName": "",
+    "registrationNumber": "",
+    "registeredAddress": "",
+    "informationOfficer": ""
+  },
+  "socials": {
+    "instagram": "https://www.instagram.com/midnightchildrenrecords/",
+    "spotify": "",
+    "appleMusic": "",
+    "youtube": "",
+    "soundcloud": "",
+    "tiktok": ""
+  },
+  "press": {
+    "kitUrl": ""
+  },
+  "demos": {
+    "open": true,
+    "genres": ["House", "Tech house", "Melodic and progressive", "Electronic pop"],
+    "allowedHosts": ["soundcloud.com", "on.soundcloud.com", "drive.google.com", "dropbox.com", "disco.ac", "bandcamp.com", "youtube.com", "youtu.be", "wetransfer.com", "we.tl"],
+    "replyNote": "We listen to everything that comes in. If we want to hear more, we will email you."
+  }
+}

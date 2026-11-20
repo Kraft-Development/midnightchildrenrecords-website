@@ -1,0 +1,14 @@
+---
+import Cover from './Cover.astro';
+import { creditLine, year, isUpcoming, formatDate } from '../lib/data';
+const { release } = Astro.props;
+---
+<li class="release" data-artists={release.artists.join(' ')} data-year={year(release.date)}>
+  <a class="release__link" href={`/releases/${release.slug}/`}>
+    <span class="release__cover"><Cover release={release} /></span>
+    <span class="release__type">{release.type}{release.catalogue && <> · {release.catalogue}</>}</span>
+    <span class="release__title">{release.title}</span>
+    <span class="release__artist">{creditLine(release)}</span>
+    <span class="release__date">{isUpcoming(release) ? `Out ${formatDate(release.date)}` : year(release.date)}</span>
+  </a>
+</li>

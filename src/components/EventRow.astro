@@ -1,0 +1,32 @@
+---
+import { artistBySlug, fmtEvent } from '../lib/data';
+const { e, past = false } = Astro.props;
+---
+<li class={`event${e.status === 'cancelled' ? ' event--cancelled' : ''}`} id={e.id}>
+  <div class="event__date">
+    <span class="event__day">{fmtEvent(e, { day: '2-digit' })}</span>
+    <span class="event__month">{fmtEvent(e, { month: 'short' })}<span class="event__year"> {e.date.slice(0, 4)}</span></span>
+    <span class="event__weekday">{fmtEvent(e, { weekday: 'short' })}{e.time && ` · ${e.time}`}</span>
+  </div>
+  <div class="event__main">
+    {e.series && <p class="event__series">{e.series}</p>}
+    <p class="event__name">{e.event}</p>
+    {e.lineup.length > 0 && (
+      <p class="event__lineup">{e.lineup.map((s, i) => <>{i > 0 && ' · '}<a href={`/artists/${s}/`}>{artistBySlug(s)?.name || s}</a></>)}</p>
+    )}
+  </div>
+  <div class="event__place">
+    <p class="event__venue">{e.venue}</p>
+    <p class="event__city">{e.address || e.city}</p>
+  </div>
+  <div class="event__actions">
+    {past ? <span class="event__status">Past</span>
+      : e.status === 'cancelled' ? <span class="tag">Cancelled</span>
+      : e.status === 'soldout' ? <span class="tag">Sold out</span>
+      : <>
+          {e.url && <a class="btn btn--small" href={e.url} rel="noopener noreferrer">{e.status === 'free' ? 'Details' : 'Tickets'}</a>}
+          {e.status === 'free' && !e.url && <span class="tag">Free</span>}
+          <a class="event__ics" href={`/events/${e.id}.ics`}>Add to calendar</a>
+        </>}
+  </div>
+</li>

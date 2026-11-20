@@ -1,0 +1,21 @@
+# Rebuilds the site once a day so past events drop off, the countdown moves to the next event,
+# and the Instagram gallery stays current.
+# One-time setup:
+#   1. Cloudflare -> Workers & Pages -> midnightchildrenrecords-website -> Settings -> Builds -> Deploy hooks -> create one for main.
+#   2. GitHub repo -> Settings -> Secrets and variables -> Actions -> New repository secret: CF_DEPLOY_HOOK = the hook URL.
+name: Refresh site data
+on:
+  schedule:
+    - cron: "7 22 * * *"   # 22:07 UTC = 00:07 SAST, just after midnight
+  workflow_dispatch:
+permissions: {}
+jobs:
+  trigger-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare Pages deploy hook
+        env:
+          HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "CF_DEPLOY_HOOK not set yet; skipping"; exit 0; fi
+          curl --fail --silent --show-error -X POST "$HOOK" > /dev/null

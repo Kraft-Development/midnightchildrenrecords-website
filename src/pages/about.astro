@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { label, artists, releases } from '../lib/data';
+import { Content } from '../content/about.md';
+---
+<Layout title={`About | ${label.name}`} description={`The story of ${label.name}.`} path="/about/" current="about">
+  <section class="page-head">
+    <div class="container">
+      <p class="eyebrow">The story</p>
+      <h1 class="page-title">About the label</h1>
+    </div>
+  </section>
+  <section class="section section--tight">
+    <div class="container about-label">
+      <div class="about-label__mark" aria-hidden="true"><img src="/img/moon.svg" alt="" width="793" height="833"></div>
+      <div class="about-label__text">
+        <div class="prose prose--lead"><Content /></div>
+        <dl class="facts">
+          {label.founded && <div><dt>Founded</dt><dd>{label.founded}</dd></div>}
+          {label.location && !label.location.startsWith('SAMPLE') && <div><dt>Based in</dt><dd class="facts__text">{label.location}</dd></div>}
+          <div><dt>Artists</dt><dd>{artists.length}</dd></div>
+          <div><dt>Releases</dt><dd>{releases.length}</dd></div>
+        </dl>
+        <div class="about-label__actions">
+          <a class="btn btn--outline" href="/contact/">Press &amp; business <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+          <a class="link-arrow" href="/demos/">Send a demo <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

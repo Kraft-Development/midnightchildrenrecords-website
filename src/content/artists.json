@@ -1,0 +1,48 @@
+[
+  {
+    "slug": "timo-odv",
+    "name": "TiMO ODV",
+    "role": "Co-founder",
+    "genre": "DJ · Producer · Singer · Songwriter",
+    "city": "Kempton Park, East Rand",
+    "short": "Co-founder. DJ, producer, singer and songwriter from Kempton Park.",
+    "bio": "TiMO ODV is a DJ, producer, singer and songwriter from Kempton Park on Johannesburg's East Rand, and co-founder of Midnight Children Records.\n\nThe label takes its name from his 2020 EP Midnight Children, made with Aidin Caye.",
+    "image": "",
+    "imageCredit": "",
+    "website": "https://timoodv.com",
+    "links": {
+      "spotify": "https://open.spotify.com/artist/5ekzQ0Zq1wSg7dDZHYKFLt",
+      "instagram": "https://www.instagram.com/timoodv/",
+      "youtube": "https://www.youtube.com/@TiMOODVmusic",
+      "soundcloud": "https://soundcloud.com/timoodv"
+    }
+  },
+  {
+    "slug": "aidin-caye",
+    "name": "Aidin Caye",
+    "role": "Co-founder",
+    "genre": "DJ · Producer",
+    "city": "East Rand",
+    "short": "Co-founder. DJ and producer from the East Rand.",
+    "bio": "Aidin Caye is a DJ and producer from Johannesburg's East Rand and co-founder of Midnight Children Records.\n\nHe co-produced TiMO ODV's 2020 EP Midnight Children, the record the label is named after.",
+    "image": "",
+    "imageCredit": "",
+    "website": "",
+    "links": {
+      "instagram": "https://www.instagram.com/aidincaye/"
+    }
+  },
+  {
+    "slug": "andeon",
+    "name": "Andeon",
+    "role": "Label artist",
+    "genre": "Artist",
+    "city": "",
+    "short": "On the label's first release, What About Us? with TiMO ODV.",
+    "bio": "Andeon features on What About Us? with TiMO ODV, the first release on Midnight Children Records.",
+    "image": "",
+    "imageCredit": "",
+    "website": "",
+    "links": {}
+  }
+]
