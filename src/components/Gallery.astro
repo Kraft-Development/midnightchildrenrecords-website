@@ -11,7 +11,7 @@ const handle = '@' + (label.socials.instagram.match(/instagram\.com\/([^/?#]+)/)
       <div class="section-head section-head--row">
         <div>
           <p class="eyebrow">{eyebrow}</p>
-          <h2 class="section-title" id="ig-title">After midnight</h2>
+          <h2 class={`section-title${gallery.length >= 4 ? '' : ' section-title--sm'}`} id="ig-title">After midnight</h2>
         </div>
         <a class="link-arrow" href={label.socials.instagram} rel="noopener noreferrer">{handle} <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
       </div>

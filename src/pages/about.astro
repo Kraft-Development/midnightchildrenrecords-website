@@ -17,7 +17,7 @@ import { Content } from '../content/about.md';
         <div class="prose prose--lead"><Content /></div>
         <dl class="facts">
           {label.founded && <div><dt>Founded</dt><dd>{label.founded}</dd></div>}
-          {label.location && !label.location.startsWith('SAMPLE') && <div><dt>Based in</dt><dd>{label.location}</dd></div>}
+          {label.location && !label.location.startsWith('SAMPLE') && <div><dt>Based in</dt><dd class="facts__text">{label.location}</dd></div>}
           <div><dt>Artists</dt><dd>{artists.length}</dd></div>
           <div><dt>Releases</dt><dd>{releases.length}</dd></div>
         </dl>
