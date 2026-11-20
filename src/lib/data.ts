@@ -35,7 +35,7 @@ export const year = (d: string) => d.slice(0, 4);
 
 export const PLATFORMS: Record<string, string> = {
   spotify: 'Spotify', appleMusic: 'Apple Music', youtube: 'YouTube', soundcloud: 'SoundCloud',
-  bandcamp: 'Bandcamp', beatport: 'Beatport', instagram: 'Instagram', tiktok: 'TikTok',
+  bandcamp: 'Bandcamp', beatport: 'Beatport', instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook',
 };
 export const linkList = (links: Links = {}) =>
   Object.entries(links).filter(([k, v]) => v && PLATFORMS[k]).map(([k, v]) => ({ key: k, name: PLATFORMS[k], url: v }));
