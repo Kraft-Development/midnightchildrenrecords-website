@@ -50,5 +50,25 @@
       "tiktok": "https://www.tiktok.com/@andeonmusic",
       "facebook": "https://www.facebook.com/profile.php?id=61578283686797"
     }
+  },
+  {
+    "slug": "advent",
+    "name": "Advent",
+    "tier": "friend",
+    "genre": "Music producer · Artist",
+    "city": "",
+    "short": "Music producer and artist, and a friend of the label.",
+    "bio": "Advent is a music producer and artist.\n\nHe has worked with TiMO ODV and The Midnight Children on the single Better.",
+    "image": "",
+    "imageCredit": "",
+    "website": "",
+    "links": {
+      "spotify": "https://open.spotify.com/artist/2egbM9qIPuBIuzga5IWPuw",
+      "soundcloud": "https://soundcloud.com/adventzamusic",
+      "instagram": "https://www.instagram.com/adventzamusic/",
+      "tiktok": "https://www.tiktok.com/@adventmusic",
+      "facebook": "https://www.facebook.com/AdventZA",
+      "twitch": "https://www.twitch.tv/adventza"
+    }
   }
 ]
