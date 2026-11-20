@@ -28,6 +28,7 @@ export const LINK_HOSTS = {
   instagram: ['www.instagram.com', 'instagram.com'],
   tiktok: ['www.tiktok.com', 'tiktok.com'],
   facebook: ['www.facebook.com', 'facebook.com'],
+  twitch: ['www.twitch.tv', 'twitch.tv'],
   kitUrl: ['drive.google.com', 'www.dropbox.com', 'dropbox.com'],
 };
 const hostOk = (host, allowed) => allowed.some((h) => host === h || host.endsWith('.' + h));
