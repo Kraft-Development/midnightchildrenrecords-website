@@ -101,11 +101,11 @@ const company = label.company.legalName || label.name;
 
   <footer class="site-footer">
     <div class="container">
-      <img class="site-footer__children" src="/img/children.svg" alt="" width="2182" height="851" loading="lazy">
       <div class="site-footer__grid">
-        <div>
+        <div class="site-footer__brand">
           <img class="site-footer__wordmark" src="/img/logo-wordmark.svg" alt={label.shortName} width="1870" height="1215" loading="lazy">
           <p class="site-footer__note">Independent record label{label.location && !label.location.startsWith('SAMPLE') ? `, ${label.location}` : ''}.</p>
+          <img class="site-footer__children" src="/img/children.svg" alt="" width="2182" height="851" loading="lazy">
         </div>
         <nav aria-label="Footer">
           <p class="site-footer__title">Label</p>
