@@ -1,0 +1,3 @@
+# Holding page: search engines stay out until launch.
+User-agent: *
+Disallow: /
