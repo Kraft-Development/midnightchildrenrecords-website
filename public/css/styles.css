@@ -673,9 +673,14 @@ button { font: inherit; color: inherit; }
   .about-label__mark img { width: 6rem; }
   .release-grid { grid-template-columns: repeat(2, 1fr); }
   .site-footer__grid { grid-template-columns: 1fr 1fr; }
-  .site-footer__grid > :first-child { grid-column: 1 / -1; }
-  .site-footer__brand { order: 2; }
-  .site-footer__children { width: min(70%, 13rem); }
+  /* Mobile footer: wordmark and note on top, the two link columns, then the children standing on the line. */
+  .site-footer__grid { row-gap: 0; column-gap: 1.5rem; }
+  .site-footer__brand { display: contents; }
+  .site-footer__wordmark, .site-footer__note, .site-footer__children { grid-column: 1 / -1; }
+  .site-footer__wordmark { padding-bottom: 0 !important; }
+  .site-footer__note { margin-top: .75rem; padding-bottom: 2.25rem !important; }
+  .site-footer__grid > nav, .site-footer__grid > div:not(.site-footer__brand) { padding-bottom: 0; }
+  .site-footer__children { order: 10; width: min(60%, 12rem); margin-top: 2.5rem; padding-bottom: 0 !important; }
 }
 @media (max-width: 700px) {
   .spotlight { grid-template-columns: 1fr; }
