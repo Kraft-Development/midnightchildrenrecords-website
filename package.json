@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node scripts/test-events.mjs && node scripts/test-calendar.mjs && node scripts/test-fetch-data.mjs && node scripts/test-validate-content.mjs && node scripts/validate-content.mjs",
+    "test": "node scripts/test-events.mjs && node scripts/test-calendar.mjs && node scripts/test-beatport.mjs && node scripts/test-fetch-data.mjs && node scripts/test-validate-content.mjs && node scripts/validate-content.mjs",
     "validate:content": "node scripts/validate-content.mjs",
     "fetch-data": "node scripts/fetch-data.mjs",
     "prebuild": "node scripts/fetch-data.mjs",

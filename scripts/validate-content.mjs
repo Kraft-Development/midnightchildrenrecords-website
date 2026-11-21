@@ -127,14 +127,13 @@ if (artists) {
   });
 }
 
-// ---------- releases.json ----------
-const releases = readJson('src/content/releases.json');
-if (releases) {
+// ---------- releases.json (hand-made entries and overrides) and releases.beatport.json (written at build from Beatport) ----------
+function checkReleases(releases, file) {
   const slugs = new Set();
   const cats = new Set();
-  if (!Array.isArray(releases)) err('releases.json', 'must be a list');
+  if (!Array.isArray(releases)) err(file, 'must be a list');
   else releases.forEach((r, i) => {
-    const w = `releases[${i}]${r?.slug ? ` (${r.slug})` : ''}`;
+    const w = `${file.replace('.json', '')}[${i}]${r?.slug ? ` (${r.slug})` : ''}`;
     if (!r || typeof r !== 'object') return err(w, 'must be an object');
     if (!SLUG.test(r.slug || '')) err(`${w}.slug`, 'must be lowercase letters, numbers and dashes');
     else if (slugs.has(r.slug)) err(`${w}.slug`, 'is used twice');
@@ -161,8 +160,13 @@ if (releases) {
     });
     for (const [k, v] of Object.entries(r.links || {})) link(`${w}.links.${k}`, k, v);
     if (r.sample && label?.launched) err(w, 'sample release must be removed before launch');
+    if (r.preorder != null && typeof r.preorder !== 'boolean') err(`${w}.preorder`, 'must be true or false');
   });
 }
+const releases = readJson('src/content/releases.json');
+if (releases) checkReleases(releases, 'releases.json');
+const beatportReleases = existsSync(join(root, 'src/content/releases.beatport.json')) ? readJson('src/content/releases.beatport.json') : [];
+if (beatportReleases) checkReleases(beatportReleases, 'releases.beatport.json');
 
 // ---------- events.json (same rules the site uses when building) ----------
 const eventsRaw = readJson('src/content/events.json');
@@ -196,4 +200,4 @@ if (errors.length) {
   console.error(`\n${errors.length} problem(s) in the content files.`);
   process.exit(1);
 }
-console.log(`Content OK (${artistSlugs.size} artists, ${releases?.length ?? 0} releases, ${warnings.length} warning(s)).`);
+console.log(`Content OK (${artistSlugs.size} artists, ${releases?.length ?? 0} hand-made + ${beatportReleases?.length ?? 0} Beatport releases, ${warnings.length} warning(s)).`);
