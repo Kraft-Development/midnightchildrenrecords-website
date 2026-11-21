@@ -476,22 +476,22 @@ button { font: inherit; color: inherit; }
 .steps strong { display: block; color: var(--ink); font-weight: 600; margin-bottom: .2rem; }
 
 /* ---------- Footer ---------- */
+/* Footer, laid out like the TiMO ODV and Aidin Caye sites: brand, then Site / Listen–Follow / Legal columns,
+   then a full-width bar. The children silhouette stands on the bar's top line. */
 .site-footer { border-top: 1px solid var(--line); padding-top: clamp(3rem, 7vw, 5rem); overflow: hidden; }
-.site-footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2.5rem; }
-.site-footer__grid > * { padding-bottom: 2.5rem; }
-/* The children stand on the footer's dividing line, under the wordmark. */
-.site-footer__brand { display: flex; flex-direction: column; align-items: flex-start; padding-bottom: 0 !important; }
-.site-footer__children { display: block; width: min(100%, 15rem); height: auto; margin-top: clamp(2rem, 4vw, 3rem); opacity: .18; }
+.site-footer__top { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: clamp(1.5rem, 4vw, 3.5rem); }
+.site-footer__top > .site-footer__col { padding-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+.site-footer__brand { display: flex; flex-direction: column; align-items: flex-start; }
 .site-footer__wordmark { width: 9rem; height: auto; opacity: .9; }
-.site-footer__note { margin-top: 1rem; color: var(--ink-3); font-size: .9rem; }
-.site-footer__title { font-size: .68rem; font-weight: 600; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--ink-3); margin-bottom: .9rem; }
-.site-footer__links { display: grid; gap: .45rem; }
-.site-footer__links a { text-decoration: none; color: var(--ink-2); }
-.site-footer__links a:hover { color: var(--ink); }
-.site-footer__bar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; padding: 1.75rem 0 2.25rem; border-top: 1px solid var(--line); font-size: .78rem; color: var(--ink-3); }
-.site-footer__legal { display: flex; gap: 1.75rem; flex-wrap: wrap; }
-.site-footer__legal a { text-decoration: none; }
-.site-footer__legal a:hover { color: var(--ink); }
+.site-footer__note { margin-top: 1rem; max-width: 22rem; color: var(--ink-3); font-size: .88rem; line-height: 1.6; }
+.site-footer__children { display: block; width: min(100%, 15rem); height: auto; margin-top: auto; padding-top: clamp(2rem, 4vw, 3rem); opacity: .18; }
+.site-footer__col h2 { margin: 0 0 1rem; font-family: var(--font-body); font-size: .72rem; font-weight: 600; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--ink-3); }
+.site-footer__col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .65rem; }
+.site-footer__col a { text-decoration: none; font-size: .92rem; color: var(--ink-2); }
+.site-footer__col a:hover, .site-footer__col a:focus-visible { color: var(--ink); text-decoration: underline; text-decoration-color: var(--green); text-underline-offset: .25em; }
+.site-footer__platform { display: inline-flex; align-items: center; gap: .6rem; }
+.site-footer__platform .icon { width: 1rem; height: 1rem; fill: currentColor; stroke: none; flex: none; }
+.site-footer__bar { border-top: 1px solid var(--line); padding: 1.5rem 0 2rem; font-size: .8rem; color: var(--ink-3); }
 
 /* ---------- 404 ---------- */
 .page-head--404 { min-height: 70vh; display: grid; align-items: center; border-bottom: 0; }
@@ -725,15 +725,7 @@ button { font: inherit; color: inherit; }
   .about-label__mark { place-items: start; padding-top: 0; }
   .about-label__mark img { width: 6rem; }
   .release-grid { grid-template-columns: repeat(2, 1fr); }
-  .site-footer__grid { grid-template-columns: 1fr 1fr; }
   /* Mobile footer: wordmark and note on top, the two link columns, then the children standing on the line. */
-  .site-footer__grid { row-gap: 0; column-gap: 1.5rem; }
-  .site-footer__brand { display: contents; }
-  .site-footer__wordmark, .site-footer__note, .site-footer__children { grid-column: 1 / -1; }
-  .site-footer__wordmark { padding-bottom: 0 !important; }
-  .site-footer__note { margin-top: .75rem; padding-bottom: 2.25rem !important; }
-  .site-footer__grid > nav, .site-footer__grid > div:not(.site-footer__brand) { padding-bottom: 0; }
-  .site-footer__children { order: 10; width: min(60%, 12rem); margin-top: 2.5rem; padding-bottom: 0 !important; }
 }
 @media (max-width: 700px) {
   .spotlight { grid-template-columns: 1fr; }
@@ -1117,3 +1109,20 @@ button { font: inherit; color: inherit; }
 .track-row__listen .platforms--icons .platform { width: 2rem; height: 2rem; }
 @media (max-width: 900px) { .track-row__listen .platforms--icons { justify-content: flex-start; flex-wrap: wrap; } }
 @media (max-width: 480px) { .platforms--blocks .platform { width: calc((100% - 1.2rem) / 3); } }
+
+@media (max-width: 1000px) {
+  .site-footer__top { grid-template-columns: repeat(3, 1fr); }
+  /* The brand's pieces join the grid so the children can stand on the bar's line at the very bottom. */
+  .site-footer__brand { display: contents; }
+  .site-footer__wordmark, .site-footer__note { grid-column: 1 / -1; }
+  .site-footer__note { margin-top: -.5rem; padding-bottom: 1.25rem; }
+  .site-footer__children { grid-column: 1 / -1; order: 10; width: min(60%, 13rem); padding-top: 0; margin-top: -.5rem; }
+}
+@media (max-width: 600px) {
+  .site-footer__top { grid-template-columns: 1fr 1fr; gap: 0 1.25rem; }
+  .site-footer__wordmark { width: 7.5rem; }
+  .site-footer__note { margin-top: .9rem; padding-bottom: 2rem; }
+  .site-footer__children { margin-top: .5rem; }
+  .site-footer__col:last-child { grid-column: 1 / -1; }
+  .site-footer__col:last-child ul { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; }
+}

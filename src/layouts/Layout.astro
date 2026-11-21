@@ -32,6 +32,7 @@ const socials = [
   { key: 'spotify', icon: 'i-spotify', name: 'Spotify' },
   { key: 'appleMusic', icon: 'i-applemusic', name: 'Apple Music' },
   { key: 'youtube', icon: 'i-youtube', name: 'YouTube' },
+  { key: 'beatport', icon: 'i-beatport', name: 'Beatport' },
 ].filter((s) => label.socials[s.key]);
 const company = label.company.legalName || label.name;
 ---
@@ -101,34 +102,40 @@ const company = label.company.legalName || label.name;
 
   <footer class="site-footer">
     <div class="container">
-      <div class="site-footer__grid">
+      <div class="site-footer__top">
         <div class="site-footer__brand">
           <img class="site-footer__wordmark" src="/img/logo-wordmark.svg" alt={label.shortName} width="1363" height="830" loading="lazy">
-          <p class="site-footer__note">Independent record label{label.location && !label.location.startsWith('SAMPLE') ? `, ${label.location}` : ''}.</p>
+          <p class="site-footer__note">Independent record label{label.location && !label.location.startsWith('SAMPLE') ? `, ${label.location}` : ''}. Records, artists and nights.</p>
           <img class="site-footer__children" src="/img/children.svg" alt="" width="2182" height="851" loading="lazy">
         </div>
-        <nav aria-label="Footer">
-          <p class="site-footer__title">Label</p>
-          <ul class="site-footer__links">
+        <nav class="site-footer__col" aria-label="Site index">
+          <h2>Site</h2>
+          <ul>
+            <li><a href="/">Home</a></li>
             {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
           </ul>
         </nav>
         {socials.length > 0 && (
-          <div>
-            <p class="site-footer__title">Follow</p>
-            <ul class="site-footer__links">
-              {socials.map((s) => <li><a href={label.socials[s.key]} rel="noopener noreferrer">{s.name}</a></li>)}
+          <nav class="site-footer__col" aria-label="Listen and follow">
+            <h2>Listen / Follow</h2>
+            <ul>
+              {socials.map((s) => <li><a class="site-footer__platform" href={label.socials[s.key]} rel="me noopener noreferrer" target="_blank"><svg class="icon" aria-hidden="true"><use href={`#${s.icon}`}></use></svg>{s.name}</a></li>)}
             </ul>
-          </div>
+          </nav>
         )}
+        <nav class="site-footer__col" aria-label="Legal">
+          <h2>Legal</h2>
+          <ul>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/terms/">Terms of Use</a></li>
+            <li><a href="/cookies/">Cookie Policy</a></li>
+          </ul>
+        </nav>
       </div>
-      <div class="site-footer__bar">
-        <p>© {new Date().getFullYear()} {company}{label.company.registrationNumber && ` · Reg. ${label.company.registrationNumber}`}{!label.launched && <span class="site-footer__preview"> · Preview, not yet launched</span>}</p>
-        <ul class="site-footer__legal">
-          <li><a href="/privacy/">Privacy Policy</a></li>
-          <li><a href="/terms/">Terms of Use</a></li>
-          <li><a href="/cookies/">Cookie Policy</a></li>
-        </ul>
+    </div>
+    <div class="site-footer__bar">
+      <div class="container">
+        <p>&copy; {new Date().getFullYear()} {company}{label.company.registrationNumber && ` · Reg. ${label.company.registrationNumber}`}. All rights reserved.{!label.launched && <span class="site-footer__preview"> · Preview, not yet launched</span>}</p>
       </div>
     </div>
   </footer>
