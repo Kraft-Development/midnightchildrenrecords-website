@@ -844,3 +844,103 @@ button { font: inherit; color: inherit; }
 }
 .event--next .btn--small { background: var(--green); border-color: var(--green); color: var(--ink); padding: .85rem 1.3rem; }
 .event--next .btn--small:hover { background: var(--green-hover); border-color: var(--green-hover); }
+/* ---------- Hero: night sky (option B) ----------
+   The moon is lit from the inside edge with a faint surface texture (img/moon-lit.svg), a wider red haze
+   spreads from the top right, faint stars sit behind everything, and the logo catches a little red light. */
+.hero { background:
+  linear-gradient(200deg, rgba(120, 0, 0, .2), transparent 42%),
+  radial-gradient(ellipse 70% 55% at 50% 45%, #0f1311 0%, var(--bg) 70%); }
+.hero__moon {
+  filter: drop-shadow(0 0 10px rgba(255, 60, 50, .6)) drop-shadow(0 0 45px rgba(252, 0, 0, .42)) drop-shadow(0 0 130px rgba(252, 0, 0, .28));
+  animation-name: moon-glow-lit;
+}
+@keyframes moon-glow-lit {
+  0%, 100% { filter: drop-shadow(0 0 9px rgba(255, 60, 50, .55)) drop-shadow(0 0 40px rgba(252, 0, 0, .38)) drop-shadow(0 0 120px rgba(252, 0, 0, .24)); }
+  50% { filter: drop-shadow(0 0 14px rgba(255, 70, 60, .75)) drop-shadow(0 0 60px rgba(252, 0, 0, .52)) drop-shadow(0 0 170px rgba(252, 0, 0, .36)); }
+}
+.hero::before {
+  width: clamp(22rem, min(62vw, 90vh), 58rem); right: -18vw; top: calc(var(--header-h) - 24vh);
+  background: radial-gradient(circle, rgba(252, 0, 0, .2) 0%, rgba(200, 0, 0, .09) 35%, rgba(120, 0, 0, .04) 55%, transparent 72%);
+}
+.hero__sky { position: absolute; inset: 0; z-index: -3; pointer-events: none; overflow: hidden; }
+.hero__sky::before, .hero__sky::after { content: ""; position: absolute; left: 0; top: 0; width: 1px; height: 1px; border-radius: 50%; }
+.hero__sky::before { box-shadow:
+    45.2vw 56.0vh 0 0 rgba(255, 250, 240, 0.42),
+    46.6vw 50.8vh 0 0 rgba(255, 250, 240, 0.31),
+    18.5vw 51.2vh 0 0 rgba(255, 250, 240, 0.33),
+    79.3vw 9.4vh 0 0 rgba(255, 250, 240, 0.22),
+    9.1vw 81.0vh 0 0 rgba(255, 250, 240, 0.35),
+    4.2vw 98.2vh 0 0 rgba(255, 250, 240, 0.44),
+    65.4vw 61.6vh 0 0 rgba(255, 250, 240, 0.17),
+    1.5vw 52.8vh 0 0 rgba(255, 250, 240, 0.14),
+    19.0vw 24.2vh 0 0 rgba(255, 250, 240, 0.13),
+    46.4vw 44.1vh 0 0 rgba(255, 250, 240, 0.40),
+    51.9vw 64.0vh 0 0 rgba(255, 250, 240, 0.28),
+    66.2vw 45.7vh 0 0 rgba(255, 250, 240, 0.21),
+    99.8vw 99.6vh 0 0 rgba(255, 250, 240, 0.40),
+    70.8vw 31.5vh 0 0 rgba(255, 250, 240, 0.20),
+    28.9vw 7.0vh 0 0 rgba(255, 250, 240, 0.37),
+    40.0vw 84.7vh 0 0 rgba(255, 250, 240, 0.25),
+    95.8vw 84.7vh 0 0 rgba(255, 250, 240, 0.12),
+    21.0vw 91.0vh 0 0 rgba(255, 250, 240, 0.28),
+    98.0vw 39.7vh 0 0 rgba(255, 250, 240, 0.14),
+    62.9vw 77.9vh 0 0 rgba(255, 250, 240, 0.21),
+    8.7vw 33.3vh 0 0 rgba(255, 250, 240, 0.44),
+    75.8vw 11.8vh 0 0 rgba(255, 250, 240, 0.20),
+    10.1vw 6.0vh 0 0 rgba(255, 250, 240, 0.38),
+    17.8vw 55.9vh 0 0 rgba(255, 250, 240, 0.27),
+    19.1vw 73.2vh 0 0 rgba(255, 250, 240, 0.16),
+    64.4vw 11.7vh 0 0 rgba(255, 250, 240, 0.26),
+    21.3vw 27.0vh 0 0 rgba(255, 250, 240, 0.44),
+    80.3vw 30.4vh 0 0 rgba(255, 250, 240, 0.41),
+    21.1vw 39.4vh 0 0 rgba(255, 250, 240, 0.40),
+    64.2vw 10.0vh 0 0 rgba(255, 250, 240, 0.45),
+    21.3vw 25.8vh 0 0 rgba(255, 250, 240, 0.37),
+    32.9vw 29.6vh 0 0 rgba(255, 250, 240, 0.14),
+    9.0vw 58.3vh 0 0 rgba(255, 250, 240, 0.20),
+    60.1vw 37.2vh 0 0 rgba(255, 250, 240, 0.27),
+    95.9vw 48.4vh 0 0 rgba(255, 250, 240, 0.31),
+    86.7vw 18.3vh 0 0 rgba(255, 250, 240, 0.17),
+    90.8vw 81.8vh 0 0 rgba(255, 250, 240, 0.20),
+    19.0vw 73.9vh 0 0 rgba(255, 250, 240, 0.43),
+    19.7vw 95.0vh 0 0 rgba(255, 250, 240, 0.41),
+    60.4vw 42.1vh 0 0 rgba(255, 250, 240, 0.15),
+    3.9vw 96.3vh 0 0 rgba(255, 250, 240, 0.20),
+    70.5vw 25.7vh 0 0 rgba(255, 250, 240, 0.39),
+    59.6vw 29.3vh 0 0 rgba(255, 250, 240, 0.18),
+    72.0vw 6.9vh 0 0 rgba(255, 250, 240, 0.20),
+    55.9vw 85.2vh 0 0 rgba(255, 250, 240, 0.32),
+    28.0vw 91.7vh 0 0 rgba(255, 250, 240, 0.19),
+    1.7vw 26.9vh 0 0 rgba(255, 250, 240, 0.27),
+    6.0vw 17.6vh 0 0 rgba(255, 250, 240, 0.24),
+    57.2vw 13.2vh 0 0 rgba(255, 250, 240, 0.24),
+    89.1vw 98.0vh 0 0 rgba(255, 250, 240, 0.34),
+    69.1vw 58.4vh 0 0 rgba(255, 250, 240, 0.17),
+    3.5vw 1.8vh 0 0 rgba(255, 250, 240, 0.42),
+    70.1vw 96.3vh 0 0 rgba(255, 250, 240, 0.13),
+    63.6vw 48.2vh 0 0 rgba(255, 250, 240, 0.36),
+    31.9vw 99.9vh 0 0 rgba(255, 250, 240, 0.14),
+    54.6vw 73.7vh 0 0 rgba(255, 250, 240, 0.42),
+    73.7vw 70.4vh 0 0 rgba(255, 250, 240, 0.38),
+    91.5vw 35.2vh 0 0 rgba(255, 250, 240, 0.35),
+    90.1vw 87.1vh 0 0 rgba(255, 250, 240, 0.26),
+    79.1vw 86.3vh 0 0 rgba(255, 250, 240, 0.31); }
+.hero__sky::after { width: 2px; height: 2px; box-shadow:
+    62.5vw 38.2vh 0 0 rgba(255, 250, 240, 0.40),
+    60.9vw 8.0vh 0 0 rgba(255, 250, 240, 0.43),
+    99.3vw 88.0vh 0 0 rgba(255, 250, 240, 0.47),
+    38.8vw 73.5vh 0 0 rgba(255, 250, 240, 0.40),
+    44.1vw 83.8vh 0 0 rgba(255, 250, 240, 0.16),
+    75.0vw 3.0vh 0 0 rgba(255, 250, 240, 0.41),
+    48.1vw 23.0vh 0 0 rgba(255, 250, 240, 0.46),
+    49.7vw 61.5vh 0 0 rgba(255, 250, 240, 0.56),
+    25.6vw 1.1vh 0 0 rgba(255, 250, 240, 0.26),
+    67.8vw 20.3vh 0 0 rgba(255, 250, 240, 0.20),
+    90.6vw 66.0vh 0 0 rgba(255, 250, 240, 0.33),
+    89.2vw 32.7vh 0 0 rgba(255, 250, 240, 0.44),
+    19.9vw 43.1vh 0 0 rgba(255, 250, 240, 0.51),
+    91.4vw 88.0vh 0 0 rgba(255, 250, 240, 0.30);
+  animation: sky-twinkle 7s ease-in-out infinite alternate; }
+@keyframes sky-twinkle { from { opacity: .55; } to { opacity: 1; } }
+.hero__title img { filter: drop-shadow(12px -8px 18px rgba(252, 0, 0, .2)); }
+@media (prefers-reduced-motion: reduce) { .hero__sky::after { animation: none; } }
