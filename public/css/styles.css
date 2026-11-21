@@ -26,7 +26,7 @@
   --track-xwide: 0.32em;
   --container: 1240px;
   --gutter: clamp(1.25rem, 4vw, 3rem);
-  --section-y: clamp(3.5rem, 7vw, 6rem);
+  --section-y: clamp(3rem, 6vw, 4.75rem);
   --header-h: 88px;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
@@ -61,8 +61,8 @@
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
-/* Desktop sits at an effective 90% scale: sizes (rem) shrink 10%, the content column widens to match. */
-@media (min-width: 1100px) { html { font-size: 90%; } :root { --container: 1378px; } }
+/* Only big monitors (1600px+) get the 90% scale and wider column, as on Tim's and Aidin's sites. Small laptops and tablets keep full-size text. */
+@media (min-width: 1600px) { html { font-size: 90%; } :root { --container: 1378px; } }
 html { scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
@@ -186,7 +186,7 @@ button { font: inherit; color: inherit; }
 /* ---------- Section scaffolding ---------- */
 .section { padding-block: var(--section-y); position: relative; }
 .section + .section { border-top: 1px solid var(--line); }
-.section-head { margin-bottom: clamp(1.75rem, 3vw, 2.5rem); }
+.section-head { margin-bottom: clamp(1.4rem, 2.6vw, 2rem); }
 .section-head--row { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
 .eyebrow {
   font-size: .74rem; font-weight: 600; letter-spacing: var(--track-xwide); text-transform: uppercase;
@@ -194,9 +194,9 @@ button { font: inherit; color: inherit; }
 }
 .section-title {
   font-family: var(--font-display); font-weight: 400; text-transform: uppercase;
-  font-size: clamp(2.4rem, 5.6vw, 4.75rem); line-height: .95; letter-spacing: .005em;
+  font-size: clamp(2.1rem, 4.4vw, 3.6rem); line-height: .95; letter-spacing: .005em;
 }
-.section-title--sm { font-size: clamp(1.9rem, 3.6vw, 3rem); }
+.section-title--sm { font-size: clamp(1.75rem, 3vw, 2.5rem); }
 .section-aside { font-size: .75rem; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--ink-3); }
 
 
@@ -299,10 +299,10 @@ button { font: inherit; color: inherit; }
 .btn[disabled] { opacity: .45; cursor: not-allowed; }
 
 /* ---------- Page heads (inner pages) ---------- */
-.page-head { padding: calc(var(--header-h) + clamp(2rem, 4vw, 3.5rem)) 0 clamp(1.75rem, 3vw, 2.5rem); border-bottom: 1px solid var(--line); }
+.page-head { padding: calc(var(--header-h) + clamp(1.75rem, 3.5vw, 2.75rem)) 0 clamp(1.5rem, 2.6vw, 2rem); border-bottom: 1px solid var(--line); }
 .page-title {
   font-family: var(--font-display); font-weight: 400; text-transform: uppercase;
-  font-size: clamp(2.75rem, 7vw, 5.5rem); line-height: .95; letter-spacing: .005em;
+  font-size: clamp(2.5rem, 5.6vw, 4.25rem); line-height: .95; letter-spacing: .005em;
 }
 .page-lead { margin-top: 1.25rem; color: var(--ink-2); font-size: clamp(1.05rem, 1.5vw, 1.25rem); max-width: 52ch; }
 .page-lead a { color: var(--ink); text-decoration-color: var(--green); text-underline-offset: .25em; }
@@ -391,9 +391,20 @@ button { font: inherit; color: inherit; }
 .artist-page__media { position: relative; margin: 0; max-width: 30rem; }
 .artist-page__media > img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
 .artist-page__media figcaption { position: absolute; left: 1rem; bottom: 1rem; font-size: .7rem; letter-spacing: var(--track-wide); text-transform: uppercase; background: rgba(6, 6, 6, .7); padding: .4rem .6rem; }
-.prose { margin-top: 1.75rem; }
-.prose p { color: var(--ink-2); max-width: 60ch; }
-.prose p + p { margin-top: 1.1rem; }
+.prose { margin-top: 1.5rem; }
+.prose p { color: var(--ink-2); max-width: 64ch; font-size: 1.06rem; line-height: 1.7; }
+.prose p + p, .prose__more > p:first-of-type { margin-top: 1.05rem; }
+/* Read more: paragraphs after the second sit behind a details element (no script) */
+.prose__more summary {
+  display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.1rem; cursor: pointer; list-style: none;
+  font-size: .74rem; font-weight: 600; letter-spacing: var(--track-wide); text-transform: uppercase;
+  border-bottom: 1px solid var(--green); padding-bottom: .2rem;
+}
+.prose__more summary::-webkit-details-marker { display: none; }
+.prose__more summary::after { content: "+"; font-size: 1rem; line-height: 1; color: var(--green-bright); }
+.prose__more[open] summary::after { content: "\2212"; }
+.prose__more-close, .prose__more[open] .prose__more-open { display: none; }
+.prose__more[open] .prose__more-close { display: inline; }
 .prose--lead p:first-child, .artist-page .prose p:first-child { color: var(--ink); font-size: clamp(1.15rem, 1.6vw, 1.35rem); line-height: 1.5; }
 
 /* ---------- About ---------- */
@@ -401,17 +412,17 @@ button { font: inherit; color: inherit; }
 .about-label__mark { display: grid; place-items: center; padding-top: 1rem; }
 .about-label__mark img { width: min(70%, 14rem); height: auto; filter: drop-shadow(0 0 60px rgba(252, 0, 0, .3)); }
 .about-label .prose { margin-top: 0; }
-.facts { display: flex; flex-wrap: wrap; gap: 2.5rem; margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--line); }
+.facts { display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
 .facts dt { font-size: .68rem; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--ink-3); }
 .facts dd { margin: .3rem 0 0; font-family: var(--font-display); font-size: 2.25rem; line-height: 1; }
 .facts dd.facts__text { font-family: var(--font-ui); font-size: 1.05rem; font-weight: 600; line-height: 1.3; padding-top: .35rem; }
 .about-label__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.75rem; margin-top: 2.5rem; }
 
 /* ---------- Demo band (red, like TiMO's listen band) ---------- */
-.section--band { background: var(--green); padding-block: clamp(3rem, 6vw, 4.5rem); border-top: 0; overflow: hidden; }
+.section--band { background: var(--green); padding-block: clamp(2.5rem, 5vw, 3.5rem); border-top: 0; overflow: hidden; }
 .band { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
-.band__children { position: absolute; right: 18%; bottom: calc(-1 * clamp(3rem, 6vw, 4.5rem)); width: clamp(12rem, 28vw, 24rem); height: auto; opacity: .16; filter: brightness(0); pointer-events: none; }
-.band__title { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(2.25rem, 5vw, 4rem); line-height: .95; color: var(--ink); }
+.band__children { position: absolute; right: 18%; bottom: calc(-1 * clamp(2.5rem, 5vw, 3.5rem)); width: clamp(12rem, 28vw, 24rem); height: auto; opacity: .16; filter: brightness(0); pointer-events: none; }
+.band__title { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(2rem, 4vw, 3.25rem); line-height: .95; color: var(--ink); }
 .band__text { margin-top: .6rem; color: var(--ink); opacity: .9; }
 
 /* ---------- Contact & demo pages ---------- */
@@ -641,7 +652,7 @@ button { font: inherit; color: inherit; }
 .work-card--primary:hover { border-color: var(--green-hover); }
 .work-card__kicker { font-size: .7rem; font-weight: 600; letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--green-bright); }
 .work-card--primary .work-card__kicker { color: var(--ink); opacity: .8; }
-.work-card__title { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.9rem, 3vw, 2.6rem); line-height: 1; }
+.work-card__title { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.7rem, 2.6vw, 2.2rem); line-height: 1; }
 .work-card__text { color: var(--ink-2); flex: 1; margin-bottom: .6rem; }
 .work-card--primary .work-card__text { color: var(--ink); opacity: .9; }
 .work-note { margin-top: 1.75rem; color: var(--ink-3); }
@@ -651,7 +662,7 @@ button { font: inherit; color: inherit; }
 /* ---------- The Children: tiers ---------- */
 .tier-title { display: flex; align-items: center; gap: 1rem; margin: 0 0 1.5rem; font-size: .78rem; font-weight: 600; letter-spacing: var(--track-xwide); text-transform: uppercase; color: var(--ink-2); }
 .tier-title::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-* + .tier-title { margin-top: clamp(2.5rem, 5vw, 3.75rem); }
+* + .tier-title { margin-top: clamp(2rem, 4vw, 3rem); }
 .founder-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 1.5rem); }
 .founder { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); background: var(--bg-2); border: 1px solid var(--line); transition: border-color .25s; }
 .founder:hover { border-color: var(--green); }
@@ -660,7 +671,7 @@ button { font: inherit; color: inherit; }
 .founder:hover .founder__media > img { transform: scale(1.03); }
 .founder__body { display: flex; flex-direction: column; align-items: flex-start; gap: .55rem; padding: clamp(1.25rem, 2.4vw, 2rem); }
 .founder__tag { padding: .25rem .5rem; background: var(--green); font-size: .62rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
-.founder__name { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(2rem, 3.4vw, 3rem); line-height: .95; margin-top: .25rem; }
+.founder__name { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.9rem, 3vw, 2.6rem); line-height: .95; margin-top: .25rem; }
 .founder__name a { text-decoration: none; }
 .founder__name a:hover { color: var(--green-bright); }
 .founder__meta { font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3); }
@@ -690,10 +701,9 @@ button { font: inherit; color: inherit; }
 .release-grid--artist { margin-top: clamp(2rem, 4vw, 3rem); }
 
 /* ---------- Responsive ---------- */
+/* Tablets and small screens (up to 1100px, i.e. every iPad): the touch-friendly full-screen menu replaces the small desktop one. */
 @media (max-width: 1100px) {
   .release-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 900px) {
   :root { --header-h: 72px; }
   .nav-toggle { display: block; }
   .site-nav {
@@ -706,6 +716,8 @@ button { font: inherit; color: inherit; }
   .site-nav__list { flex-direction: column; align-items: center; gap: 1.25rem; margin: 0; }
   .site-nav__list a { font-family: var(--font-display); font-size: 2.6rem; letter-spacing: .02em; font-weight: 400; }
   body.nav-open { overflow: hidden; }
+}
+@media (max-width: 900px) {
   .release-page__grid, .artist-page__grid, .about-label, .contact { grid-template-columns: 1fr; }
   .spotlight { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 2rem; }
   .release-page__cover { position: static; max-width: 30rem; }
@@ -776,8 +788,6 @@ button { font: inherit; color: inherit; }
   .countdown { padding-block: .9rem; }
   .page-head { padding-top: calc(var(--header-h) + 1.75rem); }
 }
-/* Small laptops: slightly smaller type so layouts keep their proportions */
-@media (min-width: 1101px) and (max-width: 1440px) { html { font-size: 93.75%; } }
 
 /* Bookings & demos: primary card full width, the other two side by side, between phone and desktop */
 @media (max-width: 1180px) and (min-width: 641px) {
@@ -785,3 +795,12 @@ button { font: inherit; color: inherit; }
   .work-card--primary { grid-column: 1 / -1; }
 }
 @media (max-width: 640px) { .work-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Tablet band (701-1100px): keep two columns where they read well instead of stretching the phone layout ---------- */
+@media (min-width: 701px) and (max-width: 1100px) {
+  .artist-page__grid, .release-page__grid { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: clamp(2rem, 5vw, 3.5rem); align-items: start; }
+  .artist-page__media, .release-page__cover { max-width: none; }
+  .about-label { grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); gap: 2.5rem; }
+  .about-label__mark img { width: min(100%, 9rem); }
+  .contact__intro > p:not(.eyebrow) { max-width: 60ch; }
+}

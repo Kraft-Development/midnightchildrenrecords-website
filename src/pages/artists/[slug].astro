@@ -42,7 +42,15 @@ const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.
         <p class="eyebrow"><a href="/artists/">The Children</a> · {tierLabel}</p>
         <h1 class="page-title">{artist.name}</h1>
         <p class="artist-page__meta">{[artist.genre, artist.city].filter(Boolean).join(' · ')}</p>
-        <div class="prose">{paragraphs.map((p) => <p>{p}</p>)}</div>
+        <div class="prose">
+          {paragraphs.slice(0, 2).map((p) => <p>{p}</p>)}
+          {paragraphs.length > 2 && (
+            <details class="prose__more">
+              <summary><span class="prose__more-open">Read more</span><span class="prose__more-close">Read less</span></summary>
+              {paragraphs.slice(2).map((p) => <p>{p}</p>)}
+            </details>
+          )}
+        </div>
         <dl class="facts facts--artist">
           <div><dt>On the label</dt><dd class="facts__text">{TIER_LABEL[artist.tier]}</dd></div>
           {artist.city && <div><dt>From</dt><dd class="facts__text">{artist.city}</dd></div>}
