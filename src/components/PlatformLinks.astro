@@ -1,0 +1,22 @@
+---
+// Platform links with their logos, in the site's fixed platform order.
+//   variant="blocks": square tiles with logo and name (artist and release pages)
+//   variant="icons":  small square logo buttons, name read out by screen readers and shown on hover (cards, track rows)
+import { linkList } from '../lib/data';
+interface Props { links?: Record<string, string>; website?: string; variant?: 'blocks' | 'icons'; label?: string; context?: string }
+const { links = {}, website = '', variant = 'blocks', label = 'Listen and follow', context = '' } = Astro.props;
+const ICON: Record<string, string> = { appleMusic: 'applemusic', youtubeMusic: 'youtubemusic', amazonMusic: 'amazonmusic' };
+const items = [...(website ? [{ key: 'website', name: 'Website', url: website }] : []), ...linkList(links)];
+---
+{items.length > 0 && (
+  <ul class={`platforms platforms--${variant}`} aria-label={label}>
+    {items.map((l) => (
+      <li>
+        <a class={`platform platform--${l.key}`} href={l.url} rel="noopener noreferrer" target="_blank" title={variant === 'icons' ? l.name : undefined}>
+          <svg class="platform__icon" aria-hidden="true"><use href={`#i-${ICON[l.key] || l.key.toLowerCase()}`}></use></svg>
+          <span class={variant === 'icons' ? 'visually-hidden' : 'platform__name'}>{l.name}{context && variant === 'icons' && <> – {context}</>}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
