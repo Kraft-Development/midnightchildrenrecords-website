@@ -13,6 +13,7 @@ import path from 'node:path';
 import { parseEvents, eventsToLabelEvents, validFeedUrl } from './calendar.mjs';
 import { cleanEvents } from './events.mjs';
 import { fetchCatalogue, mergeReleases } from './beatport.mjs';
+import { fetchStreaming } from './streaming.mjs';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -95,8 +96,8 @@ async function instagramGallery() {
 
 // ---------- Release covers (Beatport) ----------
 // 1000px is plenty for a 32rem cover at 2x; Beatport serves any size from the same image id.
-export const coverUrl = (artwork) => String(artwork).replace(/\/image_size\/\d+x\d+\//, '/image_size/1000x1000/');
-const ARTWORK = /^https:\/\/geo-media\.beatport\.com\/image_size\/\d{2,4}x\d{2,4}\/[0-9a-f-]{36}\.(jpg|png)$/;
+export const coverUrl = (artwork) => String(artwork).replace(/\/image_size\/\d+x\d+\//, '/image_size/1000x1000/').replace(/\/\d{2,4}x\d{2,4}-([0-9a-z-]+\.jpg)$/, '/1000x1000-$1');
+const ARTWORK = /^https:\/\/(geo-media\.beatport\.com\/image_size\/\d{2,4}x\d{2,4}\/[0-9a-f-]{36}\.(jpg|png)|(cdn-images|e-cdns-images)\.dzcdn\.net\/images\/cover\/[0-9a-f]{32}\/\d{2,4}x\d{2,4}-[0-9a-z-]+\.jpg)$/;
 export async function releaseCovers(releases, dir = path.join(IMG, 'covers')) {
   let got = 0, kept = 0, failed = 0;
   for (const r of releases) {
@@ -150,9 +151,17 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     log(`beatport catalogue: ${list.length} release(s)`);
     return list;
   }, []);
+  const read = async (f, d = []) => { try { return JSON.parse(await readFile(path.join(CONTENT, f), 'utf8')); } catch { return d; } };
+  const known = mergeReleases(await read('releases.beatport.json'), await read('releases.json'));
+  await step('streaming links', 'releases.streaming.json', async () => {
+    const roster = await read('artists.json');
+    const out = await fetchStreaming(known, roster, { ua: UA, spotifyId: env.SPOTIFY_CLIENT_ID, spotifySecret: env.SPOTIFY_CLIENT_SECRET, log });
+    log(`streaming links: ${Object.keys(out.links).length} release(s) matched, ${out.extra.length} new release(s) from Deezer`);
+    return out;
+  }, { links: {}, extra: [] });
   try {
-    const read = async (f) => { try { return JSON.parse(await readFile(path.join(CONTENT, f), 'utf8')); } catch { return []; } };
-    await releaseCovers(mergeReleases(await read('releases.beatport.json'), await read('releases.json')));
+    const streaming = await read('releases.streaming.json', { extra: [] });
+    await releaseCovers([...known, ...(streaming.extra || [])]);
   } catch (e) { log('release covers skipped:', e.message); }
   try { await eventsCalendar(); } catch (e) { log('events calendar skipped:', String(e.message || e).replace(/https?:\/\/\S+/g, '[calendar]')); }
   await step('instagram gallery', 'gallery.json', instagramGallery, []);

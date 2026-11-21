@@ -25,6 +25,10 @@ export const LINK_HOSTS = {
   soundcloud: ['soundcloud.com', 'on.soundcloud.com'],
   bandcamp: ['bandcamp.com'],
   beatport: ['www.beatport.com', 'beatport.com'],
+  deezer: ['www.deezer.com', 'deezer.com'],
+  tidal: ['tidal.com', 'listen.tidal.com'],
+  amazonMusic: ['music.amazon.com'],
+  youtubeMusic: ['music.youtube.com'],
   instagram: ['www.instagram.com', 'instagram.com'],
   tiktok: ['www.tiktok.com', 'tiktok.com'],
   facebook: ['www.facebook.com', 'facebook.com'],
@@ -38,7 +42,7 @@ const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const DURATION = /^\d{1,2}:\d{2}$/;
 const CATALOGUE = /^[A-Z]{2,6}\d{1,5}$/;
 // Official cover art: only Beatport's image server, downloaded at build time and served from our own domain.
-const ARTWORK = /^https:\/\/geo-media\.beatport\.com\/image_size\/\d{2,4}x\d{2,4}\/[0-9a-f-]{36}\.(jpg|png)$/;
+const ARTWORK = /^https:\/\/(geo-media\.beatport\.com\/image_size\/\d{2,4}x\d{2,4}\/[0-9a-f-]{36}\.(jpg|png)|(cdn-images|e-cdns-images)\.dzcdn\.net\/images\/cover\/[0-9a-f]{32}\/\d{2,4}x\d{2,4}-[0-9a-z-]+\.jpg)$/;
 const TYPES = ['Single', 'EP', 'Album', 'Compilation', 'Remix'];
 // No HTML, no control characters and no unpaired surrogates (a half-cut emoji once broke a production build).
 const BAD_TEXT = /[<>]|[\u0000-\u0008\u000B\u000C\u000E-\u001F]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/;
@@ -144,7 +148,7 @@ function checkReleases(releases, file) {
     (r.featuring || []).forEach((f, j) => text(`${w}.featuring[${j}]`, f, { required: true, max: 60 }));
     text(`${w}.credit`, r.credit, { max: 160 });
     text(`${w}.genre`, r.genre, { max: 40 });
-    if (r.artwork && !ARTWORK.test(r.artwork)) err(`${w}.artwork`, 'must be a Beatport cover link like https://geo-media.beatport.com/image_size/1400x1400/<id>.jpg');
+    if (r.artwork && !ARTWORK.test(r.artwork)) err(`${w}.artwork`, 'must be a Beatport or Deezer cover link');
     if (!TYPES.includes(r.type)) err(`${w}.type`, `must be one of ${TYPES.join(', ')}`);
     if (!validDate(r.date || '') && !/^\d{4}$/.test(r.date || '')) err(`${w}.date`, 'must be a real date like 2026-11-14 (or just the year, 2026, until the date is confirmed)');
     if (r.catalogue) {
@@ -167,6 +171,18 @@ const releases = readJson('src/content/releases.json');
 if (releases) checkReleases(releases, 'releases.json');
 const beatportReleases = existsSync(join(root, 'src/content/releases.beatport.json')) ? readJson('src/content/releases.beatport.json') : [];
 if (beatportReleases) checkReleases(beatportReleases, 'releases.beatport.json');
+// releases.streaming.json (written at build): streaming links per release, and new releases found on Deezer
+const streaming = existsSync(join(root, 'src/content/releases.streaming.json')) ? readJson('src/content/releases.streaming.json') : { links: {}, extra: [] };
+if (streaming) {
+  if (typeof streaming.links !== 'object' || Array.isArray(streaming.links) || !Array.isArray(streaming.extra)) err('releases.streaming.json', 'must be { links: {...}, extra: [...] }');
+  else {
+    for (const [slug, links] of Object.entries(streaming.links)) {
+      if (!SLUG.test(slug)) err(`releases.streaming.json.links`, `"${slug}" is not a slug`);
+      for (const [k, v] of Object.entries(links || {})) link(`releases.streaming.json.links.${slug}.${k}`, k, v);
+    }
+    checkReleases(streaming.extra, 'releases.streaming.json');
+  }
+}
 
 // ---------- events.json (same rules the site uses when building) ----------
 const eventsRaw = readJson('src/content/events.json');

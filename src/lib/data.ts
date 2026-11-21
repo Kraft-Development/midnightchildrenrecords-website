@@ -3,6 +3,7 @@ import labelJson from '../content/label.json';
 import artistsJson from '../content/artists.json';
 import releasesJson from '../content/releases.json';
 import beatportJson from '../content/releases.beatport.json';
+import streamingJson from '../content/releases.streaming.json';
 import { mergeReleases } from '../../scripts/beatport.mjs';
 import eventsJson from '../content/events.json';
 import galleryJson from '../content/gallery.json';
@@ -28,8 +29,16 @@ export const artistBySlug = (s: string) => bySlug.get(s);
 // Official cover art is downloaded from Beatport at build time (scripts/fetch-data.mjs) into /img/covers/<slug>.jpg.
 // A cover set by hand in releases.json wins; with neither, the branded placeholder tile is shown.
 const coverFor = (r: Release) => r.cover || (existsSync(path.join(process.cwd(), 'public/img/covers', `${r.slug}.jpg`)) ? `/img/covers/${r.slug}.jpg` : '');
+// Streaming links found at build time (Deezer, Apple Music, Spotify) are added where a release has none for that
+// platform, and releases found on Deezer that the site doesn't have yet are added (scripts/streaming.mjs).
+function withStreaming(list: Release[]): Release[] {
+  const s = streamingJson as { links: Record<string, Links>; extra: Release[] };
+  const out = list.map((r) => ({ ...r, links: { ...(s.links?.[r.slug] || {}), ...(r.links || {}) } }));
+  for (const x of s.extra || []) if (!out.some((r) => r.slug === x.slug)) out.push(x);
+  return out;
+}
 // Beatport's catalogue (written at build time) with releases.json on top: hand-set fields win, hand-made releases are added.
-export const releases: Release[] = mergeReleases(beatportJson as Release[], releasesJson as Release[])
+export const releases: Release[] = withStreaming(mergeReleases(beatportJson as Release[], releasesJson as Release[]))
   .map((r) => ({ ...r, cover: coverFor(r) }))
   .sort((a, b) => b.date.localeCompare(a.date) || (b.catalogue || '').localeCompare(a.catalogue || ''));
 export const releasesFor = (slug: string) => releases.filter((r) => r.artists.includes(slug));
@@ -47,12 +56,13 @@ export const formatDate = (d: string) => d.length === 4 ? d :
   new Date(d + 'T12:00:00Z').toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 export const year = (d: string) => d.slice(0, 4);
 
+// In display order: streaming first, then stores and socials.
 export const PLATFORMS: Record<string, string> = {
-  spotify: 'Spotify', appleMusic: 'Apple Music', youtube: 'YouTube', soundcloud: 'SoundCloud',
-  bandcamp: 'Bandcamp', beatport: 'Beatport', instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook', twitch: 'Twitch',
+  spotify: 'Spotify', appleMusic: 'Apple Music', youtubeMusic: 'YouTube Music', youtube: 'YouTube', deezer: 'Deezer', tidal: 'TIDAL',
+  amazonMusic: 'Amazon Music', soundcloud: 'SoundCloud', beatport: 'Beatport', bandcamp: 'Bandcamp', instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook', twitch: 'Twitch',
 };
 export const linkList = (links: Links = {}) =>
-  Object.entries(links).filter(([k, v]) => v && PLATFORMS[k]).map(([k, v]) => ({ key: k, name: PLATFORMS[k], url: v }));
+  Object.keys(PLATFORMS).filter((k) => links[k]).map((k) => ({ key: k, name: PLATFORMS[k], url: links[k] }));
 
 // One id per build, so browsers fetch fresh CSS/JS after every deploy.
 export const BUILD_ID = Date.now().toString(36);
