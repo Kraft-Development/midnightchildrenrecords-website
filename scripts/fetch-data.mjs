@@ -1,10 +1,11 @@
 // Build-time data fetch. Runs before `astro build` / `astro dev` (npm "prebuild"/"predev").
+//   Beatport  -> public/img/covers/<slug>.jpg, the official cover for every release that has an `artwork` link.
 //   Instagram -> src/content/gallery.json (+ public/img/gallery/ig-N.jpg), from the label's official account only.
 //   Needs INSTAGRAM_ACCESS_TOKEN and INSTAGRAM_USER_ID as Cloudflare build variables (never in the repo).
 //   Without them, the existing gallery.json is kept (empty = the site shows a "Follow us" block instead).
 // Nothing here may break the build: every step is wrapped, and the previous file is kept on any failure.
 // Images are downloaded and served from our own domain, so the strict CSP (img-src 'self') still holds.
-import { writeFile, mkdir, rm, rename } from 'node:fs/promises';
+import { writeFile, readFile, mkdir, rm, rename } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -85,6 +86,22 @@ async function instagramGallery() {
   return out;
 }
 
+// ---------- Release covers (Beatport) ----------
+// 1000px is plenty for a 32rem cover at 2x; Beatport serves any size from the same image id.
+export const coverUrl = (artwork) => String(artwork).replace(/\/image_size\/\d+x\d+\//, '/image_size/1000x1000/');
+const ARTWORK = /^https:\/\/geo-media\.beatport\.com\/image_size\/\d{2,4}x\d{2,4}\/[0-9a-f-]{36}\.(jpg|png)$/;
+export async function releaseCovers(releases, dir = path.join(IMG, 'covers')) {
+  let got = 0, kept = 0, failed = 0;
+  for (const r of releases) {
+    if (!r?.artwork || !ARTWORK.test(r.artwork) || !/^[a-z0-9-]+$/.test(r.slug || '')) continue;
+    const file = path.join(dir, `${r.slug}.jpg`);
+    if (existsSync(file)) { kept++; continue; }
+    try { await download(coverUrl(r.artwork), file); got++; }
+    catch (e) { failed++; log(`cover ${r.slug} skipped:`, e.message); } // placeholder tile is shown instead
+  }
+  log(`release covers: ${got} downloaded, ${kept} already there, ${failed} failed`);
+}
+
 async function step(name, file, fn, fallback) {
   const target = path.join(CONTENT, file);
   try {
@@ -96,5 +113,7 @@ async function step(name, file, fn, fallback) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
+  try { await releaseCovers(JSON.parse(await readFile(path.join(CONTENT, 'releases.json'), 'utf8'))); }
+  catch (e) { log('release covers skipped:', e.message); }
   await step('instagram gallery', 'gallery.json', instagramGallery, []);
 }

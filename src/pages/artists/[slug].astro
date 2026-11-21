@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ReleaseCard from '../../components/ReleaseCard.astro';
 import EventRow from '../../components/EventRow.astro';
-import { label, artists, releasesFor, eventsFor, linkList, year, TIER_LABEL, fmtEvent } from '../../lib/data';
+import { creditLine, label, artists, releasesFor, eventsFor, linkList, year, TIER_LABEL, fmtEvent } from '../../lib/data';
 
 export function getStaticPaths() {
   return artists.map((a) => ({ params: { slug: a.slug }, props: { artist: a } }));
@@ -14,7 +14,8 @@ const links = linkList(artist.links);
 const own = releasesFor(artist.slug);
 const shows = eventsFor(artist.slug);
 // Every track this artist has on the label, newest release first.
-const tracks = own.flatMap((r) => (r.tracks?.length ? r.tracks : [{ title: r.title }]).map((t) => ({ ...t, release: r })));
+// One row per release (its mixes are listed on the release page).
+const tracks = own.map((r) => ({ title: r.title, release: r }));
 const paragraphs = (artist.bio || '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
 const tierLabel = artist.tier === 'founder' ? 'Founder' : 'Friend of the label';
 const jsonLd = {
@@ -69,7 +70,7 @@ const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.
             <li class="track-row">
               <span class="track-row__n">{String(i + 1).padStart(2, '0')}</span>
               <span class="track-row__title">{t.title}</span>
-              <a class="track-row__release" href={`/releases/${t.release.slug}/`}>{t.release.title}<span> · {t.release.type}{t.release.catalogue && ` · ${t.release.catalogue}`}</span></a>
+              <a class="track-row__release" href={`/releases/${t.release.slug}/`}>{creditLine(t.release)}<span> · {t.release.catalogue}{t.release.genre && ` · ${t.release.genre}`}</span></a>
               <span class="track-row__year">{year(t.release.date)}</span>
               <span class="track-row__listen">{linkList(t.release.links).slice(0, 2).map((l) => <a href={l.url} rel="noopener noreferrer">{l.name}</a>)}</span>
             </li>

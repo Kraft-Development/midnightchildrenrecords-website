@@ -1,15 +1,404 @@
 [
   {
-    "slug": "what-about-us",
-    "title": "What About Us?",
-    "artists": ["andeon", "timo-odv"],
+    "slug": "you-and-me",
+    "title": "You & Me",
+    "artists": [
+      "aidin-caye"
+    ],
+    "credit": "Aidin Caye",
     "featuring": [],
     "type": "Single",
-    "date": "2026",
-    "catalogue": "MCR001",
+    "date": "2026-10-30",
+    "catalogue": "MCR016",
+    "genre": "Melodic House & Techno",
     "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/8252adac-4a17-4ed6-a32c-905aa55f3216.jpg",
+    "description": "A darker, more personal direction for Aidin: melodic techno emotion over a tech house engine, with a breakdown that opens up into pure euphoria. Built for peak time and dark rooms.",
+    "tracks": [
+      {
+        "title": "You & Me (Extended Mix)",
+        "duration": "5:50"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/you-me-extended-mix/7564404"
+    }
+  },
+  {
+    "slug": "what-about-us",
+    "title": "What About Us?",
+    "artists": [
+      "timo-odv",
+      "andeon"
+    ],
+    "credit": "TiMO ODV & Andeon",
+    "featuring": [],
+    "type": "Single",
+    "date": "2026-10-09",
+    "catalogue": "MCR015",
+    "genre": "Indie Tech",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/d83e6457-035a-40f1-9954-3bb1126765e1.jpg",
+    "description": "TiMO ODV and Andeon's first track together: a feel-good summer anthem with an emotional vocal about love and choosing to stay together.",
+    "tracks": [
+      {
+        "title": "What About Us? (Extended Mix)",
+        "duration": "5:43"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/what-about-us-extended-mix/7447269"
+    }
+  },
+  {
+    "slug": "change-my-mind",
+    "title": "Change My Mind",
+    "artists": [
+      "timo-odv"
+    ],
+    "credit": "TiMO ODV & Cinimin",
+    "featuring": [],
+    "type": "Single",
+    "date": "2026-04-24",
+    "catalogue": "MCR014",
+    "genre": "Tech House",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/ad27faa9-ced1-4563-a6be-c6ec69fd5b69.jpg",
+    "description": "A late-night tech house cut with rolling bass, hypnotic percussion and a male/female vocal back-and-forth, made for after-hours floors.",
+    "tracks": [
+      {
+        "title": "Change My Mind (Extended Mix)",
+        "duration": "5:04"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/change-my-mind/6585554"
+    }
+  },
+  {
+    "slug": "me-i-dance",
+    "title": "Me, I Dance",
+    "artists": [
+      "advent",
+      "timo-odv"
+    ],
+    "credit": "Advent & TiMO ODV",
+    "featuring": [],
+    "type": "Single",
+    "date": "2026-02-27",
+    "catalogue": "MCR013",
+    "genre": "Tech House",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/6a688d47-f031-4746-b473-661537e58aa2.jpg",
+    "description": "A cheeky tech house roller: TiMO's spoken vocal pokes fun at the people too cool to move, while the groove keeps going. Some stand and talk. Me? I dance.",
+    "tracks": [
+      {
+        "title": "Me, I Dance (Radio Mix)",
+        "duration": "3:38"
+      },
+      {
+        "title": "Me, I Dance (Original Mix)",
+        "duration": "5:40"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/me-i-dance/7006116"
+    }
+  },
+  {
+    "slug": "cant-be-me",
+    "title": "Can't Be Me",
+    "artists": [
+      "timo-odv",
+      "aidin-caye"
+    ],
+    "credit": "TiMO ODV & Aidin Caye",
+    "featuring": [],
+    "type": "Single",
+    "date": "2025-11-28",
+    "catalogue": "MCR011",
+    "genre": "Tech House",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/542963c4-9475-457f-8bec-cf7629d66c61.jpg",
+    "description": "The two founders together: TiMO's vocal swagger on Aidin's club-ready production, in a hard-hitting electro tech house anthem.",
+    "tracks": [
+      {
+        "title": "Can't Be Me (Original Mix)",
+        "duration": "3:36"
+      },
+      {
+        "title": "Can't Be Me (Extended Mix)",
+        "duration": "5:03"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/cant-be-me/5557899"
+    }
+  },
+  {
+    "slug": "bang-bang-newire-remix",
+    "title": "Bang Bang (NEWIRE Remix)",
+    "artists": [
+      "aidin-caye"
+    ],
+    "credit": "Aidin Caye, remixed by NEWIRE",
+    "featuring": [],
+    "type": "Single",
+    "date": "2025-10-17",
+    "catalogue": "MCR010",
+    "genre": "Indie Tech",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/a74f0a5d-262d-42b3-9693-d9a3a6ea58c1.jpg",
+    "description": "Cape Town's NEWIRE takes Aidin's Bang Bang underground with a driving, playful tech house rework for late nights.",
+    "tracks": [
+      {
+        "title": "Bang Bang (NEWIRE Remix)",
+        "duration": "5:27"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/bang-bang-newire-remix/5419049"
+    }
+  },
+  {
+    "slug": "all-i-need",
+    "title": "All I Need",
+    "artists": [
+      "aidin-caye"
+    ],
+    "credit": "Aidin Caye",
+    "featuring": [],
+    "type": "Single",
+    "date": "2025-08-29",
+    "catalogue": "MCR009",
+    "genre": "Afro House",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/7839930a-0458-4256-82d0-a8b4bc875d94.jpg",
+    "description": "Afro house at its core, with melodic and deep influences: layered percussion, immersive synths and vocal fragments that keep the floor locked in.",
+    "tracks": [
+      {
+        "title": "All I Need (Original Mix)",
+        "duration": "5:04"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/all-i-need/5180689"
+    }
+  },
+  {
+    "slug": "bang-bang",
+    "title": "Bang Bang",
+    "artists": [
+      "aidin-caye"
+    ],
+    "credit": "Aidin Caye",
+    "featuring": [],
+    "type": "Single",
+    "date": "2025-08-08",
+    "catalogue": "MCR008",
+    "genre": "Afro House",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/2d229565-0e30-4702-ab32-6e8d5a854379.jpg",
+    "description": "High-impact afro house that mixes rap-driven energy with melodic emotion, on chest-thumping bass and sharp percussion.",
+    "tracks": [
+      {
+        "title": "Bang Bang (Extended Mix)",
+        "duration": "5:08"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/bang-bang/5153115"
+    }
+  },
+  {
+    "slug": "2-am",
+    "title": "2 AM",
+    "artists": [
+      "timo-odv"
+    ],
+    "credit": "TiMO ODV",
+    "featuring": [],
+    "type": "Single",
+    "date": "2025-08-01",
+    "catalogue": "MCR007",
+    "genre": "Melodic House & Techno",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/3f1d9c22-216b-4ec8-a6cd-742915ba270d.jpg",
+    "description": "Melodic techno meets afro house: deep basslines, ethereal synths and African percussion, made for the moment the night comes alive.",
+    "tracks": [
+      {
+        "title": "2 AM (Original Mix)",
+        "duration": "6:09"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/2-am/5153114"
+    }
+  },
+  {
+    "slug": "another-love",
+    "title": "Another Love",
+    "artists": [
+      "advent",
+      "timo-odv"
+    ],
+    "credit": "Advent, TiMO ODV, beatsbyhand & The Midnight Children",
+    "featuring": [],
+    "type": "Single",
+    "date": "2024-09-06",
+    "catalogue": "MCR006",
+    "genre": "Afro House",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/76e272e8-c954-461b-b94b-551025cf503c.jpg",
+    "description": "A reimagined cover of Another Love with pulsing rhythms, emotional chords and a driving bassline, made with beatsbyhand.",
+    "tracks": [
+      {
+        "title": "Another Love (Extended Mix)",
+        "duration": "6:34"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/another-love-extended-mix/4668937"
+    }
+  },
+  {
+    "slug": "freed-from-desire",
+    "title": "Freed From Desire",
+    "artists": [
+      "timo-odv",
+      "aidin-caye"
+    ],
+    "credit": "TiMO ODV & Aidin Caye",
+    "featuring": [],
+    "type": "Single",
+    "date": "2024-05-31",
+    "catalogue": "MCR005",
+    "genre": "Afro House",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/ad3e62e0-83b5-4cd9-b94e-e2853804067d.jpg",
+    "description": "GALA's classic, reworked as afro house by the label's two founders.",
+    "tracks": [
+      {
+        "title": "Freed From Desire (Original Mix)",
+        "duration": "3:26"
+      },
+      {
+        "title": "Freed From Desire (Extended Mix)",
+        "duration": "6:32"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/freed-from-desire/4657066"
+    }
+  },
+  {
+    "slug": "fade",
+    "title": "Fade",
+    "artists": [
+      "advent",
+      "timo-odv"
+    ],
+    "credit": "Advent, TiMO ODV & The Midnight Children",
+    "featuring": [],
+    "type": "Single",
+    "date": "2024-02-16",
+    "catalogue": "MCR004",
+    "genre": "Melodic House & Techno",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/17489ded-710b-47ac-8224-605564b712de.jpg",
+    "description": "Pulsing melodic techno with nostalgic vocals, building to a euphoric peak where melody and groove meet.",
+    "tracks": [
+      {
+        "title": "Fade (Extended Mix)",
+        "duration": "5:41"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/fade-extended-mix/4419015"
+    }
+  },
+  {
+    "slug": "better",
+    "title": "Better",
+    "artists": [
+      "advent",
+      "timo-odv"
+    ],
+    "credit": "Advent, TiMO ODV & The Midnight Children",
+    "featuring": [],
+    "type": "Single",
+    "date": "2023-09-08",
+    "catalogue": "MCR003",
+    "genre": "Melodic House & Techno",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/6622f167-e7b3-4093-9bbc-6fca338d76b0.jpg",
     "description": "",
-    "tracks": [{ "title": "What About Us?", "duration": "" }],
-    "links": {}
+    "tracks": [
+      {
+        "title": "Better (Extended Mix)",
+        "duration": "6:46"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/better-extended-mix/4249625"
+    }
+  },
+  {
+    "slug": "ye-yeah-ye-yeah-ye",
+    "title": "Ye Yeah Ye Yeah Ye",
+    "artists": [
+      "timo-odv"
+    ],
+    "credit": "TiMO ODV",
+    "featuring": [],
+    "type": "Single",
+    "date": "2023-06-16",
+    "catalogue": "MCR002",
+    "genre": "Melodic House & Techno",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/e3bc8da0-8268-4350-bdf3-6cb41233227a.jpg",
+    "description": "",
+    "tracks": [
+      {
+        "title": "Ye Yeah Ye Yeah Ye (Original Mix)",
+        "duration": "2:56"
+      },
+      {
+        "title": "Ye Yeah Ye Yeah Ye (Extended Mix)",
+        "duration": "7:04"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/ye-yeah-ye-yeah-ye/4265574"
+    }
+  },
+  {
+    "slug": "harpe",
+    "title": "Harpe",
+    "artists": [
+      "timo-odv"
+    ],
+    "credit": "TiMO ODV",
+    "featuring": [],
+    "type": "Single",
+    "date": "2023-07-14",
+    "catalogue": "MCR001",
+    "genre": "Melodic House & Techno",
+    "cover": "",
+    "artwork": "https://geo-media.beatport.com/image_size/1400x1400/f53cd9e9-f557-45ee-8922-94c73c9f3318.jpg",
+    "description": "",
+    "tracks": [
+      {
+        "title": "Harpe (Original Mix)",
+        "duration": "4:03"
+      },
+      {
+        "title": "Harpe (Extended Mix)",
+        "duration": "7:13"
+      }
+    ],
+    "links": {
+      "beatport": "https://www.beatport.com/release/harpe/4265570"
+    }
   }
 ]

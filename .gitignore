@@ -6,3 +6,6 @@ dist/
 *.log
 .DS_Store
 .wrangler/
+
+# Release covers are downloaded from Beatport at build time
+public/img/covers/
