@@ -1,5 +1,6 @@
 // Build-time data fetch. Runs before `astro build` / `astro dev` (npm "prebuild"/"predev").
-//   Beatport  -> public/img/covers/<slug>.jpg, the official cover for every release that has an `artwork` link.
+//   Beatport  -> src/content/releases.beatport.json (the label's catalogue, so new releases appear by themselves)
+//                and public/img/covers/<slug>.jpg, the official cover for every release that has an `artwork` link.
 //   Calendar  -> src/content/events.json, from the label's events calendar (GIG_CALENDAR_ICS, a Cloudflare build secret).
 //   Instagram -> src/content/gallery.json (+ public/img/gallery/ig-N.jpg), from the label's official account only.
 //   Needs INSTAGRAM_ACCESS_TOKEN and INSTAGRAM_USER_ID as Cloudflare build variables (never in the repo).
@@ -11,12 +12,16 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { parseEvents, eventsToLabelEvents, validFeedUrl } from './calendar.mjs';
 import { cleanEvents } from './events.mjs';
+import { fetchCatalogue, mergeReleases } from './beatport.mjs';
+import { fetchStreaming } from './streaming.mjs';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTENT = path.join(ROOT, 'src/content');
 const IMG = path.join(ROOT, 'public/img');
 const UA = 'Mozilla/5.0 (compatible; midnightchildrenrecords-site-build/1.0)';
+// Beatport serves its pages to ordinary browsers; the build identifies itself as one plus the site name.
+const UA_BROWSER = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36 midnightchildrenrecords-site-build/1.0';
 export const GALLERY_COUNT = 8;
 const env = process.env;
 const log = (...a) => console.log('[fetch-data]', ...a);
@@ -91,8 +96,8 @@ async function instagramGallery() {
 
 // ---------- Release covers (Beatport) ----------
 // 1000px is plenty for a 32rem cover at 2x; Beatport serves any size from the same image id.
-export const coverUrl = (artwork) => String(artwork).replace(/\/image_size\/\d+x\d+\//, '/image_size/1000x1000/');
-const ARTWORK = /^https:\/\/geo-media\.beatport\.com\/image_size\/\d{2,4}x\d{2,4}\/[0-9a-f-]{36}\.(jpg|png)$/;
+export const coverUrl = (artwork) => String(artwork).replace(/\/image_size\/\d+x\d+\//, '/image_size/1000x1000/').replace(/\/\d{2,4}x\d{2,4}-([0-9a-z-]+\.jpg)$/, '/1000x1000-$1');
+const ARTWORK = /^https:\/\/(geo-media\.beatport\.com\/image_size\/\d{2,4}x\d{2,4}\/[0-9a-f-]{36}\.(jpg|png)|(cdn-images|e-cdns-images)\.dzcdn\.net\/images\/cover\/[0-9a-f]{32}\/\d{2,4}x\d{2,4}-[0-9a-z-]+\.jpg)$/;
 export async function releaseCovers(releases, dir = path.join(IMG, 'covers')) {
   let got = 0, kept = 0, failed = 0;
   for (const r of releases) {
@@ -125,6 +130,9 @@ async function eventsCalendar() {
   const { events, problems } = cleanEvents(eventsToLabelEvents(parseEvents(text), since, roster), { artistSlugs: new Set(roster.map((a) => a.slug)) });
   if (problems.length) log('events calendar: skipped', problems.length, 'entries that failed validation');
   const out = events.map(({ id, ...e }) => e); // ids are derived again when the site builds
+  // An empty result keeps the current file: a calendar that is new, still being filled in, or briefly unreadable
+  // must never wipe the events off the site.
+  if (!out.length) { log('events calendar: no public events in the calendar; keeping events.json'); return; }
   await writeFile(path.join(CONTENT, 'events.json'), JSON.stringify(out, null, 2) + '\n');
   log('events calendar:', out.length, 'event(s) written');
 }
@@ -140,8 +148,24 @@ async function step(name, file, fn, fallback) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  try { await releaseCovers(JSON.parse(await readFile(path.join(CONTENT, 'releases.json'), 'utf8'))); }
-  catch (e) { log('release covers skipped:', e.message); }
+  await step('beatport catalogue', 'releases.beatport.json', async () => {
+    const roster = JSON.parse(await readFile(path.join(CONTENT, 'artists.json'), 'utf8'));
+    const list = await fetchCatalogue(UA_BROWSER, roster);
+    log(`beatport catalogue: ${list.length} release(s)`);
+    return list;
+  }, []);
+  const read = async (f, d = []) => { try { return JSON.parse(await readFile(path.join(CONTENT, f), 'utf8')); } catch { return d; } };
+  const known = mergeReleases(await read('releases.beatport.json'), await read('releases.json'));
+  await step('streaming links', 'releases.streaming.json', async () => {
+    const roster = await read('artists.json');
+    const out = await fetchStreaming(known, roster, { ua: UA, spotifyId: env.SPOTIFY_CLIENT_ID, spotifySecret: env.SPOTIFY_CLIENT_SECRET, log });
+    log(`streaming links: ${Object.keys(out.links).length} release(s) matched, ${out.extra.length} new release(s) from Deezer`);
+    return out;
+  }, { links: {}, extra: [] });
+  try {
+    const streaming = await read('releases.streaming.json', { extra: [] });
+    await releaseCovers([...known, ...(streaming.extra || [])]);
+  } catch (e) { log('release covers skipped:', e.message); }
   try { await eventsCalendar(); } catch (e) { log('events calendar skipped:', String(e.message || e).replace(/https?:\/\/\S+/g, '[calendar]')); }
   await step('instagram gallery', 'gallery.json', instagramGallery, []);
 }
