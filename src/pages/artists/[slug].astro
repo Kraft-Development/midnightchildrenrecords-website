@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ReleaseCard from '../../components/ReleaseCard.astro';
 import EventRow from '../../components/EventRow.astro';
+import PlatformLinks from '../../components/PlatformLinks.astro';
 import { creditLine, label, artists, releasesFor, eventsFor, linkList, year, TIER_LABEL, fmtEvent } from '../../lib/data';
 
 export function getStaticPaths() {
@@ -62,8 +63,8 @@ const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.
           <a class="btn btn--solid" href={`/contact/?topic=booking&artist=${artist.slug}`}>Book {artist.name} <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
           {artist.website && <a class="link-arrow" href={artist.website} rel="noopener noreferrer">Official website <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>}
         </div>
-        {links.length > 0 && (
-          <div class="listen"><p class="listen__title">Listen &amp; follow</p><ul class="listen__list">{links.map((l) => <li><a class="btn btn--small" href={l.url} rel="noopener noreferrer">{l.name}</a></li>)}</ul></div>
+        {(links.length > 0 || artist.website) && (
+          <div class="listen"><p class="listen__title">Listen &amp; follow</p><PlatformLinks links={artist.links} website={artist.website} /></div>
         )}
       </div>
     </div>
@@ -80,7 +81,7 @@ const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.
               <span class="track-row__title">{t.title}</span>
               <a class="track-row__release" href={`/releases/${t.release.slug}/`}>{creditLine(t.release)}<span> · {t.release.catalogue}{t.release.genre && ` · ${t.release.genre}`}</span></a>
               <span class="track-row__year">{year(t.release.date)}</span>
-              <span class="track-row__listen">{linkList(t.release.links).slice(0, 2).map((l) => <a href={l.url} rel="noopener noreferrer">{l.name}</a>)}</span>
+              <span class="track-row__listen"><PlatformLinks links={t.release.links} variant="icons" label={`Listen to ${t.title}`} context={t.title} /></span>
             </li>
           ))}
         </ol>

@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Cover from '../../components/Cover.astro';
 import ReleaseCard from '../../components/ReleaseCard.astro';
+import PlatformLinks from '../../components/PlatformLinks.astro';
 import { label, releases, artistBySlug, creditLine, formatDate, isUpcoming, linkList, artistNames } from '../../lib/data';
 
 export function getStaticPaths() {
@@ -55,7 +56,7 @@ const description = release.description && !release.description.startsWith('SAMP
         <p class="release-page__date">{isUpcoming(release) ? 'Out' : 'Released'} {formatDate(release.date)}{release.genre && ` · ${release.genre}`}</p>
         {release.description && <p class="release-page__desc">{release.description}</p>}
         {links.length > 0
-          ? <div class="listen"><p class="listen__title">Listen</p><ul class="listen__list">{links.map((l) => <li><a class="btn btn--small" href={l.url} rel="noopener noreferrer">{l.name}</a></li>)}</ul></div>
+          ? <div class="listen"><p class="listen__title">Listen</p><PlatformLinks links={release.links} label={`Listen to ${release.title}`} /></div>
           : <p class="release-page__soon">Streaming links coming soon.</p>}
         {release.tracks && release.tracks.length > 0 && (
           <div class="release-page__tracks">

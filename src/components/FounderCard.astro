@@ -1,8 +1,8 @@
 ---
 // Large founder panel: photo, name, short bio, booking and listening links.
+import PlatformLinks from './PlatformLinks.astro';
 import { linkList, releasesFor, TIER_LABEL } from '../lib/data';
 const { artist } = Astro.props;
-const links = linkList(artist.links).slice(0, 4);
 const count = releasesFor(artist.slug).length;
 ---
 <li class="founder">
@@ -21,6 +21,6 @@ const count = releasesFor(artist.slug).length;
       <a class="btn btn--solid" href={`/contact/?topic=booking&artist=${artist.slug}`}>Book {artist.name} <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
       <a class="link-arrow" href={`/artists/${artist.slug}/`}>Profile <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
     </div>
-    {links.length > 0 && <ul class="founder__links">{links.map((l) => <li><a href={l.url} rel="noopener noreferrer">{l.name}</a></li>)}</ul>}
+    <PlatformLinks links={artist.links} website={artist.website} variant="icons" label={`${artist.name} on other platforms`} />
   </div>
 </li>

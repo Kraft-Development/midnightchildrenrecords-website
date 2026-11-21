@@ -1,4 +1,5 @@
 ---
+import PlatformLinks from './PlatformLinks.astro';
 import { TIER_LABEL } from '../lib/data';
 const { artist } = Astro.props;
 ---
@@ -13,4 +14,5 @@ const { artist } = Astro.props;
     <span class="artist-card__name">{artist.name}</span>
     <span class="artist-card__meta">{[artist.genre, artist.city].filter(Boolean).join(' · ')}</span>
   </a>
+  <PlatformLinks links={artist.links} website={artist.website} variant="icons" label={`${artist.name} on other platforms`} />
 </li>

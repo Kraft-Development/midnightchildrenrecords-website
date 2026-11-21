@@ -1091,3 +1091,29 @@ button { font: inherit; color: inherit; }
 .hero__star:nth-child(2), .hero__star:nth-child(5) { animation-name: star-flare; animation-duration: 9s; }
 @media (max-width: 700px) { .hero__star:nth-child(n+5) { display: none; } }
 @media (prefers-reduced-motion: reduce) { .hero__twinkle, .hero__star { animation: none; } .hero__twinkle { opacity: .7; } .hero__star { opacity: .8; } }
+@media (prefers-reduced-motion: reduce) { .hero__sky::after, .hero__star { animation: none; } .hero__star { opacity: .8; } }
+
+/* ---------- Platform links with logos (artist, release and founder blocks; track rows; cards) ---------- */
+.platforms { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+.platform { display: flex; text-decoration: none; color: var(--ink); border: 1px solid var(--line); transition: background .2s, border-color .2s, color .2s; }
+.platform:hover, .platform:focus-visible { background: var(--green); border-color: var(--green); color: var(--ink); }
+.platform__icon { fill: currentColor; flex: none; }
+.platform--website .platform__icon { fill: none; }
+/* Square blocks: logo over name */
+.platforms--blocks { gap: .6rem; }
+.platforms--blocks .platform {
+  width: 6.5rem; aspect-ratio: 1; flex-direction: column; align-items: center; justify-content: center; gap: .65rem; padding: .5rem;
+  background: rgba(244, 239, 230, .03); text-align: center;
+}
+.platforms--blocks .platform__icon { width: 1.75rem; height: 1.75rem; }
+.platform__name { font-size: .64rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; line-height: 1.25; }
+/* Small square logo buttons */
+.platforms--icons { gap: .4rem; }
+.platforms--icons .platform { width: 2.3rem; height: 2.3rem; align-items: center; justify-content: center; color: var(--ink-2); }
+.platforms--icons .platform__icon { width: 1rem; height: 1rem; }
+.founder .platforms--icons { margin-top: .9rem; }
+.artist-card .platforms--icons { margin-top: .8rem; }
+.track-row__listen .platforms--icons { justify-content: flex-end; flex-wrap: nowrap; }
+.track-row__listen .platforms--icons .platform { width: 2rem; height: 2rem; }
+@media (max-width: 900px) { .track-row__listen .platforms--icons { justify-content: flex-start; flex-wrap: wrap; } }
+@media (max-width: 480px) { .platforms--blocks .platform { width: calc((100% - 1.2rem) / 3); } }
