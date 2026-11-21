@@ -4,33 +4,52 @@
     "name": "TiMO ODV",
     "tier": "founder",
     "genre": "DJ · Producer · Singer · Songwriter",
-    "city": "Kempton Park, East Rand",
-    "short": "Co-founder. DJ, producer, singer and songwriter from Kempton Park.",
-    "bio": "TiMO ODV is a DJ, producer, singer and songwriter from Kempton Park on Johannesburg's East Rand, and co-founder of Midnight Children Records.\n\nThe label takes its name from his 2020 EP Midnight Children, made with Aidin Caye.",
+    "city": "Kempton Park, South Africa",
+    "short": "Co-founder. Self-taught DJ, producer, singer and songwriter from the East Rand.",
+    "bio": "TiMO ODV (Timothy Oude Vrielink) is a self-taught DJ, producer, singer and songwriter from Kempton Park on Johannesburg's East Rand, and co-founder of Midnight Children Records.\n\nHe broke through in 2015 with “Save Me” on Universal Music South Africa, a certified hit that ruled local charts and radio that year. Singles such as “Find My Way”, “I Need You”, “Dancing Again” and “Move”, and the 2016 EP Origins, made his name for club-ready deep house with big vocal hooks. The label takes its name from his 2020 EP Midnight Children, made with Aidin Caye.\n\nOn Midnight Children Records he has moved into melodic house, tech house and indie dance, from Harpe and 2 AM to Can't Be Me, Change My Mind and What About Us?. He still writes for the dance floor and radio, and plays South Africa's biggest stages, including ULTRA South Africa.",
     "image": "/img/artists/timo-odv.jpg",
     "imageCredit": "",
     "website": "https://timoodv.com",
     "links": {
       "spotify": "https://open.spotify.com/artist/5ekzQ0Zq1wSg7dDZHYKFLt",
-      "instagram": "https://www.instagram.com/timoodv/",
+      "appleMusic": "https://music.apple.com/za/artist/timo-odv/904958431",
       "youtube": "https://www.youtube.com/@TiMOODVmusic",
-      "soundcloud": "https://soundcloud.com/timoodv"
-    }
+      "soundcloud": "https://soundcloud.com/timoodv",
+      "instagram": "https://www.instagram.com/timoodv"
+    },
+    "highlights": [
+      "Seven certified records, including “Save Me”, “Find My Way” and the EP Origins",
+      "Breakthrough single “Save Me” on Universal Music South Africa (2015)",
+      "The Midnight Children EP (2020), which gave the label its name",
+      "ULTRA South Africa and other major festivals"
+    ]
   },
   {
     "slug": "aidin-caye",
     "name": "Aidin Caye",
     "tier": "founder",
     "genre": "DJ · Producer",
-    "city": "East Rand",
-    "short": "Co-founder. DJ and producer from the East Rand.",
-    "bio": "Aidin Caye is a DJ and producer from Johannesburg's East Rand and co-founder of Midnight Children Records.\n\nHe co-produced TiMO ODV's 2020 EP Midnight Children, the record the label is named after.",
+    "city": "East Rand, South Africa",
+    "short": "Co-founder. DJ and producer blending house and techno, from the East Rand.",
+    "bio": "Aidin Caye is a DJ, producer and creative entrepreneur from Johannesburg's East Rand, and co-founder of Midnight Children Records.\n\nHe started at 16 with club residencies across the East Rand and has now spent more than 15 years behind the decks, blending house and techno with deep grooves and uplifting moments. His 2015 debut “Reflections”, with Ziyon of Liquideep, reached South African radio and charts, and his independent 2019 single “Hypnotize” passed a million streams and became one of the country's most Shazamed songs. He co-produced “We Don't Care” on TiMO ODV's Midnight Children EP, the record the label is named after.\n\nOff stage he founded The Garden Party, a boutique event series that has grown into one of South Africa's most anticipated party brands, and directed the documentary The State of the Arts (2021). Through Midnight Children Records he champions the next wave of South African talent.",
     "image": "/img/artists/aidin-caye.jpg",
     "imageCredit": "",
-    "website": "",
+    "website": "https://aidincaye.com",
     "links": {
-      "instagram": "https://www.instagram.com/aidincaye/"
-    }
+      "spotify": "https://open.spotify.com/artist/7pePn9jwMpHawrTDcJ0L6U",
+      "appleMusic": "https://music.apple.com/za/artist/aidin-caye/1036191468",
+      "youtube": "https://www.youtube.com/channel/UCx_RoGvRcg6Tp2OFE01yFnw",
+      "soundcloud": "https://soundcloud.com/aidincaye",
+      "instagram": "https://www.instagram.com/aidincaye",
+      "tiktok": "https://www.tiktok.com/@aidincaye",
+      "facebook": "https://www.facebook.com/aidincaye"
+    },
+    "highlights": [
+      "Over 10 million streams, including more than a million each for “Hypnotize” and “We Don't Care”",
+      "290,000+ Shazams; “Hypnotize” was a Top 20 most-Shazamed song in South Africa",
+      "ULTRA South Africa, H2O, Secrets of Summer and Lentedag, plus shows in more than 7 countries",
+      "Founder of The Garden Party; director of The State of the Arts (2021)"
+    ]
   },
   {
     "slug": "andeon",
@@ -38,8 +57,8 @@
     "tier": "friend",
     "genre": "DJ · Producer",
     "city": "South Africa",
-    "short": "DJ and producer from South Africa, on the label's first release with TiMO ODV.",
-    "bio": "Andeon is a DJ and producer from South Africa.\n\nHe features on What About Us? with TiMO ODV, the first release on Midnight Children Records.",
+    "short": "DJ and producer from South Africa, on What About Us? with TiMO ODV.",
+    "bio": "Andeon is a DJ and producer from South Africa.\n\nHis first Midnight Children release is What About Us? with TiMO ODV (MCR015, October 2026), a feel-good dance anthem with an emotional vocal about love and choosing to stay together.",
     "image": "/img/artists/andeon.jpg",
     "imageCredit": "",
     "website": "",
@@ -55,10 +74,10 @@
     "slug": "advent",
     "name": "Advent",
     "tier": "friend",
-    "genre": "Music producer · Artist",
-    "city": "",
-    "short": "Music producer and artist, and a friend of the label.",
-    "bio": "Advent is a music producer and artist.\n\nHe has worked with TiMO ODV and The Midnight Children on the single Better.",
+    "genre": "Producer · Artist",
+    "city": "South Africa",
+    "short": "Producer and artist, and one of the label's longest-standing collaborators.",
+    "bio": "Advent is a music producer and artist from South Africa, and one of the label's longest-standing collaborators.\n\nWith TiMO ODV and The Midnight Children he made Better (2023) and Fade (2024), followed by Another Love with beatsbyhand (2024) and the tech house roller Me, I Dance (2026). Outside the label his releases include the album Back to Basics and the single Move For Me.",
     "image": "/img/artists/advent.jpg",
     "imageCredit": "",
     "website": "",

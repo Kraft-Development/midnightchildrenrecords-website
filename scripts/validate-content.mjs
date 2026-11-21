@@ -123,6 +123,9 @@ if (artists) {
     text(`${w}.city`, a.city, { max: 60 });
     text(`${w}.short`, a.short, { max: 140 });
     text(`${w}.bio`, a.bio, { max: 2500, multiline: true });
+    if (a.highlights != null && !Array.isArray(a.highlights)) err(`${w}.highlights`, 'must be a list');
+    (a.highlights || []).forEach((h, j) => text(`${w}.highlights[${j}]`, h, { required: true, max: 160 }));
+    if ((a.highlights || []).length > 6) err(`${w}.highlights`, 'keep it to 6 or fewer');
     image(`${w}.image`, a.image);
     text(`${w}.imageCredit`, a.imageCredit, { max: 80 });
     if (a.image && !a.imageCredit) warn(`${w}.imageCredit`, 'photo has no credit');

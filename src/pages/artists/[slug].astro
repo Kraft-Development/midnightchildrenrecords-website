@@ -53,7 +53,13 @@ const description = artist.short && !artist.short.startsWith('SAMPLE') ? artist.
             </details>
           )}
         </div>
-        <dl class="facts facts--artist">
+        {artist.highlights?.length > 0 && (
+          <div class="highlights">
+            <p class="listen__title">Highlights</p>
+            <ul class="highlights__list">{artist.highlights.map((h) => <li>{h}</li>)}</ul>
+          </div>
+        )}
+                <dl class="facts facts--artist">
           <div><dt>On the label</dt><dd class="facts__text">{TIER_LABEL[artist.tier]}</dd></div>
           {artist.city && <div><dt>From</dt><dd class="facts__text">{artist.city}</dd></div>}
           <div><dt>MCR releases</dt><dd>{own.length}</dd></div>

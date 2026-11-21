@@ -14,7 +14,7 @@ import path from 'node:path';
 export const label = labelJson;
 
 export type Links = Record<string, string>;
-export interface Artist { slug: string; name: string; tier: 'founder' | 'friend'; website?: string; genre?: string; city?: string; short?: string; bio?: string; image?: string; imageCredit?: string; links?: Links; sample?: boolean; }
+export interface Artist { slug: string; name: string; tier: 'founder' | 'friend'; website?: string; genre?: string; city?: string; short?: string; bio?: string; image?: string; imageCredit?: string; highlights?: string[]; links?: Links; sample?: boolean; }
 export interface Track { title: string; duration?: string; }
 export interface Release { slug: string; title: string; artists: string[]; credit?: string; featuring?: string[]; type: string; date: string; catalogue?: string; genre?: string; cover?: string; artwork?: string; preorder?: boolean; description?: string; tracks?: Track[]; links?: Links; sample?: boolean; }
 
