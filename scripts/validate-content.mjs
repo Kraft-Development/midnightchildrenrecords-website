@@ -37,6 +37,8 @@ const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const DURATION = /^\d{1,2}:\d{2}$/;
 const CATALOGUE = /^[A-Z]{2,6}\d{1,5}$/;
+// Official cover art: only Beatport's image server, downloaded at build time and served from our own domain.
+const ARTWORK = /^https:\/\/geo-media\.beatport\.com\/image_size\/\d{2,4}x\d{2,4}\/[0-9a-f-]{36}\.(jpg|png)$/;
 const TYPES = ['Single', 'EP', 'Album', 'Compilation', 'Remix'];
 // No HTML, no control characters and no unpaired surrogates (a half-cut emoji once broke a production build).
 const BAD_TEXT = /[<>]|[\u0000-\u0008\u000B\u000C\u000E-\u001F]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/;
@@ -141,6 +143,9 @@ if (releases) {
     if (!Array.isArray(r.artists) || !r.artists.length) err(`${w}.artists`, 'needs at least one roster artist');
     else r.artists.forEach((s) => { if (!artistSlugs.has(s)) err(`${w}.artists`, `"${s}" is not in artists.json`); });
     (r.featuring || []).forEach((f, j) => text(`${w}.featuring[${j}]`, f, { required: true, max: 60 }));
+    text(`${w}.credit`, r.credit, { max: 160 });
+    text(`${w}.genre`, r.genre, { max: 40 });
+    if (r.artwork && !ARTWORK.test(r.artwork)) err(`${w}.artwork`, 'must be a Beatport cover link like https://geo-media.beatport.com/image_size/1400x1400/<id>.jpg');
     if (!TYPES.includes(r.type)) err(`${w}.type`, `must be one of ${TYPES.join(', ')}`);
     if (!validDate(r.date || '') && !/^\d{4}$/.test(r.date || '')) err(`${w}.date`, 'must be a real date like 2026-11-14 (or just the year, 2026, until the date is confirmed)');
     if (r.catalogue) {

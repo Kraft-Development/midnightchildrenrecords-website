@@ -12,6 +12,17 @@ const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
 const path = `/releases/${release.slug}/`;
 const links = linkList(release.links);
 const credit = creditLine(release);
+// The credit as the label lists it, with roster artists linked to their pages.
+const rosterNames = release.artists.map((slug) => ({ slug, name: artistBySlug(slug)?.name || slug })).sort((a, b) => b.name.length - a.name.length);
+const creditParts: { text: string; slug?: string }[] = [];
+for (let rest = credit; rest; ) {
+  const hits = rosterNames.map((r) => ({ ...r, at: rest.indexOf(r.name) })).filter((r) => r.at >= 0).sort((a, b) => a.at - b.at);
+  if (!hits.length) { creditParts.push({ text: rest }); break; }
+  const h = hits[0];
+  if (h.at > 0) creditParts.push({ text: rest.slice(0, h.at) });
+  creditParts.push({ text: h.name, slug: h.slug });
+  rest = rest.slice(h.at + h.name.length);
+}
 const related = releases.filter((r) => r.slug !== release.slug && r.artists.some((a) => release.artists.includes(a))).slice(0, 4);
 const single = !release.tracks || release.tracks.length <= 1;
 const jsonLd = {
@@ -39,10 +50,9 @@ const description = release.description && !release.description.startsWith('SAMP
         <p class="eyebrow">{release.type}{release.catalogue && ` · ${release.catalogue}`}</p>
         <h1 class="page-title">{release.title}</h1>
         <p class="release-page__artist">
-          {release.artists.map((s, i) => <>{i > 0 && ' & '}<a href={`/artists/${s}/`}>{artistBySlug(s)?.name || s}</a></>)}
-          {release.featuring?.length ? <> feat. {release.featuring.join(', ')}</> : null}
+          {creditParts.map((p) => p.slug ? <a href={`/artists/${p.slug}/`}>{p.text}</a> : p.text)}
         </p>
-        <p class="release-page__date">{isUpcoming(release) ? 'Out' : 'Released'} {formatDate(release.date)}</p>
+        <p class="release-page__date">{isUpcoming(release) ? 'Out' : 'Released'} {formatDate(release.date)}{release.genre && ` · ${release.genre}`}</p>
         {release.description && <p class="release-page__desc">{release.description}</p>}
         {links.length > 0
           ? <div class="listen"><p class="listen__title">Listen</p><ul class="listen__list">{links.map((l) => <li><a class="btn btn--small" href={l.url} rel="noopener noreferrer">{l.name}</a></li>)}</ul></div>

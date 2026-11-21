@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
-import { mapInstagram, clip, GALLERY_COUNT } from './fetch-data.mjs';
+import { mapInstagram, clip, GALLERY_COUNT, coverUrl, releaseCovers } from './fetch-data.mjs';
+import { mkdtemp, writeFile, readdir } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 
 const ig = mapInstagram([
   { media_type: 'VIDEO', media_url: 'https://x/v.mp4', thumbnail_url: 'https://cdn.example/v-cover.jpg', timestamp: '2026-11-10T10:00:00+0000' },
@@ -18,4 +21,24 @@ const emoji = 'a'.repeat(109) + '😀😀';
 assert.equal(clip(emoji, 110), 'a'.repeat(109) + '😀', 'keeps whole emoji');
 assert.equal(clip('a\uD83D', 5), 'a', 'drops lone surrogate');
 assert.equal(clip(null, 5), '');
+// Release covers: only Beatport links are fetched, at 1000px; existing files are kept; failures never throw.
+assert.equal(coverUrl('https://geo-media.beatport.com/image_size/1400x1400/8252adac-4a17-4ed6-a32c-905aa55f3216.jpg'), 'https://geo-media.beatport.com/image_size/1000x1000/8252adac-4a17-4ed6-a32c-905aa55f3216.jpg');
+{
+  const dir = await mkdtemp(path.join(tmpdir(), 'covers-'));
+  await writeFile(path.join(dir, 'kept.jpg'), 'x');
+  const calls = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (u) => { calls.push(String(u)); throw new Error('offline'); };
+  try {
+    await releaseCovers([
+      { slug: 'kept', artwork: 'https://geo-media.beatport.com/image_size/1400x1400/8252adac-4a17-4ed6-a32c-905aa55f3216.jpg' },
+      { slug: 'evil', artwork: 'https://evil.example/image_size/1400x1400/8252adac-4a17-4ed6-a32c-905aa55f3216.jpg' },
+      { slug: '../escape', artwork: 'https://geo-media.beatport.com/image_size/1400x1400/8252adac-4a17-4ed6-a32c-905aa55f3216.jpg' },
+      { slug: 'new', artwork: 'https://geo-media.beatport.com/image_size/1400x1400/d83e6457-035a-40f1-9954-3bb1126765e1.jpg' },
+      { slug: 'none' },
+    ], dir);
+  } finally { globalThis.fetch = realFetch; }
+  assert.deepEqual(calls, ['https://geo-media.beatport.com/image_size/1000x1000/d83e6457-035a-40f1-9954-3bb1126765e1.jpg']);
+  assert.deepEqual(await readdir(dir), ['kept.jpg'], 'a failed download leaves no file behind');
+}
 console.log('fetch-data: all tests passed');
