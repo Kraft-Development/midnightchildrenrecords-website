@@ -849,6 +849,7 @@ button { font: inherit; color: inherit; }
    spreads from the top right, faint stars sit behind everything, and the logo catches a little red light. */
 .hero { background:
   linear-gradient(200deg, rgba(120, 0, 0, .2), transparent 42%),
+  radial-gradient(ellipse 75% 70% at 0% 100%, rgba(0, 122, 77, .24) 0%, rgba(0, 122, 77, .09) 42%, transparent 75%),
   radial-gradient(ellipse 70% 55% at 50% 45%, #0f1311 0%, var(--bg) 70%); }
 .hero__moon {
   filter: drop-shadow(0 0 10px rgba(255, 60, 50, .6)) drop-shadow(0 0 45px rgba(252, 0, 0, .42)) drop-shadow(0 0 130px rgba(252, 0, 0, .28));
