@@ -804,3 +804,43 @@ button { font: inherit; color: inherit; }
   .about-label__mark img { width: min(100%, 9rem); }
   .contact__intro > p:not(.eyebrow) { max-width: 60ch; }
 }
+
+/* ---------- Events: featured "Next up" row (as on the TiMO ODV and Aidin Caye sites) ---------- */
+.event__next { grid-column: 1 / -1; display: block; margin-bottom: .55rem; font-size: .66rem; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--green-bright); }
+.event--next {
+  padding: clamp(1.25rem, 2.6vw, 2rem); margin-bottom: 1rem;
+  background: linear-gradient(90deg, rgba(0, 122, 77, .3), rgba(0, 122, 77, .06)); border: 1px solid var(--green);
+}
+.event--next:hover, .event--next:target { background: linear-gradient(90deg, rgba(0, 122, 77, .38), rgba(0, 122, 77, .08)); }
+.event--next .event__date { padding-right: clamp(1rem, 2vw, 1.75rem); border-right: 1px solid rgba(244, 239, 230, .18); }
+.event--next .event__day { font-size: clamp(3rem, 5vw, 4.5rem); }
+.event--next .event__name { font-size: clamp(2rem, 3.6vw, 3rem); }
+.event-list:has(.event--next) { border-top: 0; }
+
+/* ---------- Calendar: release days ---------- */
+.cal-day--release { box-shadow: inset 0 -3px 0 var(--red); }
+.cal-day__release { display: flex; align-items: center; gap: .4rem; margin-top: .45rem; text-decoration: none; font-size: clamp(.68rem, 1vw, .8rem); font-weight: 600; line-height: 1.15; color: var(--ink-2); }
+.cal-day__release img { width: 1.35rem; height: 1.35rem; flex: none; object-fit: cover; }
+.cal-day__release span { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.cal-day__release:hover span { color: var(--ink); }
+.cal-legend { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; margin-top: 1rem; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.cal-legend__item { display: inline-flex; align-items: center; gap: .5rem; }
+.cal-legend__item::before { content: ""; width: .9rem; height: .9rem; }
+.cal-legend__item--event::before { background: rgba(0, 122, 77, .45); border: 1px solid var(--green); }
+.cal-legend__item--release::before { border: 1px solid var(--line); box-shadow: inset 0 -3px 0 var(--red); }
+.cal-upcoming { margin-top: 1.75rem; }
+.cal-upcoming__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.cal-upcoming__list a { display: block; padding: .8rem 0; border-bottom: 1px solid var(--line); text-decoration: none; font-weight: 600; }
+.cal-upcoming__date { font-size: .75rem; letter-spacing: .12em; color: var(--green-bright); margin-right: .5rem; }
+.cal-upcoming__by { font-weight: 400; color: var(--ink-3); }
+@media (max-width: 900px) {
+  .event--next { grid-template-columns: auto 1fr; }
+  .event--next .event__place, .event--next .event__actions { grid-column: 2; }
+}
+@media (max-width: 600px) {
+  .cal-day__release span { display: none; }
+  .cal-day__release { justify-content: center; margin-top: .2rem; }
+  .event--next .event__day { font-size: 3rem; }
+}
+.event--next .btn--small { background: var(--green); border-color: var(--green); color: var(--ink); padding: .85rem 1.3rem; }
+.event--next .btn--small:hover { background: var(--green-hover); border-color: var(--green-hover); }

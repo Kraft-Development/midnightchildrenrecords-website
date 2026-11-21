@@ -1,5 +1,6 @@
 // Build-time data fetch. Runs before `astro build` / `astro dev` (npm "prebuild"/"predev").
 //   Beatport  -> public/img/covers/<slug>.jpg, the official cover for every release that has an `artwork` link.
+//   Calendar  -> src/content/events.json, from the label's events calendar (GIG_CALENDAR_ICS, a Cloudflare build secret).
 //   Instagram -> src/content/gallery.json (+ public/img/gallery/ig-N.jpg), from the label's official account only.
 //   Needs INSTAGRAM_ACCESS_TOKEN and INSTAGRAM_USER_ID as Cloudflare build variables (never in the repo).
 //   Without them, the existing gallery.json is kept (empty = the site shows a "Follow us" block instead).
@@ -8,6 +9,8 @@
 import { writeFile, readFile, mkdir, rm, rename } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { parseEvents, eventsToLabelEvents, validFeedUrl } from './calendar.mjs';
+import { cleanEvents } from './events.mjs';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -102,6 +105,30 @@ export async function releaseCovers(releases, dir = path.join(IMG, 'covers')) {
   log(`release covers: ${got} downloaded, ${kept} already there, ${failed} failed`);
 }
 
+// ---------- Events calendar -> events.json ----------
+// GIG_CALENDAR_ICS is the calendar's secret iCal address (same name as on the TiMO ODV and Aidin Caye sites; never in
+// the repo or logs). Without it, events.json is left as it is (edited by hand). With it, events.json mirrors the
+// calendar: upcoming events plus the last year's past nights. Any failure keeps the previous file.
+async function eventsCalendar() {
+  if (!env.GIG_CALENDAR_ICS) { log('events calendar: not configured; keeping events.json'); return; }
+  const feed = validFeedUrl(env.GIG_CALENDAR_ICS);
+  if (!feed) { log('events calendar: GIG_CALENDAR_ICS is not an https .ics address; keeping events.json'); return; }
+  let text = '';
+  try {
+    const r = await fetch(feed, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(15000) });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`); // never include the address: it is a secret
+    text = await r.text();
+  } catch (e) { log('events calendar: fetch failed, keeping events.json:', String(e.message || e).replace(/https?:\/\/\S+/g, '[calendar]')); return; }
+  if (!/BEGIN:VCALENDAR/.test(text)) { log('events calendar: response is not a calendar; keeping events.json'); return; }
+  const since = new Date(Date.now() + 2 * 3600e3 - 365 * 86400e3).toISOString().slice(0, 10); // SAST, one year back
+  const roster = JSON.parse(await readFile(path.join(CONTENT, 'artists.json'), 'utf8'));
+  const { events, problems } = cleanEvents(eventsToLabelEvents(parseEvents(text), since, roster), { artistSlugs: new Set(roster.map((a) => a.slug)) });
+  if (problems.length) log('events calendar: skipped', problems.length, 'entries that failed validation');
+  const out = events.map(({ id, ...e }) => e); // ids are derived again when the site builds
+  await writeFile(path.join(CONTENT, 'events.json'), JSON.stringify(out, null, 2) + '\n');
+  log('events calendar:', out.length, 'event(s) written');
+}
+
 async function step(name, file, fn, fallback) {
   const target = path.join(CONTENT, file);
   try {
@@ -115,5 +142,6 @@ async function step(name, file, fn, fallback) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   try { await releaseCovers(JSON.parse(await readFile(path.join(CONTENT, 'releases.json'), 'utf8'))); }
   catch (e) { log('release covers skipped:', e.message); }
+  try { await eventsCalendar(); } catch (e) { log('events calendar skipped:', String(e.message || e).replace(/https?:\/\/\S+/g, '[calendar]')); }
   await step('instagram gallery', 'gallery.json', instagramGallery, []);
 }

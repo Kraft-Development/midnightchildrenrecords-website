@@ -2,20 +2,24 @@
 import Layout from '../../layouts/Layout.astro';
 import EventRow from '../../components/EventRow.astro';
 import Countdown from '../../components/Countdown.astro';
-import { label, upcomingEvents, pastEvents, events, startIso, artistBySlug } from '../../lib/data';
+import { label, upcomingEvents, pastEvents, events, startIso, artistBySlug, releases, creditLine, isUpcoming } from '../../lib/data';
 
 const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
-// Months shown in the calendar: this month through the month of the last upcoming event (at least 3 months).
+// Months shown in the calendar: this month through the month of the last upcoming event or release (at least 3 months).
 const today = new Date();
 const first = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), 1));
-const lastEvent = upcomingEvents.at(-1);
-const lastMonth = lastEvent ? new Date(Date.UTC(+lastEvent.date.slice(0, 4), +lastEvent.date.slice(5, 7) - 1, 1)) : first;
+const lastDate = [upcomingEvents.at(-1)?.date, ...releases.filter(isUpcoming).map((r) => r.date)].filter(Boolean).sort().at(-1);
+const lastMonth = lastDate ? new Date(Date.UTC(+lastDate.slice(0, 4), +lastDate.slice(5, 7) - 1, 1)) : first;
 const months: Date[] = [];
 for (let d = new Date(first); months.length < 3 || d <= lastMonth; d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1))) {
   months.push(d); if (months.length >= 18) break;
 }
 const byDay = new Map<string, typeof events>();
 for (const e of events) byDay.set(e.date, [...(byDay.get(e.date) || []), e]);
+// Release days from the catalogue (Beatport), shown on the calendar next to the events.
+const relByDay = new Map<string, typeof releases>();
+for (const r of releases) if (/^\d{4}-\d{2}-\d{2}$/.test(r.date)) relByDay.set(r.date, [...(relByDay.get(r.date) || []), r]);
+const upcomingReleases = releases.filter(isUpcoming).sort((a, b) => a.date.localeCompare(b.date));
 const iso = (d: Date) => d.toISOString().slice(0, 10);
 const weeksOf = (m: Date) => {
   const lead = (m.getUTCDay() + 6) % 7; // Monday first
@@ -47,7 +51,7 @@ const jsonLd = upcomingEvents.length ? {
     <div class="container">
       <p class="eyebrow">Nights</p>
       <h1 class="page-title">Events</h1>
-      <p class="page-lead">Our own nights, where the label's records get played the way they were made to be heard.</p>
+      <p class="page-lead">Our own nights, where the label's records get played the way they were made to be heard. Release days are on the calendar too.</p>
     </div>
   </section>
 
@@ -61,7 +65,7 @@ const jsonLd = upcomingEvents.length ? {
     <div class="container">
       <div class="section-head"><h2 class="section-title section-title--sm" id="upcoming-title">Upcoming</h2></div>
       {upcomingEvents.length
-        ? <ol class="event-list">{upcomingEvents.map((e) => <EventRow e={e} />)}</ol>
+        ? <ol class="event-list">{upcomingEvents.map((e, i) => <EventRow e={e} featured={i === 0} />)}</ol>
         : <p class="empty-note">No dates announced right now. New nights land on <a href={label.socials.instagram} rel="noopener noreferrer">Instagram</a> first.</p>}
     </div>
   </section>
@@ -86,10 +90,12 @@ const jsonLd = upcomingEvents.length ? {
                   <tr>{week.map((d) => {
                     if (!d) return <td class="cal-day cal-day--empty"></td>;
                     const list = byDay.get(iso(d)) || [];
+                    const rels = relByDay.get(iso(d)) || [];
                     return (
-                      <td class={`cal-day${list.length ? ' cal-day--event' : ''}`} data-cal-date={iso(d)}>
+                      <td class:list={['cal-day', list.length && 'cal-day--event', rels.length && 'cal-day--release']} data-cal-date={iso(d)}>
                         <span class="cal-day__n">{d.getUTCDate()}</span>
                         {list.map((e) => <a class="cal-day__event" href={`#${e.id}`}><img src="/img/moon.svg" alt="" width="793" height="833"><span>{e.event}</span></a>)}
+                        {rels.map((r) => <a class="cal-day__release" href={`/releases/${r.slug}/`} title={`${r.title} by ${creditLine(r)}`}>{r.cover ? <img src={r.cover} alt="" width="40" height="40" loading="lazy"> : <img src="/img/moon.svg" alt="" width="793" height="833">}<span>{r.title}</span></a>)}
                       </td>
                     );
                   })}</tr>
@@ -99,6 +105,13 @@ const jsonLd = upcomingEvents.length ? {
           </div>
         ))}
       </div>
+      <p class="cal-legend"><span class="cal-legend__item cal-legend__item--event">Event</span><span class="cal-legend__item cal-legend__item--release">Release day</span></p>
+      {upcomingReleases.length > 0 && (
+        <div class="cal-upcoming">
+          <p class="listen__title">Coming soon</p>
+          <ul class="cal-upcoming__list">{upcomingReleases.map((r) => <li><a href={`/releases/${r.slug}/`}><span class="cal-upcoming__date">{r.date}</span> {r.title} <span class="cal-upcoming__by">{creditLine(r)}</span></a></li>)}</ul>
+        </div>
+      )}
     </div>
   </section>
 

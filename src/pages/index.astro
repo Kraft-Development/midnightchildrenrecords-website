@@ -89,7 +89,7 @@ const jsonLd = {
           </div>
           <a class="link-arrow" href="/events/">Calendar <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
         </div>
-        <ol class="event-list">{upcomingEvents.slice(0, 3).map((e) => <EventRow e={e} />)}</ol>
+        <ol class="event-list">{upcomingEvents.slice(0, 3).map((e, i) => <EventRow e={e} featured={i === 0} />)}</ol>
       </div>
     </section>
   )}
