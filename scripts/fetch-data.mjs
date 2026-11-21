@@ -130,6 +130,9 @@ async function eventsCalendar() {
   const { events, problems } = cleanEvents(eventsToLabelEvents(parseEvents(text), since, roster), { artistSlugs: new Set(roster.map((a) => a.slug)) });
   if (problems.length) log('events calendar: skipped', problems.length, 'entries that failed validation');
   const out = events.map(({ id, ...e }) => e); // ids are derived again when the site builds
+  // An empty result keeps the current file: a calendar that is new, still being filled in, or briefly unreadable
+  // must never wipe the events off the site.
+  if (!out.length) { log('events calendar: no public events in the calendar; keeping events.json'); return; }
   await writeFile(path.join(CONTENT, 'events.json'), JSON.stringify(out, null, 2) + '\n');
   log('events calendar:', out.length, 'event(s) written');
 }
