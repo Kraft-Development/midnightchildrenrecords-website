@@ -1,0 +1,176 @@
+[
+  {
+    "slug": "wonderland",
+    "name": "Wonderland",
+    "date": "2026-03-28",
+    "start": "16:00",
+    "end": "00:00",
+    "series": "Midnight Children presents",
+    "partner": "Green Live Events",
+    "venue": "The Warehouse, Emperors Palace",
+    "address": "64 Jones Rd, Kempton Park",
+    "city": "Johannesburg",
+    "tagline": "A tea party of sound. Dress code: as curious as you dare.",
+    "lineup": [
+      "timo-odv",
+      "aidin-caye"
+    ],
+    "guests": [
+      "Skelm"
+    ],
+    "lineupNote": "TiMO ODV played live.",
+    "cover": {
+      "src": "/img/nights/wonderland/04260.jpg",
+      "small": "/img/nights/wonderland/04260-sm.jpg",
+      "width": 1600,
+      "height": 1067,
+      "alt": "The Warehouse at Emperors Palace during Wonderland: the main stage glowing red and blue above a packed floor, with white drapes overhead",
+      "caption": ""
+    },
+    "story": [
+      "On 28 March 2026, Midnight Children and Green Live Events turned The Warehouse at Emperors Palace upside down. Wonderland was an invitation to step through the keyhole: eight hours, from 4pm to midnight, of bass, visuals and a room dressed like a dream that had lost track of gravity.",
+      "Chairs, lampshades and flowers hung from the ceiling, a jungle garden waited by the entrance, and the dress code was simply “as curious as you dare”. The guests took it seriously: bunny ears, Mad Hatter top hats, a Joker and his Harley.",
+      "Under the glowing Midnight Children sign, TiMO ODV (live) and Aidin Caye hosted the night with Skelm, a live saxophone soaring over the top as the floor filled up and the lights went deep red and blue."
+    ],
+    "chapters": [
+      {
+        "title": "Through the keyhole",
+        "intro": "The Warehouse, dressed for a dream: everything a little upside down.",
+        "photos": [
+          {
+            "src": "/img/nights/wonderland/04039.jpg",
+            "small": "/img/nights/wonderland/04039-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "Chairs, fringed lampshades and flowers hanging upside down from the ceiling next to the Midnight Children sign",
+            "caption": "Gravity optional."
+          },
+          {
+            "src": "/img/nights/wonderland/04059.jpg",
+            "small": "/img/nights/wonderland/04059-sm.jpg",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A jungle garden of plants and glowing lanterns along one wall of The Warehouse",
+            "caption": "The garden by the entrance."
+          },
+          {
+            "src": "/img/nights/wonderland/04053.jpg",
+            "small": "/img/nights/wonderland/04053-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "Two guests, one in bunny ears, in front of the jungle garden",
+            "caption": "Follow the rabbit."
+          },
+          {
+            "src": "/img/nights/wonderland/04046.jpg",
+            "small": "/img/nights/wonderland/04046-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "The VIP lounge with velvet seating under blue and red stage lights",
+            "caption": "The VIP lounge before the rush."
+          }
+        ]
+      },
+      {
+        "title": "The tea party",
+        "intro": "As curious as you dare, and they dared.",
+        "photos": [
+          {
+            "src": "/img/nights/wonderland/04100.jpg",
+            "small": "/img/nights/wonderland/04100-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "Four guests in tall Mad Hatter top hats around a table with drinks",
+            "caption": "A place at the table for the mad."
+          },
+          {
+            "src": "/img/nights/wonderland/03899.jpg",
+            "small": "/img/nights/wonderland/03899-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "A couple dressed as the Joker and Harley Quinn on the dance floor",
+            "caption": "Curiouser and curiouser."
+          },
+          {
+            "src": "/img/nights/wonderland/04090.jpg",
+            "small": "/img/nights/wonderland/04090-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "A guest in a sequinned outfit fanning a colourful hand fan on the floor",
+            "caption": "Colour on the floor."
+          }
+        ]
+      },
+      {
+        "title": "Down the rabbit hole",
+        "intro": "Then the music took over.",
+        "photos": [
+          {
+            "src": "/img/nights/wonderland/03857.jpg",
+            "small": "/img/nights/wonderland/03857-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "A DJ in a zebra-print cap and tinted glasses at the decks under the glowing Midnight Children sign",
+            "caption": "Under the sign."
+          },
+          {
+            "src": "/img/nights/wonderland/03964.jpg",
+            "small": "/img/nights/wonderland/03964-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "A saxophonist playing on the red-lit stage below the Midnight Children sign",
+            "caption": "Live sax over the drop."
+          },
+          {
+            "src": "/img/nights/wonderland/04338.jpg",
+            "small": "/img/nights/wonderland/04338-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "Two DJs at the decks beside the Midnight Children sign, red light behind them",
+            "caption": "Behind the decks."
+          },
+          {
+            "src": "/img/nights/wonderland/04249.jpg",
+            "small": "/img/nights/wonderland/04249-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "The view from behind the DJ booth over hands in the air",
+            "caption": "The view from the booth."
+          },
+          {
+            "src": "/img/nights/wonderland/04112.jpg",
+            "small": "/img/nights/wonderland/04112-sm.jpg",
+            "width": 1600,
+            "height": 1067,
+            "alt": "A wide shot of the packed dance floor framed by plants",
+            "caption": "The floor fills up."
+          },
+          {
+            "src": "/img/nights/wonderland/04130.jpg",
+            "small": "/img/nights/wonderland/04130-sm.jpg",
+            "width": 1600,
+            "height": 1067,
+            "alt": "The crowd dancing close to the stage at peak time",
+            "caption": "Peak time."
+          },
+          {
+            "src": "/img/nights/wonderland/04278.jpg",
+            "small": "/img/nights/wonderland/04278-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "A guest with red hair dancing with both arms raised",
+            "caption": "Lost in it."
+          },
+          {
+            "src": "/img/nights/wonderland/04365.jpg",
+            "small": "/img/nights/wonderland/04365-sm.jpg",
+            "width": 1067,
+            "height": 1600,
+            "alt": "Friends hugging and laughing on the dance floor late in the night",
+            "caption": "See you at the next one."
+          }
+        ]
+      }
+    ]
+  }
+]

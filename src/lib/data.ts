@@ -4,6 +4,7 @@ import artistsJson from '../content/artists.json';
 import releasesJson from '../content/releases.json';
 import beatportJson from '../content/releases.beatport.json';
 import streamingJson from '../content/releases.streaming.json';
+import nightsJson from '../content/nights.json';
 import { mergeReleases } from '../../scripts/beatport.mjs';
 import eventsJson from '../content/events.json';
 import galleryJson from '../content/gallery.json';
@@ -85,3 +86,12 @@ export const gallery: GalleryItem[] = (galleryJson as GalleryItem[]).filter((g) 
 
 // Events an artist is on the line-up for.
 export const eventsFor = (slug: string) => upcomingEvents.filter((e) => e.lineup.includes(slug));
+
+// ---------- Past nights (recap pages at /events/<slug>/) ----------
+export interface NightPhoto { src: string; small: string; width: number; height: number; alt: string; caption?: string }
+export interface Night {
+  slug: string; name: string; date: string; start?: string; end?: string; series?: string; partner?: string;
+  venue: string; address?: string; city?: string; tagline?: string; lineup: string[]; guests?: string[]; lineupNote?: string;
+  cover: NightPhoto; story: string[]; chapters: { title: string; intro?: string; photos: NightPhoto[] }[];
+}
+export const nights: Night[] = [...(nightsJson as Night[])].sort((a, b) => b.date.localeCompare(a.date));

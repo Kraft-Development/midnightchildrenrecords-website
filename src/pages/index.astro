@@ -7,7 +7,7 @@ import FounderCard from '../components/FounderCard.astro';
 import Countdown from '../components/Countdown.astro';
 import EventRow from '../components/EventRow.astro';
 import Gallery from '../components/Gallery.astro';
-import { label, artists, founders, friends, releases, creditLine, formatDate, isUpcoming, linkList, upcomingEvents, nextEvent } from '../lib/data';
+import { label, artists, founders, friends, releases, creditLine, formatDate, isUpcoming, linkList, upcomingEvents, nextEvent, nights } from '../lib/data';
 
 const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
 const latest = releases[0];
@@ -91,6 +91,17 @@ const jsonLd = {
           <a class="link-arrow" href="/events/">Calendar <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a>
         </div>
         <ol class="event-list">{upcomingEvents.slice(0, 3).map((e, i) => <EventRow e={e} featured={i === 0} />)}</ol>
+        {nights[0] && (
+          <a class="archive-teaser" href={`/events/${nights[0].slug}/`}>
+            <img src={nights[0].cover.small} alt="" width="720" height={Math.round(720 * nights[0].cover.height / nights[0].cover.width)} loading="lazy">
+            <span class="archive-teaser__text">
+              <span class="eyebrow">From the archive</span>
+              <span class="archive-teaser__name">{nights[0].name}</span>
+              <span class="archive-teaser__meta">{formatDate(nights[0].date)} · {nights[0].venue}</span>
+              <span class="link-arrow">Read the story <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></span>
+            </span>
+          </a>
+        )}
       </div>
     </section>
   )}

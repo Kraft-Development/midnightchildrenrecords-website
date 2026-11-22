@@ -1,0 +1,109 @@
+---
+// Recap page for a past night: the story, the line-up and the photos in chapters. Content: src/content/nights.json.
+import Layout from '../../layouts/Layout.astro';
+import { label, nights, artistBySlug, formatDate, upcomingEvents, fmtEvent } from '../../lib/data';
+
+export function getStaticPaths() {
+  return nights.map((n) => ({ params: { slug: n.slug }, props: { night: n } }));
+}
+const { night } = Astro.props;
+const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
+const path = `/events/${night.slug}/`;
+const roster = night.lineup.map((s) => artistBySlug(s)).filter(Boolean);
+const lineupNames = [...roster.map((a) => a!.name), ...(night.guests || [])];
+const next = upcomingEvents[0];
+const others = nights.filter((n) => n.slug !== night.slug).slice(0, 3);
+const startIso = `${night.date}T${night.start || '20:00'}:00+02:00`;
+// An end time of 00:00 means midnight at the end of the night's date.
+const endDate = night.end && night.end <= (night.start || '20:00')
+  ? new Date(Date.parse(`${night.date}T00:00:00Z`) + 864e5).toISOString().slice(0, 10) : night.date;
+const description = `${night.name}, ${formatDate(night.date)} at ${night.venue}. ${night.story[0].slice(0, 120)}…`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicEvent',
+  name: night.name,
+  startDate: startIso,
+  ...(night.end ? { endDate: `${endDate}T${night.end}:00+02:00` } : {}),
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  location: { '@type': 'Place', name: night.venue, address: [night.address, night.city, 'South Africa'].filter(Boolean).join(', ') },
+  organizer: [{ '@type': 'Organization', name: label.name, url: SITE }, ...(night.partner ? [{ '@type': 'Organization', name: night.partner }] : [])],
+  performer: lineupNames.map((name) => ({ '@type': 'PerformingGroup', name })),
+  image: [`${SITE}${night.cover.src}`],
+  description: night.story[0],
+  url: `${SITE}${path}`,
+};
+---
+<Layout title={`${night.name} | ${label.name}`} description={description} path={path} jsonLd={jsonLd} image={night.cover.src} current="events">
+  <section class="night-hero">
+    <img class="night-hero__img" src={night.cover.src} alt={night.cover.alt} width={night.cover.width} height={night.cover.height} fetchpriority="high">
+    <div class="container night-hero__text">
+      <p class="eyebrow"><a href="/events/#past-nights">Past nights</a></p>
+      <h1 class="page-title night-hero__title">{night.name}</h1>
+      {night.series && <p class="night-hero__series">{night.series}{night.partner && <> with {night.partner}</>}</p>}
+      <p class="night-hero__meta">{formatDate(night.date)} · {night.venue}</p>
+    </div>
+  </section>
+
+  <section class="section night-story">
+    <div class="container night-story__grid">
+      <div class="prose night-story__text">
+        {night.story.map((p) => <p>{p}</p>)}
+      </div>
+      <dl class="night-facts">
+        <div><dt>Date</dt><dd>{formatDate(night.date)}</dd></div>
+        {night.start && <div><dt>Hours</dt><dd>{night.start} to {night.end === '00:00' ? 'midnight' : night.end}</dd></div>}
+        <div><dt>Venue</dt><dd>{night.venue}{night.address && <span>{night.address}</span>}</dd></div>
+        <div><dt>Line-up</dt><dd>
+          {roster.map((a, i) => <>{i > 0 && ', '}<a href={`/artists/${a!.slug}/`}>{a!.name}</a></>)}
+          {(night.guests || []).map((g) => <>, {g}</>)}
+          {night.lineupNote && <span>{night.lineupNote}</span>}
+        </dd></div>
+        {night.tagline && <div><dt>The brief</dt><dd>{night.tagline}</dd></div>}
+      </dl>
+    </div>
+  </section>
+
+  {night.chapters.map((c, i) => (
+    <section class="section night-chapter" aria-labelledby={`chapter-${i}`}>
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Chapter {i + 1}</p>
+          <h2 class="section-title section-title--sm" id={`chapter-${i}`}>{c.title}</h2>
+          {c.intro && <p class="night-chapter__intro">{c.intro}</p>}
+        </div>
+        <ul class:list={['night-gallery', `night-gallery--${Math.min(c.photos.length, 4)}`]}>
+          {c.photos.map((p) => (
+            <li class:list={['night-gallery__item', p.width > p.height && 'night-gallery__item--wide']}>
+              <a href={p.src} target="_blank" rel="noopener">
+                <img src={p.small} srcset={`${p.small} 720w, ${p.src} 1600w`} sizes="(max-width: 700px) 100vw, 40vw" alt={p.alt} width={p.width} height={p.height} loading="lazy">
+              </a>
+              {p.caption && <p class="night-gallery__caption">{p.caption}</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <section class="section section--band">
+    <div class="container band">
+      <div>
+        <h2 class="band__title">{next ? 'The next night' : 'Bring a night to your venue'}</h2>
+        <p class="band__text">{next ? `${next.event}, ${fmtEvent(next, { weekday: 'short', day: 'numeric', month: 'long' })} at ${next.venue}.` : 'Midnight Children brings the music, the production and the crowd.'}</p>
+      </div>
+      <div class="band__actions">
+        {next?.url && <a class="btn btn--light" href={next.url} rel="noopener noreferrer" target="_blank">Tickets</a>}
+        <a class="btn btn--ghost-light" href="/contact/?topic=booking">Book Midnight Children</a>
+        {label.socials?.instagram && <a class="btn btn--ghost-light" href={label.socials.instagram} rel="noopener noreferrer" target="_blank">More on Instagram</a>}
+      </div>
+    </div>
+  </section>
+
+  <section class="section night-footnote">
+    <div class="container">
+      <p>Spotted yourself and want a photo taken down? <a href="/contact/?topic=press">Let us know</a> and we'll remove it.</p>
+      {others.length > 0 && <p><a class="link-arrow" href="/events/#past-nights">More past nights <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></a></p>}
+    </div>
+  </section>
+</Layout>

@@ -1,8 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import EventRow from '../../components/EventRow.astro';
+import NightCard from '../../components/NightCard.astro';
 import Countdown from '../../components/Countdown.astro';
-import { label, upcomingEvents, pastEvents, events, startIso, artistBySlug, releases, creditLine, isUpcoming } from '../../lib/data';
+import { label, upcomingEvents, pastEvents, events, startIso, artistBySlug, releases, creditLine, isUpcoming, nights } from '../../lib/data';
 
 const SITE = Astro.site?.origin || 'https://midnightchildrenrecords.com';
 // Months shown in the calendar: this month through the month of the last upcoming event or release (at least 3 months).
@@ -115,10 +116,22 @@ const jsonLd = upcomingEvents.length ? {
     </div>
   </section>
 
+  {nights.length > 0 && (
+    <section class="section" id="past-nights" aria-labelledby="nights-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">The archive</p>
+          <h2 class="section-title" id="nights-title">Past nights</h2>
+        </div>
+        <ul class="night-cards">{nights.map((n) => <NightCard night={n} />)}</ul>
+      </div>
+    </section>
+  )}
+
   {pastEvents.length > 0 && (
     <section class="section" aria-labelledby="past-title">
       <div class="container">
-        <div class="section-head"><h2 class="section-title section-title--sm" id="past-title">Past nights</h2></div>
+        <div class="section-head"><h2 class="section-title section-title--sm" id="past-title">{nights.length > 0 ? 'Earlier dates' : 'Past nights'}</h2></div>
         <ol class="event-list event-list--past">{pastEvents.slice(0, 12).map((e) => <EventRow e={e} past />)}</ol>
       </div>
     </section>
