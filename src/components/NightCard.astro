@@ -1,0 +1,19 @@
+---
+// Poster-style card for a past night, linking to its recap page.
+import { formatDate, type Night } from '../lib/data';
+interface Props { night: Night; eager?: boolean }
+const { night, eager = false } = Astro.props;
+---
+<li class="night-card">
+  <a href={`/events/${night.slug}/`}>
+    <span class="night-card__media">
+      <img src={night.cover.small} alt="" width="720" height={Math.round(720 * night.cover.height / night.cover.width)} loading={eager ? 'eager' : 'lazy'}>
+    </span>
+    <span class="night-card__text">
+      {night.series && <span class="night-card__series">{night.series}</span>}
+      <span class="night-card__name">{night.name}</span>
+      <span class="night-card__meta">{formatDate(night.date)} · {night.venue}</span>
+      <span class="night-card__more">The story <svg class="icon icon--arrow" aria-hidden="true"><use href="#i-arrow"></use></svg></span>
+    </span>
+  </a>
+</li>

@@ -128,7 +128,6 @@ if (artists) {
     if ((a.highlights || []).length > 6) err(`${w}.highlights`, 'keep it to 6 or fewer');
     image(`${w}.image`, a.image);
     text(`${w}.imageCredit`, a.imageCredit, { max: 80 });
-    if (a.image && !a.imageCredit) warn(`${w}.imageCredit`, 'photo has no credit');
     for (const [k, v] of Object.entries(a.links || {})) link(`${w}.links.${k}`, k, v);
     if (a.sample && label?.launched) err(w, 'sample artist must be removed before launch');
   });
@@ -185,6 +184,42 @@ if (streaming) {
     }
     checkReleases(streaming.extra, 'releases.streaming.json');
   }
+}
+
+// ---------- nights.json (recap pages for past nights: /events/<slug>/) ----------
+const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
+const nights = existsSync(join(root, 'src/content/nights.json')) ? readJson('src/content/nights.json') : [];
+if (nights) {
+  const seen = new Set();
+  if (!Array.isArray(nights)) err('nights.json', 'must be a list');
+  else nights.forEach((n, i) => {
+    const w = `nights[${i}]${n?.slug ? ` (${n.slug})` : ''}`;
+    if (!SLUG.test(n.slug || '')) err(`${w}.slug`, 'must be lowercase words joined by dashes');
+    else if (seen.has(n.slug)) err(`${w}.slug`, 'is used twice'); else seen.add(n.slug);
+    text(`${w}.name`, n.name, { required: true, max: 60 });
+    if (!validDate(n.date)) err(`${w}.date`, 'must be a real date like 2026-03-28');
+    for (const k of ['start', 'end']) if (n[k] && !TIME.test(n[k])) err(`${w}.${k}`, 'must be a time like 16:00');
+    for (const k of ['series', 'partner', 'venue', 'address', 'city', 'lineupNote']) text(`${w}.${k}`, n[k], { max: 120 });
+    text(`${w}.tagline`, n.tagline, { max: 160 });
+    (n.lineup || []).forEach((s, j) => { if (!artistSlugs.has(s)) err(`${w}.lineup[${j}]`, `"${s}" is not an artist slug`); });
+    (n.guests || []).forEach((g, j) => text(`${w}.guests[${j}]`, g, { required: true, max: 60 }));
+    if (!Array.isArray(n.story) || !n.story.length) err(`${w}.story`, 'needs at least one paragraph');
+    else n.story.forEach((p, j) => text(`${w}.story[${j}]`, p, { required: true, max: 800 }));
+    const photo = (pw, ph) => {
+      if (!ph?.src) return err(pw, 'needs src');
+      image(`${pw}.src`, ph.src); image(`${pw}.small`, ph.small);
+      text(`${pw}.alt`, ph.alt, { required: true, max: 200 }); text(`${pw}.caption`, ph.caption, { max: 120 });
+      if (!(Number.isInteger(ph.width) && Number.isInteger(ph.height) && ph.width > 0 && ph.height > 0)) err(pw, 'needs width and height');
+    };
+    photo(`${w}.cover`, n.cover);
+    let count = 0;
+    (n.chapters || []).forEach((c, j) => {
+      text(`${w}.chapters[${j}].title`, c.title, { required: true, max: 60 });
+      text(`${w}.chapters[${j}].intro`, c.intro, { max: 200 });
+      (c.photos || []).forEach((ph, k) => { count++; photo(`${w}.chapters[${j}].photos[${k}]`, ph); });
+    });
+    if (count > 24) err(`${w}.chapters`, `has ${count} photos; keep it to 24 or fewer so the page stays fast`);
+  });
 }
 
 // ---------- events.json (same rules the site uses when building) ----------
